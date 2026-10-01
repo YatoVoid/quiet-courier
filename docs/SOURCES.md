@@ -13,9 +13,12 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
   - Images: we omit them. Many are Getty/AP and not covered by the license.
   - The 1×1 page counter is required online only. Their print rules say the counter and links are not needed, and they ask for a copy of the printed result at us-republish@theconversation.com.
   - Republishing behind a paywall is allowed. Selling an article on its own is not.
-- **Open questions, need a decision before launch:**
-  - "You can't systematically republish all of our articles." We pick two or three a day, which seems fine, but an automated daily feed should be confirmed with them in writing.
-  - "Commercial, non-journalism usage: license fees may apply." A paid newspaper is journalism, but ask them to confirm.
+- Confirmed by email with The Conversation US republishing team, 2026-10-01:
+  - Two or three articles a day is fine. Eight to ten would be too much. The selector uses at most three per edition, and every city draws from the same pool, so the daily total stays at three.
+  - The paper counts as journalism, free and paid tiers alike. No license fee.
+  - The page counter can be skipped for PDF and EPUB editions. In its place they ask for:
+    - a copy of each edition that uses their content, sent to us-republish@theconversation.com
+    - usage reporting so they can log each republication, plus a general circulation number
 
 ### Global Voices
 - License: CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/). Commercial use and edits allowed.
