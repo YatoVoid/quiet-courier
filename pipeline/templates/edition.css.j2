@@ -1,0 +1,340 @@
+@font-face { font-family: "Nameplate"; src: url("{{ fonts }}/UnifrakturMaguntia-Book.ttf"); }
+@font-face { font-family: "Body"; font-weight: 400; font-style: normal; src: url("{{ fonts }}/OldStandard-Regular.ttf"); }
+@font-face { font-family: "Body"; font-weight: 400; font-style: italic; src: url("{{ fonts }}/OldStandard-Italic.ttf"); }
+@font-face { font-family: "Body"; font-weight: 700; font-style: normal; src: url("{{ fonts }}/OldStandard-Bold.ttf"); }
+@font-face { font-family: "Fell"; font-style: normal; src: url("{{ fonts }}/IMFePIrm28P.ttf"); }
+@font-face { font-family: "Fell"; font-style: italic; src: url("{{ fonts }}/IMFePIit28P.ttf"); }
+@font-face { font-family: "Fell SC"; src: url("{{ fonts }}/IMFeENsc28P.ttf"); }
+
+@page {
+  size: {{ d.page_width_in }}in {{ d.page_height_in }}in;
+  margin: {{ d.margin_in * 1.9 }}in {{ d.margin_in }}in {{ d.margin_in }}in;
+  @top-center {
+    content: string(paper) "  ·  " string(date) "  ·  Page " counter(page);
+    font-family: "Fell SC"; font-size: {{ d.body_pt * 0.82 }}pt;
+    width: 100%;
+    border-bottom: 1pt solid #000;
+    vertical-align: bottom;
+    padding-bottom: 1.5pt;
+    margin-bottom: {{ d.margin_in * 0.35 }}in;
+  }
+}
+@page :first {
+  margin-top: {{ d.margin_in }}in;
+  @top-center { content: none; border: 0; }
+}
+@page last {
+  margin-top: {{ d.margin_in }}in;
+  @top-center { content: none; border: 0; }
+}
+
+html {
+  font-family: "Body", serif;
+  font-size: {{ d.body_pt }}pt;
+  line-height: {{ d.leading }};
+  color: #000;
+  background: #fff;
+  font-variant-numeric: oldstyle-nums;
+}
+body { margin: 0; }
+h1, h2, h3, h4, p, figure, ul, ol, table { margin: 0; padding: 0; }
+
+p {
+  text-align: justify;
+  hyphens: auto;
+  text-indent: 1em;
+  orphans: 2;
+  widows: 2;
+}
+h1, h2, h3, h4 { hyphens: manual; break-after: avoid; font-weight: 700; }
+
+.masthead {
+  display: grid;
+  {% if d.id == "small" %}
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "name name" "left right";
+  column-gap: 4pt;
+  row-gap: 2pt;
+  {% else %}
+  grid-template-columns: 21% 1fr 21%;
+  grid-template-areas: "left name right";
+  column-gap: 6pt;
+  {% endif %}
+  align-items: center;
+}
+.nameplate-wrap { grid-area: name; text-align: center; }
+.ear-left { grid-area: left; }
+.ear-right { grid-area: right; }
+.nameplate {
+  font-family: "Nameplate";
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  letter-spacing: 0;
+  string-set: paper content();
+}
+.motto {
+  font-family: "Fell"; font-style: italic;
+  font-size: 0.85em; text-indent: 0; text-align: center;
+  margin-top: 1pt;
+}
+.ear {
+  border: 1.2pt solid #000;
+  padding: 2.5pt 4pt;
+  text-align: center;
+}
+.ear p { text-indent: 0; text-align: center; hyphens: manual; line-height: 1.15; }
+{% if d.id == "small" %}
+.ear { padding: 1pt 3pt; text-align: left; }
+.ear p { display: inline; text-align: left; font-size: 0.8em; }
+.ear-title { border: 0; margin: 0; }
+.ear-title::after { content: ": "; }
+{% endif %}
+.ear-title { font-family: "Fell SC"; font-size: 0.9em; border-bottom: 0.8pt solid #000; margin-bottom: 1.5pt; }
+.ear-body { font-size: 0.85em; }
+
+.folio {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: "Fell SC";
+  font-size: {{ 0.82 if d.id == "small" else 0.95 }}em;
+  margin-top: 4pt;
+  padding: 2pt 0 1.5pt;
+  border-top: 2.4pt solid #000;
+  border-bottom: 1pt solid #000;
+  box-shadow: none;
+}
+.folio-date { string-set: date content(); }
+.folio + * { margin-top: 0; }
+
+.front { break-after: page; }
+.lead-head {
+  border-top: 1pt solid #000;
+  margin-top: 1.5pt;
+  padding: 5pt 0 4pt;
+  text-align: center;
+  border-bottom: 1pt solid #000;
+  margin-bottom: 5pt;
+}
+.lead-headline {
+  font-size: {{ d.lead_headline_pt }}pt;
+  line-height: 1.08;
+  hyphens: manual;
+}
+.lead-deck {
+  font-family: "Fell"; font-style: italic;
+  text-indent: 0; text-align: center;
+  font-size: 1.08em;
+  margin-top: 3pt;
+  hyphens: manual;
+}
+.front-columns { column-fill: auto; }
+.sec { break-before: page; }
+.front-columns, .cols {
+  columns: {{ d.columns }};
+  column-gap: {{ 9 if d.id == "small" else 12 }}pt;
+  column-rule: 0.9pt solid #000;
+}
+
+.story + .story, .story + .old-ad, .old-ad + .story {
+  margin-top: 6pt;
+  padding-top: 6pt;
+  border-top: 1pt solid #000;
+}
+.headline {
+  font-size: 1.28em;
+  line-height: 1.12;
+  text-align: center;
+  margin-bottom: 2pt;
+}
+.secondary .headline { font-size: 1.18em; }
+.deck {
+  font-family: "Fell"; font-style: italic;
+  text-indent: 0; text-align: center;
+  margin-bottom: 2pt; hyphens: manual;
+}
+.credit {
+  font-family: "Fell SC"; text-indent: 0; text-align: center;
+  font-size: 0.92em;
+  letter-spacing: 0.04em;
+}
+.byline {
+  font-family: "Fell SC"; text-indent: 0; text-align: center;
+  font-size: 0.92em;
+  hyphens: manual;
+}
+.affil {
+  font-style: italic; text-indent: 0; text-align: center;
+  font-size: 0.82em; line-height: 1.15;
+  margin-bottom: 3pt; hyphens: manual;
+}
+.byline + p:not(.affil), .credit + p:not(.byline), .deck + p, .headline + p { margin-top: 3pt; }
+
+p.drop, p.pcont { text-indent: 0; }
+.dropcap {
+  font-family: "Fell";
+  float: left;
+  font-size: {{ d.leading * 2 + 0.55 }}em;
+  line-height: 0.82;
+  margin: 0.06em 0.08em 0 0;
+}
+.subhead {
+  font-size: 1em;
+  text-align: center;
+  font-family: "Fell SC";
+  font-weight: 400;
+  margin: 4pt 0 2pt;
+}
+.subhead + p { text-indent: 0; }
+.label { text-indent: 0; font-weight: 700; margin-top: 3pt; text-align: left; }
+.label + p { text-indent: 0; }
+.note { font-style: italic; font-size: 0.86em; text-indent: 0; margin-top: 3pt; }
+.source {
+  break-before: avoid;
+  font-size: 0.78em;
+  line-height: 1.2;
+  text-indent: 0;
+  text-align: left;
+  font-style: italic;
+  margin-top: 3pt;
+  hyphens: auto;
+}
+.jump {
+  font-family: "Fell SC";
+  text-indent: 0; text-align: right;
+  margin-top: 2pt;
+}
+.jump a { color: #000; text-decoration: none; }
+.jump a::after { content: target-counter(attr(href), page); }
+
+.jump-head { font-size: 1.05em; line-height: 1.12; text-align: center; }
+.jump-from { font-family: "Fell SC"; text-indent: 0; text-align: center; font-size: 0.9em; margin-bottom: 3pt; }
+
+.section-head {
+  text-align: center;
+  font-family: "Fell SC";
+  font-weight: 400;
+  font-size: 1.5em;
+  line-height: 1.1;
+  border-top: 2.4pt solid #000;
+  border-bottom: 1pt solid #000;
+  padding: 2pt 0 1pt;
+  margin: 8pt 0 6pt;
+}
+.section-head small {
+  display: block;
+  font-family: "Fell"; font-style: italic;
+  font-size: 0.55em;
+}
+.sec > .section-head { margin-top: 0; }
+
+.plate {
+  margin: 3pt 0 4pt;
+  break-inside: avoid;
+}
+.plate-row { display: flex; gap: 4pt; }
+.plate-cell { flex: 1; text-align: center; }
+.plate-cell img { width: 100%; border: 1pt solid #000; display: block; }
+.plate-cap { font-family: "Fell SC"; font-size: 0.82em; display: block; margin-top: 1pt; }
+.plate figcaption { font-style: italic; font-size: 0.85em; text-align: center; margin-top: 2pt; }
+.plate-credit { font-style: normal; font-family: "Fell SC"; }
+
+.forecast-table { break-inside: avoid; width: 100%; border-collapse: collapse; margin: 3pt 0 5pt; font-size: 0.92em; line-height: 1.15; }
+.forecast-table th { text-align: left; font-family: "Fell SC"; font-weight: 400; padding: 1.5pt 3pt 1.5pt 0; vertical-align: top; white-space: nowrap; }
+.forecast-table td { padding: 1.5pt 0; vertical-align: top; }
+.forecast-table td.temp { font-weight: 700; padding-right: 4pt; text-align: right; font-variant-numeric: lining-nums; }
+.forecast-table tr + tr th, .forecast-table tr + tr td { border-top: 0.8pt solid #000; }
+
+.archive-head {
+  text-transform: uppercase;
+  font-size: 0.98em;
+  line-height: 1.12;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.archive-deck {
+  text-transform: uppercase;
+  font-size: 0.78em;
+  text-indent: 0; text-align: center;
+  margin: 1pt 0 2pt;
+  hyphens: manual;
+}
+.archive-deck::before, .archive-deck::after { content: ""; display: block; width: 30%; margin: 1.5pt auto; border-top: 0.9pt solid #000; }
+.old-ad {
+  border: 2pt double #000;
+  border-width: 3pt;
+  padding: 4pt 5pt;
+  text-align: center;
+  break-inside: avoid;
+}
+.old-ad p { text-indent: 0; text-align: center; hyphens: manual; }
+.old-ad-mark { font-family: "Fell SC"; font-size: 0.75em; }
+.old-ad-head { font-family: "Fell"; font-weight: 400; font-size: 1.35em; line-height: 1.05; margin: 1pt 0 3pt; }
+.archive-source { margin-top: 5pt; }
+
+.poem {
+  margin-top: 6pt;
+  padding-top: 5pt;
+  border-top: 2.4pt solid #000;
+  break-inside: auto;
+}
+.poem-head { font-family: "Fell"; font-weight: 400; font-size: 1.4em; text-align: center; }
+.poem-author { font-family: "Fell SC"; text-indent: 0; text-align: center; margin-bottom: 4pt; }
+.stanza { margin-bottom: 4pt; break-inside: avoid; }
+.poem-open { break-inside: avoid; }
+.line { display: block; padding-left: 1.2em; text-indent: -1.2em; font-size: 0.94em; line-height: 1.2; }
+.poem .source { text-align: center; }
+
+.sources { font-size: 0.72em; line-height: 1.2; padding-left: 1.4em; overflow-wrap: anywhere; }
+.sources li { margin-bottom: 2pt; text-align: left; }
+.sources b { font-weight: 700; }
+
+.final { break-before: page; page: last; text-align: center; }
+.final .section-head { margin-top: 0; }
+.final p { text-indent: 0; text-align: center; hyphens: manual; }
+.puzzle-title { font-family: "Fell"; font-weight: 400; font-size: 1.3em; }
+.puzzle-intro { font-style: italic; font-size: 0.86em; margin: 0 auto 3pt; max-width: 32em; }
+.wordsearch {
+  border-collapse: collapse;
+  margin: 0 auto;
+  border: 1.5pt solid #000;
+  font-family: "Body";
+  font-weight: 700;
+  font-size: {{ d.puzzle_cell_pt }}pt;
+  font-variant-numeric: lining-nums;
+}
+.wordsearch td {
+  width: {{ d.puzzle_cell_pt * 1.75 }}pt;
+  height: {{ d.puzzle_cell_pt * 1.5 }}pt;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+  line-height: 1;
+}
+.wordlist {
+  list-style: none;
+  columns: {{ 3 if d.id == "small" else 4 }};
+  column-gap: 6pt;
+  font-family: "Fell SC";
+  font-size: 0.92em;
+  margin: 4pt auto 0;
+  {% if d.id == "large" %}width: 80%;{% endif %}
+}
+.answers-note { font-style: italic; font-size: 0.82em; margin-top: 2pt; }
+.almanac {
+  margin: 6pt auto 0;
+  border-top: 2.4pt solid #000;
+  border-bottom: 1pt solid #000;
+  padding: 3pt 0 4pt;
+}
+.almanac-title { font-family: "Fell SC"; font-weight: 400; font-size: 1.15em; }
+.almanac-place { font-family: "Body"; font-style: italic; font-size: 0.72em; }
+.almanac table { margin: 2pt auto 0; border-collapse: collapse; font-size: 0.9em; line-height: 1.2; }
+.almanac th { font-family: "Fell SC"; font-weight: 400; text-align: right; padding: 0 3pt 0 6pt; }
+.almanac td { text-align: left; padding: 0 6pt 0 0; font-variant-numeric: lining-nums; }
+.almanac-year { font-size: 0.85em; margin-top: 2pt; }
+.the-end { margin-top: {{ 4 if d.id == "small" else 10 }}pt; break-inside: avoid; }
+.end-words { font-family: "Nameplate"; font-size: {{ 1.9 if d.id == "small" else 2.4 }}em; line-height: 1.1; }
+.end-sub { font-style: italic; font-size: 0.9em; }
+.end-mark { font-family: "Fell SC"; margin-top: 3pt; letter-spacing: 0.1em; }

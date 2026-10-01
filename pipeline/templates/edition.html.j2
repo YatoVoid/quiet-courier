@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ e.paper_name }}, {{ date_long }}</title>
+<style>
+{% include "edition.css.j2" %}
+</style>
+</head>
+<body class="device-{{ d.id }}">
+
+{% macro byline(a) %}
+  {% if a.source_name == "The Conversation" %}<p class="credit">The Conversation</p>{% endif %}
+  {% if a.author and a.author != a.source_name %}
+  <p class="byline">By {{ a.author }}</p>
+  {% if a.author_affiliation %}<p class="affil">{{ a.author_affiliation }}</p>{% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% macro blocks(list, drop=true) %}
+  {% for b in list %}
+    {% if b.kind == "h" %}<h4 class="subhead">{{ b.text }}</h4>
+    {% elif b.kind == "label" %}<p class="label">{{ b.text }}</p>
+    {% elif b.kind == "note" %}<p class="note">{{ b.text }}</p>
+    {% elif b.kind == "pcont" %}<p class="pcont">{{ b.text }}</p>
+    {% elif loop.first and drop %}<p class="drop">{{ b.text | dropcap }}</p>
+    {% else %}<p>{{ b.text }}</p>
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro source(a) %}
+  <p class="source">{{ a.attribution }}{% if a.license.id.startswith("cc-") %} License: {{ a.license.name }}.{% endif %}{% if a.changes %} {{ a.changes }}{% endif %}</p>
+{% endmacro %}
+
+{% macro figure(a) %}
+  {% if a.images %}
+  <figure class="plate">
+    <div class="plate-row">
+    {% for img in a.images %}
+      <div class="plate-cell"><img src="{{ images[img.path] }}" alt="{{ img.caption }}"><span class="plate-cap">{{ img.caption }}</span></div>
+    {% endfor %}
+    </div>
+    <figcaption>{{ a.title }}. <span class="plate-credit">{{ a.images[0].credit }}</span></figcaption>
+  </figure>
+  {% endif %}
+{% endmacro %}
+
+<section class="front">
+  <header class="masthead">
+    <div class="ear ear-left">
+      <p class="ear-title">{{ today.name }}’s Weather</p>
+      <p class="ear-body">{{ today.short | sentence }}. {{ "High" if today.is_daytime else "Low" }} {{ today.temperature }}°.</p>
+    </div>
+    <div class="nameplate-wrap">
+      <h1 class="nameplate" style="font-size: {{ nameplate_pt }}pt">{{ e.paper_name }}</h1>
+      <p class="motto">“{{ e.motto }}”</p>
+    </div>
+    <div class="ear ear-right">
+      <p class="ear-title">{{ next_period.name }}</p>
+      <p class="ear-body">{{ next_period.short | sentence }}. {{ "High" if next_period.is_daytime else "Low" }} {{ next_period.temperature }}°.</p>
+    </div>
+  </header>
+  <div class="folio">
+    <span>Vol. {{ e.volume | roman }} · No. {{ e.number }}</span>
+    <span class="folio-date">{{ date_long }}</span>
+    <span>{{ e.location.name }} Edition</span>
+  </div>
+
+  <div class="lead-head">
+    <h2 class="lead-headline">{{ lead.article.title }}</h2>
+    {% if lead.article.deck %}<p class="lead-deck">{{ lead.article.deck }}</p>{% endif %}
+  </div>
+
+  <div class="front-columns">
+    <article class="story lead">
+      {{ byline(lead.article) }}
+      {{ blocks(lead.front) }}
+      {% if lead.jumps %}<p class="jump">Continued on Page <a href="#cont-{{ lead.article.id }}"></a></p>{% else %}{{ source(lead.article) }}{% endif %}
+    </article>
+    {% for s in secondaries %}
+    <article class="story secondary">
+      <h3 class="headline">{{ s.article.title }}</h3>
+      {% if s.article.deck %}<p class="deck">{{ s.article.deck }}</p>{% endif %}
+      {{ byline(s.article) }}
+      {{ blocks(s.front) }}
+      {% if s.jumps %}<p class="jump">Continued on Page <a href="#cont-{{ s.article.id }}"></a></p>{% else %}{{ source(s.article) }}{% endif %}
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% if not front_only %}
+{% macro section_head(title, subtitle=none, id=none) %}
+<h2 class="section-head"{% if id %} id="{{ id }}"{% endif %}><span>{{ title }}</span>{% if subtitle %}<small>{{ subtitle }}</small>{% endif %}</h2>
+{% endmacro %}
+
+{% if jumped %}
+<section class="sec">
+  {{ section_head("Continued from Page One") }}
+  <div class="cols">
+  {% for s in jumped %}
+  <article class="story continued">
+    <h3 class="jump-head" id="cont-{{ s.article.id }}">{{ s.article.title }}</h3>
+    <p class="jump-from">Continued from Page 1</p>
+    {{ blocks(s.rest, drop=false) }}
+    {{ source(s.article) }}
+  </article>
+  {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% for sec, articles in sections %}
+<section class="sec sec-{{ sec.id }}">
+  {{ section_head(sec.name, sec.subtitle, "sec-" ~ sec.id) }}
+  <div class="cols">
+  {% if sec.id == "weather" %}
+  <article class="story forecast">
+    <h3 class="headline">The Forecast for {{ e.weather.city }}</h3>
+    <p class="byline">From the {{ e.weather.office }}</p>
+    <table class="forecast-table">
+      {% for p in e.weather.periods %}
+      <tr><th>{{ p.name }}</th><td class="temp">{{ p.temperature }}°</td><td>{{ p.short | sentence }}</td></tr>
+      {% endfor %}
+    </table>
+    <p class="drop">{{ today.detail | dropcap }}</p>
+    <p class="source">{{ e.weather.attribution }}</p>
+  </article>
+  {% endif %}
+
+  {% if sec.id == "archives" %}
+    {% for a in articles %}
+      {% if a.kind == "advertisement" %}
+      <aside class="old-ad">
+        <p class="old-ad-mark">Advertisement, 1926</p>
+        <h3 class="old-ad-head">{{ a.title }}</h3>
+        {% for b in a.body %}<p>{{ b.text }}</p>{% endfor %}
+      </aside>
+      {% else %}
+      <article class="story archive">
+        <h3 class="archive-head">{{ a.title }}</h3>
+        {% if a.deck %}<p class="archive-deck">{{ a.deck }}</p>{% endif %}
+        {{ blocks(a.body, drop=false) }}
+      </article>
+      {% endif %}
+    {% endfor %}
+    {% if articles %}<p class="source archive-source">{{ articles[0].attribution }}</p>{% endif %}
+
+    <aside class="poem">
+      {% for stanza in e.poem.stanzas %}
+      {% if loop.first %}<div class="poem-open">
+      <h3 class="poem-head">{{ e.poem.title }}</h3>
+      <p class="poem-author">{{ e.poem.author }}, {{ e.poem.year }}</p>{% endif %}
+      <div class="stanza">{% for line in stanza %}<span class="line">{{ line }}</span>{% endfor %}</div>
+      {% if loop.first %}</div>{% endif %}
+      {% endfor %}
+      <p class="source">{{ e.poem.attribution }} Text from {{ e.poem.source_name }}.</p>
+    </aside>
+  {% else %}
+    {% for a in articles %}
+    <article class="story">
+      <h3 class="headline">{{ a.title }}</h3>
+      {% if a.deck %}<p class="deck">{{ a.deck }}</p>{% endif %}
+      {{ byline(a) }}
+      {{ figure(a) }}
+      {{ blocks(a.body) }}
+      {{ source(a) }}
+    </article>
+    {% endfor %}
+  {% endif %}
+  </div>
+</section>
+{% endfor %}
+
+<section class="sec sec-sources">
+  {{ section_head("Sources and Licenses", id="sources") }}
+  <ol class="sources">
+    {% for a in e.all_sources() %}
+    <li><b>{{ a.title }}</b>. {{ a.source_name }}{% if a.author and a.author != a.source_name %}, {{ a.author }}{% endif %}. {{ a.license.name }}{% if a.license.id.startswith("cc-") %} ({{ a.license.url }}){% endif %}. {{ a.source_url }}</li>
+    {% endfor %}
+    <li><b>Weather</b>. {{ e.weather.office }}. Public domain. {{ e.weather.source_url }}</li>
+    <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. {{ e.poem.source_url }}</li>
+  </ol>
+</section>
+
+<section class="final" id="final-start">
+  <h2 class="section-head"><span>Puzzles</span></h2>
+  <h3 class="puzzle-title">Word Search</h3>
+  <p class="puzzle-intro">Words from today’s poem, “{{ e.poem.title }},” hidden in any of eight directions.</p>
+  <table class="wordsearch">
+    {% for row in ws.grid %}<tr>{% for ch in row %}<td>{{ ch }}</td>{% endfor %}</tr>{% endfor %}
+  </table>
+  <ul class="wordlist">{% for w in ws.words %}<li>{{ w }}</li>{% endfor %}</ul>
+  <p class="answers-note">Answers in tomorrow’s edition.</p>
+
+  <div class="almanac">
+    <h3 class="almanac-title">The Almanac <span class="almanac-place">for {{ e.location.name }}, {{ e.location.region }}</span></h3>
+    <table>
+      <tr><th>Sunrise</th><td>{{ alm.sunrise | clock }}</td><th>Sunset</th><td>{{ alm.sunset | clock }}</td></tr>
+      <tr><th>Daylight</th><td>{{ alm.daylight.seconds // 3600 }} h {{ (alm.daylight.seconds % 3600) // 60 }} min</td><th>Moon</th><td>{{ alm.moon_phase }}</td></tr>
+      <tr><th>Moonrise</th><td>{{ alm.moonrise | clock }}</td><th>Moonset</th><td>{{ alm.moonset | clock }}</td></tr>
+    </table>
+    <p class="almanac-year">Day {{ alm.day_of_year }} of the year. {{ alm.days_remaining }} days remain.</p>
+  </div>
+
+  <div class="the-end" id="the-end">
+    <p class="end-words">That’s all for today.</p>
+    <p class="end-sub">The next edition arrives tomorrow morning.</p>
+    <p class="end-mark">-30-</p>
+  </div>
+</section>
+{% endif %}
+</body>
+</html>

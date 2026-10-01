@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>{{ title }}</title>
+<link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+{% macro story(a, drop=true, show_title=true) %}
+<article class="story">
+  {% if show_title %}<h3>{{ a.title }}</h3>{% endif %}
+  {% if a.deck %}<p class="deck">{{ a.deck }}</p>{% endif %}
+  {% if a.source_name == "The Conversation" %}<p class="credit">The Conversation</p>{% endif %}
+  {% if a.author and a.author != a.source_name %}<p class="byline">By {{ a.author }}</p>{% endif %}
+  {% if a.author_affiliation %}<p class="affil">{{ a.author_affiliation }}</p>{% endif %}
+  {% for img in a.images %}
+  <figure><img src="{{ images[img.path] }}" alt="{{ img.caption }}"/><figcaption>{{ img.caption }}. {{ img.credit }}</figcaption></figure>
+  {% endfor %}
+  {% for b in a.body %}
+    {% if b.kind == "h" %}<h4>{{ b.text }}</h4>
+    {% elif b.kind == "label" %}<p class="label">{{ b.text }}</p>
+    {% elif b.kind == "note" %}<p class="note">{{ b.text }}</p>
+    {% elif loop.first and drop %}<p class="first">{{ b.text }}</p>
+    {% else %}<p>{{ b.text }}</p>
+    {% endif %}
+  {% endfor %}
+  <p class="source">{{ a.attribution }}{% if a.license.id.startswith("cc-") %} License: {{ a.license.name }}.{% endif %}{% if a.changes %} {{ a.changes }}{% endif %}</p>
+</article>
+{% endmacro %}
+
+{% if kind == "front" %}
+<header class="masthead">
+  <h1 class="nameplate">{{ e.paper_name }}</h1>
+  <p class="motto">“{{ e.motto }}”</p>
+  <p class="folio">Vol. {{ e.volume | roman }} · No. {{ e.number }} · {{ date_long }} · {{ e.location.name }} Edition</p>
+  <p class="weather-line"><b>{{ today.name }}:</b> {{ today.short | sentence }}, {{ "high" if today.is_daytime else "low" }} {{ today.temperature }}°. <b>{{ next_period.name }}:</b> {{ next_period.short | sentence }}, {{ "high" if next_period.is_daytime else "low" }} {{ next_period.temperature }}°.</p>
+</header>
+<h2 class="lead-headline">{{ e.lead.title }}</h2>
+{{ story(e.lead, show_title=false) }}
+{% for a in secondaries %}{{ story(a) }}{% endfor %}
+
+{% elif kind == "section" %}
+<h2 class="section-head">{{ section.name }}{% if section.subtitle %}<small>{{ section.subtitle }}</small>{% endif %}</h2>
+{% if section.id == "weather" %}
+<article class="story">
+  <h3>The Forecast for {{ e.weather.city }}</h3>
+  <table class="forecast">
+    {% for p in e.weather.periods %}<tr><th>{{ p.name }}</th><td>{{ p.temperature }}°</td><td>{{ p.short | sentence }}</td></tr>{% endfor %}
+  </table>
+  <p class="first">{{ today.detail }}</p>
+  <p class="source">{{ e.weather.attribution }}</p>
+</article>
+{% endif %}
+{% if section.id == "archives" %}
+  {% for a in articles %}
+  <article class="story archive{% if a.kind == 'advertisement' %} old-ad{% endif %}">
+    {% if a.kind == "advertisement" %}<p class="credit">Advertisement, 1926</p>{% endif %}
+    <h3>{{ a.title }}</h3>
+    {% if a.deck %}<p class="deck">{{ a.deck }}</p>{% endif %}
+    {% for b in a.body %}<p>{{ b.text }}</p>{% endfor %}
+  </article>
+  {% endfor %}
+  {% if articles %}<p class="source">{{ articles[0].attribution }}</p>{% endif %}
+  <article class="poem">
+    <h3>{{ e.poem.title }}</h3>
+    <p class="byline">{{ e.poem.author }}, {{ e.poem.year }}</p>
+    {% for stanza in e.poem.stanzas %}<p class="stanza">{% for line in stanza %}{{ line }}{% if not loop.last %}<br/>{% endif %}{% endfor %}</p>{% endfor %}
+    <p class="source">{{ e.poem.attribution }} Text from {{ e.poem.source_name }}.</p>
+  </article>
+{% else %}
+  {% for a in articles %}{{ story(a) }}{% endfor %}
+{% endif %}
+
+{% elif kind == "sources" %}
+<h2 class="section-head">Sources and Licenses</h2>
+<ol class="sources">
+  {% for a in e.all_sources() %}
+  <li><b>{{ a.title }}</b>. {{ a.source_name }}{% if a.author and a.author != a.source_name %}, {{ a.author }}{% endif %}. {{ a.license.name }}{% if a.license.id.startswith("cc-") %} (<a href="{{ a.license.url }}">{{ a.license.url }}</a>){% endif %}. <a href="{{ a.source_url }}">{{ a.source_url }}</a></li>
+  {% endfor %}
+  <li><b>Weather</b>. {{ e.weather.office }}. Public domain. <a href="{{ e.weather.source_url }}">{{ e.weather.source_url }}</a></li>
+  <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. <a href="{{ e.poem.source_url }}">{{ e.poem.source_url }}</a></li>
+</ol>
+
+{% elif kind == "final" %}
+<h2 class="section-head">Puzzles</h2>
+<h3>Word Search</h3>
+<p class="center"><i>Words from today’s poem, “{{ e.poem.title }},” hidden in any of eight directions.</i></p>
+<table class="wordsearch">
+  {% for row in ws.grid %}<tr>{% for ch in row %}<td>{{ ch }}</td>{% endfor %}</tr>{% endfor %}
+</table>
+<p class="center wordlist">{{ ws.words | join(" · ") }}</p>
+<p class="center"><i>Answers in tomorrow’s edition.</i></p>
+<h3>The Almanac</h3>
+<p class="center"><i>{{ e.location.name }}, {{ e.location.region }}</i></p>
+<p class="center">Sunrise {{ alm.sunrise | clock }} · Sunset {{ alm.sunset | clock }}<br/>
+Daylight {{ alm.daylight.seconds // 3600 }} h {{ (alm.daylight.seconds % 3600) // 60 }} min<br/>
+Moon: {{ alm.moon_phase }}. Moonrise {{ alm.moonrise | clock }}, moonset {{ alm.moonset | clock }}<br/>
+Day {{ alm.day_of_year }} of the year. {{ alm.days_remaining }} days remain.</p>
+<div class="the-end">
+  <p class="end-words">That’s all for today.</p>
+  <p class="center"><i>The next edition arrives tomorrow morning.</i></p>
+  <p class="center">-30-</p>
+</div>
+{% endif %}
+</body>
+</html>

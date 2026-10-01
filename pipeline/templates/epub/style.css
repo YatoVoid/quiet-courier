@@ -1,0 +1,46 @@
+@font-face { font-family: "Nameplate"; src: url("fonts/UnifrakturMaguntia-Book.ttf"); }
+@font-face { font-family: "Body"; font-weight: normal; font-style: normal; src: url("fonts/OldStandard-Regular.ttf"); }
+@font-face { font-family: "Body"; font-weight: normal; font-style: italic; src: url("fonts/OldStandard-Italic.ttf"); }
+@font-face { font-family: "Body"; font-weight: bold; font-style: normal; src: url("fonts/OldStandard-Bold.ttf"); }
+
+body { font-family: "Body", serif; line-height: 1.35; color: #000; }
+p { margin: 0; text-indent: 1.2em; text-align: justify; }
+h1, h2, h3, h4 { text-align: center; page-break-after: avoid; }
+.masthead { text-align: center; border-bottom: 3px solid #000; padding-bottom: 0.4em; margin-bottom: 0.8em; }
+.nameplate { font-family: "Nameplate", serif; font-weight: normal; font-size: 2.4em; margin: 0; }
+.motto, .folio, .weather-line, .center { text-indent: 0; text-align: center; }
+.motto { font-style: italic; }
+.folio { border-top: 2px solid #000; border-bottom: 1px solid #000; margin: 0.4em 0; padding: 0.15em 0; font-variant: small-caps; }
+.weather-line { font-size: 0.9em; }
+.lead-headline { font-size: 1.6em; line-height: 1.15; margin: 0.4em 0 0.2em; }
+.section-head { font-variant: small-caps; font-weight: normal; font-size: 1.6em; border-top: 3px solid #000; border-bottom: 1px solid #000; padding: 0.1em 0; margin: 0 0 0.8em; }
+.section-head small { display: block; font-size: 0.55em; font-style: italic; font-variant: normal; }
+.story { margin-bottom: 1.2em; padding-bottom: 0.8em; border-bottom: 1px solid #000; }
+.story h3 { font-size: 1.25em; line-height: 1.2; margin: 0.3em 0; }
+h4 { font-variant: small-caps; font-weight: normal; margin: 0.8em 0 0.3em; }
+.deck { font-style: italic; text-align: center; text-indent: 0; margin-bottom: 0.3em; }
+.credit, .byline { font-variant: small-caps; text-align: center; text-indent: 0; }
+.affil { font-style: italic; text-align: center; text-indent: 0; font-size: 0.85em; margin-bottom: 0.5em; }
+p.first, h4 + p, .label + p { text-indent: 0; }
+p.first:first-letter { font-size: 2.2em; font-weight: bold; }
+.label { font-weight: bold; text-indent: 0; margin-top: 0.4em; }
+.note { font-style: italic; text-indent: 0; margin-top: 0.4em; font-size: 0.9em; }
+.source { font-style: italic; font-size: 0.8em; text-indent: 0; margin-top: 0.5em; text-align: left; }
+figure { margin: 0.6em 0; text-align: center; }
+figure img { max-width: 100%; }
+figcaption { font-style: italic; font-size: 0.85em; }
+.archive h3 { text-transform: uppercase; font-size: 1em; }
+.old-ad { border: 3px double #000; padding: 0.5em; text-align: center; }
+.old-ad p { text-align: center; text-indent: 0; }
+.poem .stanza { text-indent: 0; text-align: left; margin: 0 0 0.8em 1em; }
+table.forecast { width: 100%; border-collapse: collapse; margin: 0.4em 0; }
+table.forecast th { text-align: left; font-weight: normal; font-variant: small-caps; padding-right: 0.5em; }
+table.forecast td, table.forecast th { border-top: 1px solid #000; padding: 0.15em 0.3em 0.15em 0; vertical-align: top; }
+.sources { font-size: 0.85em; }
+.sources li { margin-bottom: 0.4em; word-wrap: break-word; }
+.sources a { color: #000; }
+table.wordsearch { margin: 0.5em auto; border: 2px solid #000; border-collapse: collapse; font-weight: bold; }
+table.wordsearch td { width: 1.5em; height: 1.5em; text-align: center; padding: 0; }
+.wordlist { font-variant: small-caps; margin-top: 0.4em; }
+.the-end { margin-top: 2em; text-align: center; }
+.end-words { font-family: "Nameplate", serif; font-size: 2em; text-align: center; text-indent: 0; }

@@ -1,0 +1,1026 @@
+{
+  "paper_name": "The Morning Placeholder",
+  "motto": "All the News That Is Free to Print",
+  "edition_number": 1,
+  "volume": 1,
+  "date": "2026-10-01",
+  "location": {
+    "name": "Kansas City",
+    "region": "Missouri",
+    "lat": 39.0997,
+    "lon": -94.5786,
+    "tz": "America/Chicago"
+  },
+  "sections": [
+    {
+      "id": "world",
+      "name": "World"
+    },
+    {
+      "id": "science",
+      "name": "Science"
+    },
+    {
+      "id": "weather",
+      "name": "Weather"
+    },
+    {
+      "id": "archives",
+      "name": "From the Archives",
+      "subtitle": "One Hundred Years Ago Today"
+    },
+    {
+      "id": "puzzles",
+      "name": "Puzzles"
+    }
+  ],
+  "front": {
+    "lead": "conv-schrodinger",
+    "secondary": [
+      "nasa-moon-base",
+      "nasa-5g"
+    ]
+  },
+  "articles": [
+    {
+      "id": "conv-schrodinger",
+      "section": "science",
+      "title": "100 years ago, Schrödinger’s equation shed light on quantum physics – scientists use it today to fine-tune chemical reactions",
+      "deck": "A 100-year-old equation helps scientists build solar cells, develop biofuels and even study quantum computers.",
+      "author": "Sophya Garashchuk",
+      "author_affiliation": "Professor of Chemistry and Biochemistry, University of South Carolina",
+      "source_name": "The Conversation",
+      "source_url": "https://theconversation.com/100-years-ago-schrodingers-equation-shed-light-on-quantum-physics-scientists-use-it-today-to-fine-tune-chemical-reactions-284912",
+      "published": "2026-10-01T12:42:20Z",
+      "license": {
+        "id": "cc-by-nd-4.0",
+        "name": "CC BY-ND 4.0",
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "commercial": true,
+        "derivatives": false
+      },
+      "attribution": "This article is republished from The Conversation under a Creative Commons license. Read the original article at theconversation.com.",
+      "changes": "Images omitted. Text unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "The objects you interact with every day are predictable – you can pick up a box, sit down in a chair without falling to the floor, or open a door without your hand passing through the knob. But if you zoom in on these objects all the way to the quantum level – where you look at the individual atoms – you’ll find that things start to behave somewhat strangely."
+        },
+        {
+          "kind": "p",
+          "text": "The typical size of quantum objects is a nanometer, or one-billionth of a meter. For scale, a human hair is 60,000-100,000 nanometers wide. At the nanoscale level, you cannot know where exactly a particle is in space – you can only calculate a probability of where it might be."
+        },
+        {
+          "kind": "p",
+          "text": "At the quantum level, particles exhibit wavelike behavior. Instead of discrete, tiny objects, particles act more like continuous waves. A particle’s properties, including properties as basic as its position in space, are defined in terms of probabilities. You can’t know exactly where the particle is, but you can estimate the chances of finding it within a certain region of space. You can compute these probabilities using Schrödinger’s equation, the solutions to which are called wave functions."
+        },
+        {
+          "kind": "p",
+          "text": "About a century ago in 1926, Austrian physicist Erwin Schrödinger developed the wave equation, which allowed him to calculate the probability that a particle exhibited a certain property from its wave functions."
+        },
+        {
+          "kind": "p",
+          "text": "Even though the human eye can’t parse what’s happening at the quantum scale, the way particles behave at that level influences how you experience the world. It gives plants their green color, provides the foundations for computer and information technology, and governs how many everyday materials work."
+        },
+        {
+          "kind": "h",
+          "text": "The wave equation and wave functions"
+        },
+        {
+          "kind": "p",
+          "text": "I am a theoretical chemist, and Schrödinger’s 100-year-old breakthrough equation underlies many of my research projects. I track how atoms in certain chemicals are rearranged when they react with one another. Following chemical reactions at such a tiny scale can help researchers develop more efficient reactions, which is useful for everything from creating biofuels to developing solar energy technology."
+        },
+        {
+          "kind": "p",
+          "text": "How atoms behave at the quantum level dictates the properties molecules and materials have, so understanding their wave functions is key, and Schrödinger’s formulation became widely used for this purpose. Scientists try to compute these wave functions before synthesizing and characterizing the molecules directly in the lab, so the labs can focus their resources on the most promising reactions."
+        },
+        {
+          "kind": "p",
+          "text": "However, the Schrödinger equation is impossible to solve exactly, even on supercomputers, for all but the smallest molecules consisting of up to five or six atoms. This is because the difficulty of computing the wave function scales exponentially with bigger molecules. So if I need to calculate 10 bits of information per quantum particle, I will need 100 bits for two interacting particles, 1,000 bits for three particles, and so on."
+        },
+        {
+          "kind": "p",
+          "text": "To predict the properties of larger molecules and materials, researchers have developed methods that can find approximate wave functions. These techniques help scientists design new molecules and materials with specific desired properties for use in, for example, better sunscreens, solar cells, biodegradable plastics or nanoparticles for drug delivery."
+        },
+        {
+          "kind": "p",
+          "text": "Nowadays, you can solve the Schrödinger equation for electrons using well-established commercial or free software. If your molecule of interest is not too large – a few dozen atoms – you can quickly compute information about it, such as how stable it is or what wavelength of light it will absorb."
+        },
+        {
+          "kind": "p",
+          "text": "But these tools are limited. To understand quantum effects present in larger molecules, you’ll need a specialized set of tools, which my colleagues and I develop."
+        },
+        {
+          "kind": "h",
+          "text": "Quantum effects in chemical reactions"
+        },
+        {
+          "kind": "p",
+          "text": "One effect that comes into play at the quantum level, called quantum tunneling, can change how certain chemical reactions play out. Wave function solutions take this effect into account."
+        },
+        {
+          "kind": "p",
+          "text": "During many chemical reactions, the initial set of molecules, called reactants, have to overcome an energy barrier as their atoms are rearranged into the products of the reaction. Typically, this type of reaction would only take place if the reactants were heated up enough that they could sail above the barrier and release their energy on the product side."
+        },
+        {
+          "kind": "p",
+          "text": "But sometimes, for reactions at the quantum level, there is a chance the molecules can react even if their total energy is lower than the energy barrier. This phenomenon is called quantum tunneling. At low temperatures with light atoms, it can be the only way to have the reaction. Lighter particles have wave functions that are more spread out in space – these are more likely to exhibit quantum effects."
+        },
+        {
+          "kind": "p",
+          "text": "The lightest atomic nuclei are found in hydrogen atoms, and these are the most inclined to quantum tunneling. If hydrogen atoms are involved in a chemical reaction, scientists can use this tunneling property to learn certain details about the reaction. They do so by replacing some hydrogen atoms with a heavier version, called deuterium. Deuterium has a neutron in its nucleus, which hydrogen doesn’t, so it’s twice as heavy and less able to tunnel."
+        },
+        {
+          "kind": "h",
+          "text": "Experiments with quantum tunneling"
+        },
+        {
+          "kind": "p",
+          "text": "In 2022, my colleagues and I examined hydrogen atom transfer for a reaction that is part of the process that converts a sustainable biological resource, such as straw and switchgrass, into liquid fuel, such as gasoline and diesel. Our quantum calculations told us that a hydrogen atom was tunneling, which increased the reaction’s efficiency. The tunneling atom meant the reaction could still take place, even with a low-energy input. Over time, this small factor led to real efficiency gains."
+        },
+        {
+          "kind": "p",
+          "text": "Our work explained how making a minor modification to a reacting molecule – switching the hydrogen to deuterium – could increase the size of the energy barrier and stop tunneling. Because of these quantum behavior quirks, even a seemingly small change can stop the reaction altogether."
+        },
+        {
+          "kind": "h",
+          "text": "Future quantum applications"
+        },
+        {
+          "kind": "p",
+          "text": "Some technological applications that take advantage of particles’ quantum behaviors are truly futuristic, such as quantum computers. Quantum computers could eventually solve very demanding computational problems much faster than regular computers."
+        },
+        {
+          "kind": "p",
+          "text": "Right now, we have only early prototypes of quantum computers, which are large, highly complicated experimental machines – not unlike early computers that were the size of a room."
+        },
+        {
+          "kind": "p",
+          "text": "Perhaps quantum computers could one day help scientists solve the Schrödinger equation for molecules made up of thousands of atoms so we can design better molecules, materials and technologies."
+        },
+        {
+          "kind": "note",
+          "text": "Sophya Garashchuk receives funding from the National Science Foundation and Department of Energy of USA."
+        }
+      ]
+    },
+    {
+      "id": "nasa-moon-base",
+      "section": "science",
+      "title": "NASA Adds New Science Investigations for Moon Base",
+      "deck": null,
+      "author": "Lauren E. Low",
+      "author_affiliation": null,
+      "source_name": "NASA",
+      "source_url": "https://www.nasa.gov/news-release/nasa-adds-new-science-investigations-for-moon-base/",
+      "published": "Wed, 30 Sep 2026 21:11:23 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA news release. U.S. government work, public domain. NASA does not endorse this publication.",
+      "changes": null,
+      "body": [
+        {
+          "kind": "p",
+          "text": "NASA selected three new scientific investigations and their payload suites to advance our knowledge of the Moon and help pave the way for building humanity’s first lunar outpost, Moon Base."
+        },
+        {
+          "kind": "p",
+          "text": "The suite of science instruments and technologies was selected through NASA’s Payloads and Research Investigations on the Surface of the Moon (PRISM) program and will fly to the lunar surface using the CLPS (Commercial Lunar Payload Services) initiative as part of the agency’s Moon Base Program. The payloads will help researchers understand lunar resources, map natural shelters, and assess environmental hazards, laying the foundational groundwork for a safe and sustained human presence under the agency’s Artemis and Moon Base programs."
+        },
+        {
+          "kind": "p",
+          "text": "“NASA Science is building the ultimate interplanetary survival guide to ensure that science goes first to the lunar surface to provide our future astronaut crews with the vital information, resources, and safety precautions needed ahead of time to survive the night on the Moon,” said Nicky Fox, associate administrator, Science Mission Directorate, at NASA Headquarters in Washington. “These PRISM selections will directly help NASA minimize risks to our astronauts while maximizing our agency goals as we set up humanity’s first lunar outpost in preparation for sending the first astronauts to Mars.”"
+        },
+        {
+          "kind": "p",
+          "text": "The three payload suites are:"
+        },
+        {
+          "kind": "label",
+          "text": "Lunar Environment Monitoring Station – South Pole (LEMS-SP):"
+        },
+        {
+          "kind": "p",
+          "text": "Principal Investigator: Dr. Mehdi Benna, University of Maryland, Baltimore County"
+        },
+        {
+          "kind": "label",
+          "text": "Geophysical Investigation for Mapping Lunar Interior (GIMLI):"
+        },
+        {
+          "kind": "p",
+          "text": "Principal Investigator: Dr. Nathaniel Putzig, Planetary Science Institute"
+        },
+        {
+          "kind": "label",
+          "text": "Depth Imager with Spectral and Color Optics (DISCO):"
+        },
+        {
+          "kind": "p",
+          "text": "Principal Investigator: Dr. Ariel Deutsch, NASA’s Ames Research Center in California’s Silicon Valley"
+        },
+        {
+          "kind": "p",
+          "text": "“Each new PRISM selection strengthens our ability to deliver ambitious, transformative science to the lunar surface,” said Brad Bailey, director of the Exploration Science Strategy Integration Office in NASA’s Science Mission Directorate. “These investigations exemplify how Artemis and Moon Base are expanding the frontier of lunar exploration, advancing innovative technologies, deepening our understanding of the Moon’s environment, and paving the way for future astronaut missions.”"
+        },
+        {
+          "kind": "p",
+          "text": "NASA is increasing its cadence of lunar missions to build a Moon Base, delivering science investigations and technology payloads that contribute to American scientific preeminence, strengthen a sustained presence on the Moon, and advance future human exploration."
+        },
+        {
+          "kind": "p",
+          "text": "NASA’s CLPS initiative supports the Moon Base Program, as the agency works with American companies to deliver scientific, exploration, and technology payloads to the Moon’s surface and orbit."
+        }
+      ]
+    },
+    {
+      "id": "nasa-5g",
+      "section": "science",
+      "title": "NASA Awards Contract to Develop 5G Communications for Moon",
+      "deck": null,
+      "author": "Gerelle Q. Dodson",
+      "author_affiliation": null,
+      "source_name": "NASA",
+      "source_url": "https://www.nasa.gov/news-release/nasa-awards-contract-to-develop-5g-communications-for-moon/",
+      "published": "Wed, 30 Sep 2026 20:41:26 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA news release. U.S. government work, public domain. NASA does not endorse this publication.",
+      "changes": null,
+      "body": [
+        {
+          "kind": "p",
+          "text": "NASA has awarded Modulate Space Corporation a contract to develop key elements of a 5G communications system for use on the lunar surface with built-in Wi-Fi 6, for NASA’s Glenn Research Center in Cleveland."
+        },
+        {
+          "kind": "p",
+          "text": "This accelerated effort is organized into two primary work areas that together will develop a scalable, standards-based communications capability designed to support future Moon Base surface operations."
+        },
+        {
+          "kind": "p",
+          "text": "The 5G System and Lunar Surface Communications Evaluation and Radio Propagation Measurements contract is a firm-fixed-price contract with a value of approximately $38 million. The performance period for the 5G Network-in-a-Box Development and Lab Demonstration runs from Thursday, Oct. 1, through Jan. 31, 2028. The performance period for the Lunar 5G and Wi-Fi Integrated Surface Network and Flight Demonstration on the Lunar Surface runs from Monday, Nov. 30, through Dec. 31, 2028."
+        },
+        {
+          "kind": "p",
+          "text": "Through these demonstrations, NASA will acquire technology development of hardware, firmware, and software needed to advance the integrated lunar communications system. This effort will give NASA insight into the system architecture and operational performance while providing the flexibility needed to evolve the technology for future lunar surface communications."
+        }
+      ]
+    },
+    {
+      "id": "gv-ukraine-business",
+      "section": "world",
+      "title": "After five years of war, how do Ukrainian small businesses survive?",
+      "deck": null,
+      "author": "Nevena Borisova",
+      "author_affiliation": null,
+      "source_name": "Global Voices",
+      "source_url": "https://globalvoices.org/2026/09/28/after-five-years-of-war-how-do-ukrainian-small-businesses-survive/",
+      "published": "Mon, 28 Sep 2026 06:00:15 +0000",
+      "license": {
+        "id": "cc-by-3.0",
+        "name": "CC BY 3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "Originally published on Global Voices (globalvoices.org) under CC BY 3.0.",
+      "changes": "Images and photo captions omitted. Text otherwise unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "Small businesses may look marginal, but for individual households they represent independence. We talk with Victoria Belim-Frolova."
+        },
+        {
+          "kind": "p",
+          "text": "The war in Ukraine, with its multiple effects, has been taking its toll on various sectors, and small businesses are not immune. Yet, some businesses manage to oppose the widespread infrastructure and supply-chain problems, labor shortages, and limited access to finance — and among these, a special place belongs to women."
+        },
+        {
+          "kind": "p",
+          "text": "A UNDP-supported study found that 83 percent of small businesses were negatively affected by the war; the prevalence of women-led business has also increased since the beginning of the full-scale invasion. Many women have become entrepreneurs because of displacement, loss of household income, absence of a partner serving in the military and, last but not least, the need to combine flexible work with family care."
+        },
+        {
+          "kind": "p",
+          "text": "According to The New Voice of Ukraine, women accounted for nearly 60 percent of newly registered sole proprietors in the first quarter of 2026, compared with about 49 percent at the beginning of the conflict."
+        },
+        {
+          "kind": "p",
+          "text": "It was also women who, in 2025, headed 12,757 newly established companies — 34 percent of all newly formed enterprises. According to data from March 2026, women lead approximately 32 percent of registered Ukrainian companies."
+        },
+        {
+          "kind": "p",
+          "text": "“War can destroy a business quickly, but it also creates a constant process of adaptation”, says writer and journalist Viktoria Belim-Frolova, somewhere from Ukraine, via our chat interview. “Somewhere” feels like a fair description, because she is extremely mobile, having lived and worked in eastern Ukraine and frontline communities for more than two years now. She moved back to Ukraine from Brussels in 2024, and has been reporting on how women are forced to adapt because of the war."
+        },
+        {
+          "kind": "p",
+          "text": "Local businesses — including the women-led ones, she says — tend to not give up so easily. Instead, they “relocate, become smaller, change their products or services, or operate under circumstances that would ordinarily make running a business impossible.”"
+        },
+        {
+          "kind": "p",
+          "text": "Global Voices (GV): We all know that war inevitably affects economics and business. You have been in Ukraine for a long time now; how would you describe the dynamics?"
+        },
+        {
+          "kind": "p",
+          "text": "Victoria Belim-Frolova (VBF) People relocated, companies moved operations, employees learned to work through blackouts and air raids, and businesses became much more geographically dispersed. But statistics don’t necessarily capture what economic life feels like on the ground. In eastern Ukraine, I have watched the commercial life of entire cities contract. Shops close. Restaurants disappear. Businesses move west or abroad. Skilled people leave. A place can still exist on the map while gradually losing the economic ecosystem that made normal life possible. At the same time, war creates new sectors and transforms old ones. Ukraine now has an extraordinary defense-tech industry. Engineers who might once have worked on commercial technology are developing drones, communications systems and other military technologies. So, I would describe the Ukrainian economy less as simply declining than as being violently restructured by war."
+        },
+        {
+          "kind": "p",
+          "text": "GV: What happened to once thriving sectors like information technology?"
+        },
+        {
+          "kind": "p",
+          "text": "VBF: One of the striking things about Ukraine is that the economy has not simply collapsed. It has adapted, although very unevenly. IT is a good example. Before the full-scale invasion, it was one of Ukraine’s great success stories, and it remains remarkably resilient."
+        },
+        {
+          "kind": "p",
+          "text": "GV: What about the online craft business in Ukraine, which was often women-dominated?"
+        },
+        {
+          "kind": "p",
+          "text": "VBF: This is actually one of the areas I would be careful about describing as simply disappearing. Online commerce has given small Ukrainian producers something extremely valuable during the war: access to customers who are not physically in Ukraine. For someone making ceramics, jewelry, embroidery, clothing, cosmetics or other handmade goods, the local customer base may have become poorer or disappeared altogether. But an online business can potentially sell to Warsaw, Brussels, London or New York."
+        },
+        {
+          "kind": "p",
+          "text": "The difficulties are substantial: disrupted logistics, electricity cuts, displacement, increased costs and the simple psychological difficulty of running a tiny business while your country is at war. Yet, these businesses can be unusually adaptable precisely because they are small. I’ve become increasingly interested in these very modest forms of economic resilience. We tend to talk about the Ukrainian economy through GDP, reconstruction costs and major industries."
+        },
+        {
+          "kind": "p",
+          "text": "But there is another economy made up of a woman selling embroidered shirts online, someone baking cakes from her apartment, a market vendor arranging tomatoes every morning, or a displaced person restarting a tiny business in another city. These activities may look insignificant individually. Collectively, they are part of what keeps society functioning."
+        },
+        {
+          "kind": "p",
+          "text": "GV: Your specific sphere of interest is how women and their communities help each other. What examples do you observe?"
+        },
+        {
+          "kind": "p",
+          "text": "VBF: One that stays with me is Anastasia, an 18-year-old woman I met in Mykolaivka, a town near Kramatorsk, where the security situation has been steadily deteriorating. She taught herself to do gel manicures by watching videos online, and eventually became the last manicurist still working in her town."
+        },
+        {
+          "kind": "p",
+          "text": "What surprised me was how far women were prepared to go to see her. Some came from neighboring towns, traveling [along] roads exposed to drones, simply to have their nails done. It would be easy to dismiss this as something frivolous during a war, but I think it shows exactly the opposite. The manicure was not only about beauty. It was self-care, a small assertion of normality and control, and an opportunity for social connection."
+        },
+        {
+          "kind": "p",
+          "text": "Anastasia’s little business created a space where women could sit together, talk and feel like themselves for a while. For me, this is also an example of what small businesses can mean to communities during wartime. Their value cannot always be measured simply by revenue or employment. A tiny business can become part of the social infrastructure of a place. And when these businesses disappear, communities lose more than economic activity. They lose places of connection, routine and normal life."
+        },
+        {
+          "kind": "p",
+          "text": "GV: How does the decline of community wealth affect people’s mental health?"
+        },
+        {
+          "kind": "p",
+          "text": "VBF: Poverty during war is not only about having less money. It is about losing choices. When a community becomes poorer, people’s radius of possibility shrinks. You postpone medical treatment. You stop travelling. You buy cheaper food. You cannot repair your apartment. Eventually, you may not have the resources to leave a dangerous place."
+        },
+        {
+          "kind": "p",
+          "text": "I see this very clearly during evacuations in [the] Donetsk region. Leaving requires resources. You need somewhere to go, money to rent another apartment, transportation, documents, perhaps someone who can help an elderly parent or a child. People sometimes remain in extremely dangerous places partly because everything they own is there."
+        },
+        {
+          "kind": "p",
+          "text": "GV: What about women in this context?"
+        },
+        {
+          "kind": "p",
+          "text": "VBF: Women often carry a particular burden because they are managing households, children, and elderly relatives while also trying to earn an income. Many have also been displaced while their husbands or partners are serving in the military. Economic insecurity therefore becomes intertwined with an enormous burden of care and responsibility."
+        },
+        {
+          "kind": "p",
+          "text": "There is also a psychological effect that is difficult to quantify. When a café closes or a market becomes half empty, you lose more than a business. You lose places where people meet, exchange information and feel part of a community. The impoverishment of a city is also an impoverishment of its social life."
+        },
+        {
+          "kind": "p",
+          "text": "GV: Is there hope at the end of the tunnel?"
+        },
+        {
+          "kind": "p",
+          "text": "VBF: I don't really think about hope as something waiting at the end of the tunnel anymore. In Ukraine, especially close to the frontline, nobody knows how long the tunnel is. What interests me much more is what people do inside it."
+        },
+        {
+          "kind": "p",
+          "text": "In Kramatorsk, I have watched people leave their homes and give vegetables from their gardens to the volunteers evacuating them. I have seen people meet for coffee after nights of explosions. Markets still open. People teach classes, repair roofs, take elderly neighbors to hospital, rescue animals and go back to work the following morning."
+        },
+        {
+          "kind": "p",
+          "text": "None of this means that everything will be fine. I think there is sometimes too much pressure to turn Ukrainian resilience into an uplifting story. People are exhausted. They are losing homes, livelihoods and people they love. But resilience is real. Hope, for me, is less a feeling than an accumulation of very small actions that keep ordinary life functioning when almost everything is working against it."
+        },
+        {
+          "kind": "p",
+          "text": "GV: How does poverty change communities and women-led businesses?"
+        },
+        {
+          "kind": "p",
+          "text": "VBF: It [is] much more visible, but what strikes me is how resourceful people become. People grow food, preserve vegetables, exchange things, rely on relatives and neighbors and combine several sources of income."
+        },
+        {
+          "kind": "p",
+          "text": "Small amounts of money matter. Informal networks matter enormously. So do pensions and humanitarian assistance. For women, small businesses can become particularly important. Their activities may look marginal from the perspective of macroeconomics, but for an individual household they can mean independence and survival."
+        },
+        {
+          "kind": "p",
+          "text": "There is another side to this resourcefulness, however. Having to become endlessly inventive because your income disappeared, your husband is at war, your children were displaced and your savings are running out, is survival, and we don’t need to romanticise it."
+        }
+      ]
+    },
+    {
+      "id": "conv-frogs",
+      "section": "science",
+      "title": "Too many males to choose from can overwhelm female frogs – and change who gets to mate",
+      "deck": "Many animal species – frogs and humans alike – struggle to make choices in a complex, overwhelming world.",
+      "author": "Claire Therese Hemingway",
+      "author_affiliation": "Assistant Professor of Ecology & Evolutionary Biology, University of Tennessee; Smithsonian Institution",
+      "source_name": "The Conversation",
+      "source_url": "https://theconversation.com/too-many-males-to-choose-from-can-overwhelm-female-frogs-and-change-who-gets-to-mate-292343",
+      "published": "2026-10-01T12:42:31Z",
+      "license": {
+        "id": "cc-by-nd-4.0",
+        "name": "CC BY-ND 4.0",
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "commercial": true,
+        "derivatives": false
+      },
+      "attribution": "This article is republished from The Conversation under a Creative Commons license. Read the original article at theconversation.com.",
+      "changes": "Images and audio omitted. Text unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "If you’ve ever felt overwhelmed by menu options at a restaurant, cereal varieties at the grocery store or potential partners while scrolling through dating apps, you’ve experienced choice overload."
+        },
+        {
+          "kind": "p",
+          "text": "People aren’t the only ones to have trouble making decisions when confronted with many options simultaneously. In our new study published in the journal iScience, my colleagues and I found similar effects of choice overload in female gray tree frogs when faced with too many calls from males looking for love."
+        },
+        {
+          "kind": "p",
+          "text": "Scientists have observed many species having similar decision-making problems when experiencing choice overload. But we know little about how these kinds of cognitive constraints affect animals in natural settings."
+        },
+        {
+          "kind": "h",
+          "text": "Indecision on the frog dating scene"
+        },
+        {
+          "kind": "p",
+          "text": "The gray tree frogs we focused on live in wooded areas near sources of water in North America. During the mating season, males gather in choruses and call to attract mates. Females pick mates based on several call attributes, including call length. Longer calls are more attractive."
+        },
+        {
+          "kind": "p",
+          "text": "For our experiment, we captured 60 female tree frogs from breeding choruses in East Tennessee and brought them into our lab. Then we played recorded mating calls for each female, giving her a choice between one long, attractive “target” call and one, three or seven shorter, less attractive “distractor” calls."
+        },
+        {
+          "kind": "p",
+          "text": "In the wild, a tree frog breeding chorus can include dozens or even hundreds of calling males. In our lab setup, the calls played sequentially, so they never overlapped."
+        },
+        {
+          "kind": "p",
+          "text": "Females would hop toward the speaker broadcasting the call she preferred. As the number of distractor calls increased, females got worse at picking the attractive call, took longer to decide, and were more likely to defer choosing within the 10-minute window altogether."
+        },
+        {
+          "kind": "h",
+          "text": "Cognitive confusion"
+        },
+        {
+          "kind": "p",
+          "text": "Because we eliminated call overlap entirely, we know this decline wasn’t due to what researchers call energetic masking. That’s the well-documented problem of overlapping signals impairing an individual’s ability to detect and discriminate a signal from noise."
+        },
+        {
+          "kind": "p",
+          "text": "Biologists have long known that female preferences can weaken in choruses and have usually assumed the explanation is energetic masking: Too many overlapping signals create a challenge for the frogs’ perceptual systems. In other words, they can’t detect or discriminate individual calls."
+        },
+        {
+          "kind": "p",
+          "text": "Instead, our study shows that a female’s own cognitive limits can make it hard for her to select her preferred mate. The challenge comes from too many males to choose from, not being unable to hear the males clearly."
+        },
+        {
+          "kind": "h",
+          "text": "When females can’t make the optimal choice"
+        },
+        {
+          "kind": "p",
+          "text": "Call traits are linked to offspring fitness in gray tree frogs. If females have trouble recognizing the calls they prefer in a real chorus, they aren’t able to pick the mates with the best genes to pass on. They may end up mating with males they would otherwise reject. These males with less going for them then pass on their less desirable traits, which could have negative consequences for the offspring."
+        },
+        {
+          "kind": "p",
+          "text": "Our finding raises the possibility that males could exploit this cognitive limitation in females. Less attractive males might do better by joining bigger choruses, where the sheer number of competitors makes it harder for females to discriminate against them. Conversely, more attractive males may benefit from calling in smaller groups, or even in isolation. My colleagues and I hope to investigate some of these possibilities soon."
+        },
+        {
+          "kind": "h",
+          "text": "More options, more opportunities … to a point"
+        },
+        {
+          "kind": "p",
+          "text": "We ran our experiments in a simplified lab arena, which allowed us to isolate choice overload from other effects. We removed the real-world clutter of overlapping calls, vegetation and risk from predators that females would face in an actual pond. We also limited female choice to eight calls, though frogs may hear even more in natural settings."
+        },
+        {
+          "kind": "p",
+          "text": "The next step in this research is figuring out how much choice overload matters in a real chorus, where calls do overlap, and where sensory processing and cognitive processing are probably both at play. We’re particularly interested in seeing whether, in natural choruses, decisions do take longer and females really end up mating with less preferable males."
+        },
+        {
+          "kind": "p",
+          "text": "Choice overload isn’t unique to frogs, or even to mate choice. Researchers have seen bees choosing among flowers, ants comparing potential nest sites and mosquitoes selecting egg-laying sites all making worse decisions as the number of competing options increases. And recent research on field crickets and tree frogs has found similar patterns in these animals as they pick mates based on their calls."
+        },
+        {
+          "kind": "p",
+          "text": "Together, this growing body of evidence suggests that cognitive constraints are a general feature of animal decision-making."
+        },
+        {
+          "kind": "note",
+          "text": "Claire Therese Hemingway receives funding from the National Science Foundation."
+        }
+      ]
+    },
+    {
+      "id": "nasa-eo-island",
+      "section": "science",
+      "title": "An Agricultural “Island” in the Saskatchewan River Delta",
+      "deck": null,
+      "author": "NASA Earth Observatory",
+      "author_affiliation": null,
+      "source_name": "NASA Earth Observatory",
+      "source_url": "https://science.nasa.gov/earth/earth-observatory/an-agricultural-island-in-the-saskatchewan-river-delta/",
+      "published": "Thu, 01 Oct 2026 04:00:00 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA Earth Observatory. U.S. government work, public domain.",
+      "changes": "Image converted to monochrome.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "Much of the Saskatchewan River Delta, a large inland delta that straddles the Canadian provinces of Saskatchewan and Manitoba, is too wet for extensive farming. But amid the delta’s winding channels, lakes, and marshes, an “island” of straight-edged fields breaks up the curvy contours. These fields, west of the town of The Pas, make up Manitoba’s northernmost agricultural area."
+        },
+        {
+          "kind": "p",
+          "text": "Known as the Carrot River Valley (Pasquia Area Settlement), the area lies within the Rural Municipality of Kelsey. Its actively farmed land spans more than 40,000 hectares (100,000 acres) between the Carrot and Pasquia rivers—tributaries of the Saskatchewan River—and is surrounded by wetlands, including the marshes of the Saskeram Wildlife Management Area to the north."
+        },
+        {
+          "kind": "p",
+          "text": "These images show the valley at two points during the 2026 growing season: on July 2 (left) and September 21 (right). They were acquired with the OLI (Operational Land Imager) on the NASA-USGS Landsat 9 and Landsat 8 satellites, respectively."
+        },
+        {
+          "kind": "p",
+          "text": "Landsat data feed into the Agriculture and Agri-Food Canada annual crop inventory. The 2026 inventory was not released as of late September, but the 2025 map shows that farmers in the Carrot River Valley grew mostly canola and spring wheat that year, along with small patches of Canary seed."
+        },
+        {
+          "kind": "p",
+          "text": "The July 2026 image shows green crops across many of the valley’s fields. Planting in the area, part of Manitoba Agriculture’s Northwest crop reporting region, began later than in parts of the region to the south because of wet conditions. Still, fertile soils and long summer days at this northern latitude can help crops grow quickly."
+        },
+        {
+          "kind": "p",
+          "text": "By the time of the September image, the pattern had flipped. The Pas recorded little rainfall in the preceding week (1.6 millimeters, or 0.06 inches), while wetter weather elsewhere in the Northwest region (up to 43.9 millimeters, or 1.7 inches) held up the harvest. By then, farmers across the region had harvested about 10 percent of the canola and 50 percent of the spring wheat."
+        },
+        {
+          "kind": "p",
+          "text": "Managing water has long been a challenge in the valley. In the 1950s, a major flood control and drainage project got underway, and farming in the area today still depends on diking and pumping for agricultural flood protection."
+        },
+        {
+          "kind": "p",
+          "text": "NASA Earth Observatory images by Michala Garrison, using Landsat data from the U.S. Geological Survey. Story by Kathryn Hansen."
+        }
+      ],
+      "images": [
+        {
+          "path": "images/eo-saskatchewan-delta-20260702.jpg",
+          "caption": "July 2, 2026",
+          "credit": "NASA Earth Observatory/Michala Garrison",
+          "license": {
+            "id": "us-gov-pd",
+            "name": "Public domain (U.S. government work)",
+            "url": "https://www.usa.gov/government-copyright",
+            "commercial": true,
+            "derivatives": true
+          }
+        },
+        {
+          "path": "images/eo-saskatchewan-delta-20260921.jpg",
+          "caption": "September 21, 2026",
+          "credit": "NASA Earth Observatory/Michala Garrison",
+          "license": {
+            "id": "us-gov-pd",
+            "name": "Public domain (U.S. government work)",
+            "url": "https://www.usa.gov/government-copyright",
+            "commercial": true,
+            "derivatives": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "conv-noreaster",
+      "section": "weather",
+      "title": "Why the nor'easter’s storm surge was so high, and what it says about the El Niño winter ahead",
+      "deck": "Several factors make for high water levels, and they conspired to worsen the storm surge that flooded coastal areas from North Carolina to New York.",
+      "author": "Brian Tang",
+      "author_affiliation": "Professor of Atmospheric Science, University at Albany, State University of New York",
+      "source_name": "The Conversation",
+      "source_url": "https://theconversation.com/why-the-noreasters-storm-surge-was-so-high-and-what-it-says-about-the-el-nino-winter-ahead-293082",
+      "published": "2026-09-30T12:44:28Z",
+      "license": {
+        "id": "cc-by-nd-4.0",
+        "name": "CC BY-ND 4.0",
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "commercial": true,
+        "derivatives": false
+      },
+      "attribution": "This article is republished from The Conversation under a Creative Commons license. Read the original article at theconversation.com.",
+      "changes": "Images omitted. Text unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "As a powerful nor’easter hit the U.S. Atlantic Coast in late September 2026, the ocean poured into coastal neighborhoods from North Carolina to New York. Water from the storm surge and heavy rain filled streets and surrounded homes as near-hurricane-force winds knocked out power. It may have even uncovered a shipwreck more than a century old."
+        },
+        {
+          "kind": "p",
+          "text": "Atlantic City, New Jersey, saw its highest water level since Superstorm Sandy in 2012, as the storm surge washed into houses and vehicles and eroded protective beach dunes."
+        },
+        {
+          "kind": "p",
+          "text": "I study storm systems. People may be wondering if the nor’easter flooding is a prelude for what to expect as a strong El Niño continues to build this winter and as sea level rises in the future. To understand the risks, let’s break down what caused the water to rise so high."
+        },
+        {
+          "kind": "h",
+          "text": "The storm surge"
+        },
+        {
+          "kind": "p",
+          "text": "Several factors go into high water levels, and they combined to worsen flooding during the nor’easter."
+        },
+        {
+          "kind": "p",
+          "text": "Storm surge is the piling up of water caused by strong winds pushing water onshore. As the nor’easter began to take shape, gale-force winds began pushing water over hundreds of miles of the Atlantic toward the coast. As the storm strengthened and its pressure dropped, the winds grew stronger and this push of water intensified."
+        },
+        {
+          "kind": "p",
+          "text": "There are four basic factors that determine the surge height at any given location: the strength of the onshore wind, the size of the storm, the shape of the coastline and the depth of the ocean."
+        },
+        {
+          "kind": "p",
+          "text": "The September 2026 surge was highest where the water was directed into shallow bays and inlets. In those areas, the push of water becomes concentrated into a small area with nowhere to go but onto land. Some of the largest surges during the nor’easter were in Raritan Bay in New Jersey and Delaware Bay."
+        },
+        {
+          "kind": "p",
+          "text": "The slow movement of the nor’easter up the East Coast resulted in a large, sustained surge."
+        },
+        {
+          "kind": "h",
+          "text": "High tides raised the flood risk"
+        },
+        {
+          "kind": "p",
+          "text": "Inundation – the actual water level above the ground – depends on both the storm surge and the tide."
+        },
+        {
+          "kind": "p",
+          "text": "The greatest flooding occurs when the peak storm surge coincides with high tide. Worse yet is when the high tides are higher than normal, such as around a full moon. The gravitational pull of both the Moon and the Sun combine around a full moon to make the tides larger. That’s what happened during the height of the nor’easter."
+        },
+        {
+          "kind": "p",
+          "text": "Additionally, the long duration of the nor’easter allowed inundation to occur over multiple high tides, resulting in repeated rounds of coastal flooding."
+        },
+        {
+          "kind": "h",
+          "text": "The role of sea-level rise"
+        },
+        {
+          "kind": "p",
+          "text": "Another important factor for inundation is sea-level rise. Sea-level rise is occurring because the planet is warming. That melts glaciers, sending more water into the oceans, and causes the ocean to physically expand."
+        },
+        {
+          "kind": "p",
+          "text": "Sea-level rise is occurring faster in parts of the U.S. East Coast compared with other areas, primarily due to something called post-glacial rebound. The weight of the Laurentide ice sheet that covered large parts of North America thousands of years ago pushed down the land below it, while causing the land around its edges to rise – including along the mid-Atlantic seaboard. As the ice melted, those edges that had lifted slowly sank again."
+        },
+        {
+          "kind": "p",
+          "text": "In Atlantic City, sea level is rising at a rate of about 2 inches (50 millimeters) every decade. A couple of inches can mean the difference between water staying out of one’s house or pouring in. Even if nor’easters don’t become stronger in the future, they will become more damaging because sea level is already higher, and more places will experience flooding."
+        },
+        {
+          "kind": "h",
+          "text": "More to come this El Niño winter?"
+        },
+        {
+          "kind": "p",
+          "text": "With one of the strongest El Niños in recent memory already affecting weather patterns around the world, is this early-season nor’easter a sign of things to come? It’s difficult to say."
+        },
+        {
+          "kind": "p",
+          "text": "One study found that strong nor’easters along the East Coast are more likely during El Niño years."
+        },
+        {
+          "kind": "p",
+          "text": "Computer model seasonal forecasts suggest an increased chance of above-normal precipitation along the East Coast during the winter. This suggests moisture-laden storms with heavy precipitation may be more likely to move up the coast with damaging storm surges."
+        },
+        {
+          "kind": "p",
+          "text": "However, every El Niño is different, and there are few past El Niños close to the strength expected this time to compare with."
+        },
+        {
+          "kind": "p",
+          "text": "The best advice this El Niño winter is to be proactive in preparing and monitoring the weather. Check your insurance policies to understand your coverage, particularly if you are in a flood-prone area. Have an emergency supply kit and make sure its contents are refreshed."
+        },
+        {
+          "kind": "p",
+          "text": "Should a big storm threaten, pay attention to the weather forecast from trusted sources and listen to the advice of your community’s emergency managers to keep everyone safe."
+        },
+        {
+          "kind": "note",
+          "text": "Brian Tang receives funding from the National Science Foundation, the National Aeronautics and Space Administration, and the Center for Western Weather and Water Extremes at Scripps Institution of Oceanography at UC San Diego."
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": "Season Is Closed. Owners Will Erect New Structure.",
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Cordele Dispatch, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/2022239700/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Cordele Dispatch (Cordele, Ga.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-st-simons",
+      "title": "No Loss of Life Is Reported",
+      "body": [
+        {
+          "kind": "p",
+          "text": "BRUNSWICK, Ga., October 1.—(AP)—Fire destroyed St. Simons Hotel and adjacent buildings early this morning. There were no casualties, the guests having left several days ago when the season closed."
+        },
+        {
+          "kind": "p",
+          "text": "The damage is estimated at around twenty-five thousand dollars."
+        },
+        {
+          "kind": "p",
+          "text": "The hotel owners expect to erect a new building at once."
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": null,
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Cordele Dispatch, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/2022239700/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Cordele Dispatch (Cordele, Ga.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-tornado",
+      "title": "Tornado Hits Resort Region on Iowa Lake",
+      "body": [
+        {
+          "kind": "p",
+          "text": "SPENCER, Iowa, October 1.—(AP)—A tornado swept a section of Lake Okoboji resort region north of here last night. Indirect reports said many cottages were [illegible] and that the Methodist tabernacle, costing thirty thousand, was destroyed. No reports of casualties were received. [Illegible] communication was seriously [illegible]."
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": null,
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Cordele Dispatch, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/2022239700/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Cordele Dispatch (Cordele, Ga.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-golf",
+      "title": "Girl Golf Wonder Is Beaten by Mrs. Stetson",
+      "body": [
+        {
+          "kind": "p",
+          "text": "HAVERFORD, Pa., October 1.—(AP)—Virginia Wilson, Chicago twenty-year-old conqueror of Glenna Collett, met her defeat in the semi-finals of the women’s national golf championship today, losing a nineteen hole match to Mrs. G. Henry Stetson, of Philadelphia, one up."
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": null,
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Cordele Dispatch, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/2022239700/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Cordele Dispatch (Cordele, Ga.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-atlanta-schools",
+      "title": "Atlanta Banks Refuse to Lend Money to Run School Till January Next Year",
+      "body": [
+        {
+          "kind": "p",
+          "text": "ATLANTA, Ga., October 1.—(AP)—All the city schools here will be closed Monday unless means are devised today to meet a salary pay roll of approximately two hundred thousand dollars due the one thousand two hundred public school teachers, A. J. Orme, chairman of the city council finance committee, said today."
+        },
+        {
+          "kind": "p",
+          "text": "If closed, the schools will not reopen until January one, when the appropriations to meet school expenses are available. The only course left open is for individuals to loan the city sufficient money to pay school salaries, due as the clearing house has refused to loan the money."
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": null,
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Cordele Dispatch, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/2022239700/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Cordele Dispatch (Cordele, Ga.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-ice-cream",
+      "kind": "advertisement",
+      "title": "To Introduce Ice-Cream Kisses",
+      "body": [
+        {
+          "kind": "p",
+          "text": "This advertisement clipped from the paper and presented at our store together with a 25¢ cash purchase will entitle the holder to one of our new chocolate covered ice cream kisses, made in the store from Kinnett’s Velvet Ice Cream & Chocolate Coating. Retail price 5¢. Try them and you’ll buy them."
+        },
+        {
+          "kind": "p",
+          "text": "Stead’s Drug Store."
+        }
+      ]
+    }
+  ],
+  "weather": {
+    "city": "Kansas City, Mo.",
+    "office": "NWS Kansas City/Pleasant Hill (EAX)",
+    "generated": "2026-10-01T12:11:35+00:00",
+    "source_url": "https://forecast.weather.gov/MapClick.php?lat=39.0997&lon=-94.5786",
+    "license": {
+      "id": "us-gov-pd",
+      "name": "Public domain (U.S. government work)",
+      "url": "https://www.usa.gov/government-copyright",
+      "commercial": true,
+      "derivatives": true
+    },
+    "attribution": "Forecast from the National Weather Service. Public domain.",
+    "periods": [
+      {
+        "name": "Today",
+        "temperature": 72,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Showers And Thunderstorms",
+        "detail": "Showers and thunderstorms. Some of the storms could produce heavy rain. Cloudy, with a high near 72. South southwest wind 3 to 9 mph, with gusts as high as 18 mph. Chance of precipitation is 90%. New rainfall amounts between 1 and 2 inches possible."
+      },
+      {
+        "name": "Tonight",
+        "temperature": 54,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Showers And Thunderstorms",
+        "detail": "Showers and thunderstorms before 1am. Mostly cloudy, with a low around 54. North northeast wind 10 to 14 mph, with gusts as high as 23 mph. Chance of precipitation is 90%. New rainfall amounts between 1 and 2 inches possible."
+      },
+      {
+        "name": "Friday",
+        "temperature": 65,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Sunny",
+        "detail": "Sunny, with a high near 65. North northeast wind around 10 mph, with gusts as high as 18 mph."
+      },
+      {
+        "name": "Friday Night",
+        "temperature": 49,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Clear",
+        "detail": "Clear, with a low around 49. East northeast wind 3 to 7 mph."
+      },
+      {
+        "name": "Saturday",
+        "temperature": 69,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Sunny",
+        "detail": "Sunny, with a high near 69. East southeast wind around 5 mph."
+      },
+      {
+        "name": "Saturday Night",
+        "temperature": 54,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Mostly Clear",
+        "detail": "Mostly clear, with a low around 54."
+      },
+      {
+        "name": "Sunday",
+        "temperature": 73,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Sunny",
+        "detail": "Sunny, with a high near 73."
+      },
+      {
+        "name": "Sunday Night",
+        "temperature": 51,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Mostly Clear",
+        "detail": "Mostly clear, with a low around 51."
+      }
+    ]
+  },
+  "poem": {
+    "id": "pd-keats-to-autumn",
+    "title": "To Autumn",
+    "author": "John Keats",
+    "year": 1820,
+    "source_name": "Wikisource, from The Oxford Book of English Verse",
+    "source_url": "https://en.wikisource.org/wiki/Oxford_Book_of_English_Verse_1250-1900/To_Autumn",
+    "license": {
+      "id": "pd-expired",
+      "name": "Public domain (published before 1931)",
+      "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+      "commercial": true,
+      "derivatives": true
+    },
+    "attribution": "First published 1820. Public domain.",
+    "stanzas": [
+      [
+        "Season of mists and mellow fruitfulness!",
+        "Close bosom-friend of the maturing sun;",
+        "Conspiring with him how to load and bless",
+        "With fruit the vines that round the thatch-eaves run;",
+        "To bend with apples the moss'd cottage-trees,",
+        "And fill all fruit with ripeness to the core;",
+        "To swell the gourd, and plump the hazel shells",
+        "With a sweet kernel; to set budding more,",
+        "And still more, later flowers for the bees,",
+        "Until they think warm days will never cease,",
+        "For Summer has o'er-brimm'd their clammy cells."
+      ],
+      [
+        "Who hath not seen thee oft amid thy store?",
+        "Sometimes whoever seeks abroad may find",
+        "Thee sitting careless on a granary floor,",
+        "Thy hair soft-lifted by the winnowing wind,",
+        "Or on a half-reap'd furrow sound asleep,",
+        "Drowsed with the fume of poppies, while thy hook",
+        "Spares the next swath and all its twinèd flowers;",
+        "And sometimes like a gleaner thou dost keep",
+        "Steady thy laden head across a brook;",
+        "Or by a cider-press, with patient look,",
+        "Thou watchest the last oozings hours by hours."
+      ],
+      [
+        "Where are the songs of Spring? Ay, where are they?",
+        "Think not of them, thou hast thy music too,—",
+        "While barrèd clouds bloom the soft-dying day,",
+        "And touch the stubble-plains with rosy hue;",
+        "Then in a wailful choir the small gnats mourn",
+        "Among the river sallows, borne aloft",
+        "Or sinking as the light wind lives or dies;",
+        "And full-grown lambs loud bleat from hilly bourn;",
+        "Hedge-crickets sing; and now with treble soft",
+        "The redbreast whistles from a garden-croft;",
+        "And gathering swallows twitter in the skies."
+      ]
+    ]
+  }
+}
