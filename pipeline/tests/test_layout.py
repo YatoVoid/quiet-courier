@@ -42,6 +42,6 @@ def test_dropcap_escapes_and_keeps_quote():
 
 def test_nameplate_shrinks_for_long_names():
     short = fit_font_size("The Gazette", 300, 46)
-    long = fit_font_size("The Morning Placeholder of Greater Kansas City", 300, 46)
+    long = fit_font_size("The Quiet Courier of Greater Kansas City and Environs", 300, 46)
     assert short == 46
     assert long < 20

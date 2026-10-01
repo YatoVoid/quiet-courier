@@ -1,8 +1,8 @@
-# Broadsheet
+# The Quiet Courier
 
 A daily newspaper for e-ink readers, laid out like an early-1900s broadsheet. Every article is written by people and is either public domain or openly licensed.
 
-The paper's name is a placeholder ("The Morning Placeholder") until a real one is chosen. It is set in one place: `paper_name` in the edition data.
+The name and motto are set in the edition data (`paper_name`, `motto`), so custom editions can carry a different masthead.
 
 ## Status
 
