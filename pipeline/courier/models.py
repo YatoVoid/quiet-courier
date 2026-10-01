@@ -145,7 +145,7 @@ class Edition:
     articles: dict[str, Article]
     lead_id: str
     secondary_ids: list[str]
-    weather: Weather
+    weather: Weather | None
     poem: Poem
 
     @property
@@ -177,7 +177,7 @@ def load_edition(path: Path) -> Edition:
     for aid in [front["lead"], *front["secondary"]]:
         if aid not in articles:
             raise ContentError(f"front page references unknown article {aid}")
-    w = d["weather"]
+    w = d.get("weather")
     p = d["poem"]
     loc = d["location"]
     return Edition(
@@ -189,7 +189,7 @@ def load_edition(path: Path) -> Edition:
         weather=Weather(
             w["city"], w["office"], w["source_url"], w["attribution"],
             tuple(ForecastPeriod(**x) for x in w["periods"]),
-        ),
+        ) if w and len(w["periods"]) >= 2 else None,
         poem=Poem(
             p["title"], p["author"], p["year"], tuple(tuple(s) for s in p["stanzas"]),
             p["source_name"], p["source_url"], License.from_dict(p["license"]), p["attribution"],

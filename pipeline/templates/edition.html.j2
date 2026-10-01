@@ -34,7 +34,7 @@
 {% endmacro %}
 
 {% macro ending(s) %}
-  {% if s.jumps %}<p class="jump">Continued on Page <a href="#cont-{{ s.article.id }}"></a></p>{% else %}{{ source(s.article) }}{% endif %}
+  {% if s.jumps %}<p class="jump">Continued on Page {% if front_only %}9{% else %}<a href="#cont-{{ s.article.id }}"></a>{% endif %}</p>{% else %}{{ source(s.article) }}{% endif %}
 {% endmacro %}
 
 {% macro figure(a) %}
@@ -53,16 +53,26 @@
 <section class="front">
   <header class="masthead">
     <div class="ear ear-left">
+      {% if today %}
       <p class="ear-title">{{ today.name }}’s Weather</p>
       <p class="ear-body">{{ today.short | sentence }}. {{ "High" if today.is_daytime else "Low" }} {{ today.temperature }}°.</p>
+      {% else %}
+      <p class="ear-title">Sunrise</p>
+      <p class="ear-body">{{ alm.sunrise | clock }}</p>
+      {% endif %}
     </div>
     <div class="nameplate-wrap">
       <h1 class="nameplate" style="font-size: {{ nameplate_pt }}pt">{{ e.paper_name }}</h1>
       <p class="motto">“{{ e.motto }}”</p>
     </div>
     <div class="ear ear-right">
+      {% if next_period %}
       <p class="ear-title">{{ next_period.name }}</p>
       <p class="ear-body">{{ next_period.short | sentence }}. {{ "High" if next_period.is_daytime else "Low" }} {{ next_period.temperature }}°.</p>
+      {% else %}
+      <p class="ear-title">Sunset</p>
+      <p class="ear-body">{{ alm.sunset | clock }}</p>
+      {% endif %}
     </div>
   </header>
   <div class="folio">
@@ -119,7 +129,7 @@
 <section class="sec sec-{{ sec.id }}">
   {{ section_head(sec.name, sec.subtitle, "sec-" ~ sec.id) }}
   <div class="cols">
-  {% if sec.id == "weather" %}
+  {% if sec.id == "weather" and e.weather %}
   <article class="story forecast">
     <h3 class="headline">The Forecast for {{ e.weather.city }}</h3>
     <p class="byline">From the {{ e.weather.office }}</p>
@@ -183,7 +193,7 @@
     {% for a in e.all_sources() %}
     <li><b>{{ a.title }}</b>. {{ a.source_name }}{% if a.author and a.author != a.source_name %}, {{ a.author }}{% endif %}. {{ a.license.name }}{% if a.license.id.startswith("cc-") %} ({{ a.license.url }}){% endif %}. {{ a.source_url }}</li>
     {% endfor %}
-    <li><b>Weather</b>. {{ e.weather.office }}. Public domain. {{ e.weather.source_url }}</li>
+    {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. Public domain. {{ e.weather.source_url }}</li>{% endif %}
     <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. {{ e.poem.source_url }}</li>
   </ol>
 </section>

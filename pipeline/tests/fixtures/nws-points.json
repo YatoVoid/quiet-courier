@@ -1,0 +1,112 @@
+{
+    "@context": [
+        "https://geojson.org/geojson-ld/geojson-context.jsonld",
+        {
+            "@version": "1.1",
+            "wx": "https://api.weather.gov/ontology#",
+            "s": "https://schema.org/",
+            "geo": "http://www.opengis.net/ont/geosparql#",
+            "unit": "http://codes.wmo.int/common/unit/",
+            "@vocab": "https://api.weather.gov/ontology#",
+            "geometry": {
+                "@id": "s:GeoCoordinates",
+                "@type": "geo:wktLiteral"
+            },
+            "city": "s:addressLocality",
+            "state": "s:addressRegion",
+            "distance": {
+                "@id": "s:Distance",
+                "@type": "s:QuantitativeValue"
+            },
+            "bearing": {
+                "@type": "s:QuantitativeValue"
+            },
+            "value": {
+                "@id": "s:value"
+            },
+            "unitCode": {
+                "@id": "s:unitCode",
+                "@type": "@id"
+            },
+            "forecastOffice": {
+                "@type": "@id"
+            },
+            "forecastGridData": {
+                "@type": "@id"
+            },
+            "publicZone": {
+                "@type": "@id"
+            },
+            "county": {
+                "@type": "@id"
+            }
+        }
+    ],
+    "id": "https://api.weather.gov/points/39.0997,-94.5786",
+    "type": "Feature",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [
+            -94.5786,
+            39.0997
+        ]
+    },
+    "properties": {
+        "@id": "https://api.weather.gov/points/39.0997,-94.5786",
+        "@type": "wx:Point",
+        "cwa": "EAX",
+        "type": "land",
+        "forecastOffice": "https://api.weather.gov/offices/EAX",
+        "gridId": "EAX",
+        "gridX": 44,
+        "gridY": 51,
+        "forecast": "https://api.weather.gov/gridpoints/EAX/44,51/forecast",
+        "forecastHourly": "https://api.weather.gov/gridpoints/EAX/44,51/forecast/hourly",
+        "forecastGridData": "https://api.weather.gov/gridpoints/EAX/44,51",
+        "observationStations": "https://api.weather.gov/gridpoints/EAX/44,51/stations",
+        "relativeLocation": {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -94.5503133,
+                    39.1251553
+                ]
+            },
+            "properties": {
+                "city": "Kansas City",
+                "state": "MO",
+                "distance": {
+                    "unitCode": "wmoUnit:m",
+                    "value": 0
+                },
+                "bearing": {
+                    "unitCode": "wmoUnit:degree_(angle)",
+                    "value": 0
+                }
+            }
+        },
+        "forecastZone": "https://api.weather.gov/zones/forecast/MOZ037",
+        "county": "https://api.weather.gov/zones/county/MOC095",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/MOZ037",
+        "timeZone": "America/Chicago",
+        "radarStation": "KEAX",
+        "astronomicalData": {
+            "sunrise": "2026-10-01T07:14:34-05:00",
+            "sunset": "2026-10-01T19:01:10-05:00",
+            "transit": "2026-10-01T13:07:52-05:00",
+            "civilTwilightBegin": "2026-10-01T06:48:01-05:00",
+            "civilTwilightEnd": "2026-10-01T19:27:44-05:00",
+            "nauticalTwilightBegin": "2026-10-01T06:17:02-05:00",
+            "nauticalTwilightEnd": "2026-10-01T19:58:43-05:00",
+            "astronomicalTwilightBegin": "2026-10-01T05:45:48-05:00",
+            "astronomicalTwilightEnd": "2026-10-01T20:29:57-05:00"
+        },
+        "nwr": {
+            "transmitter": "KID77",
+            "sameCode": "029095",
+            "areaBroadcast": "https://api.weather.gov/radio/KID77/broadcast",
+            "pointBroadcast": "https://api.weather.gov/points/39.0997,-94.5786/radio"
+        }
+    }
+}

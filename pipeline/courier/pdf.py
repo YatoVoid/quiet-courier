@@ -78,6 +78,7 @@ def build_pdf(edition: Edition, device: Device, out_path: Path, work_dir: Path) 
 
     final_page = next((i for i, p in enumerate(doc.pages) if "final-start" in p.anchors), None)
     end_page = next((i for i, p in enumerate(doc.pages) if "the-end" in p.anchors), None)
+    work_dir.mkdir(parents=True, exist_ok=True)
     (work_dir / f"edition_{device.id}.html").write_text(html, encoding="utf-8")
     if final_page is None or end_page != final_page or end_page != len(doc.pages) - 1:
         doc.write_pdf(work_dir / f"failed_{device.id}.pdf")

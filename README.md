@@ -36,9 +36,13 @@ More pages are in [docs/showcase](docs/showcase):
 
 ## Status
 
-Phase 1 (newspaper design) is done. The editions above are rendered from content saved in `pipeline/samples/`.
+| Phase | State |
+|---|---|
+| 1. Newspaper design | Done |
+| 2. Content pipeline | Done: `courier build` makes today's edition from live sources |
+| 3–7. Website, delivery, billing, launch, monetization | Not started |
 
-Not built yet: live fetching (Phase 2), website and signup (3), delivery (4), billing (5), launch tooling (6), monetization groundwork (7).
+The sample editions above are rendered from content saved in `pipeline/samples/`. Editions built with `courier build` use whatever the sources published that day.
 
 ## Repository layout
 
@@ -47,8 +51,11 @@ assets/fonts/        Fonts and their licenses (all SIL OFL 1.1)
 pipeline/            Python: fetch, clean, select, lay out, render
   courier/           The package
   templates/         Print HTML/CSS (Jinja) and EPUB templates
+  courier/sources/   One module per source, all returning the same article shape
+  courier/data/      Poem library and the English word list used to score OCR
   samples/           Sample edition data and images
-  tests/
+  tests/             Offline: every source is tested against saved copies of its feed
+  courier.toml       Paper name, reading length, cities, which sources are on
 docs/                Source licensing notes, showcase images
 web/                 Next.js site (Phase 3, not started)
 .github/workflows/   Daily build and send (Phase 4, not started)
@@ -70,6 +77,29 @@ python -m venv .venv
 ```
 
 `--edition pipeline/samples/denver.json` renders one edition (repeatable). `--device small|large` renders one size. `--no-epub` skips the EPUB.
+
+### Building today's real edition
+
+```sh
+export COURIER_CONTACT_EMAIL=you@example.com   # sent to the Weather Service and Library of Congress, which ask for a contact
+.venv/bin/python -m courier build              # every city in courier.toml
+.venv/bin/python -m courier build --city denver --date 2026-10-01
+```
+
+Output goes to `out/<date>/<city>/`: `edition.json`, the two PDFs and the EPUB. Every edition, every article in it with its license and attribution, and whether each source succeeded are recorded in `data/courier.db` (SQLite; the schema in `pipeline/courier/schema.sql` is plain SQL so it can move to Supabase). Feeds are cached in `out/cache/<date>/`, so rebuilding the same day does not refetch.
+
+## How an edition is put together
+
+| Step | What happens |
+|---|---|
+| Fetch | The Conversation, Global Voices, NASA and NASA Earth Observatory, the National Weather Service, and the Library of Congress are fetched in parallel. Each has a timeout and three tries. |
+| Check licenses | The Conversation entries must state CC BY-ND in the feed. Global Voices stories republished from partner outlets are skipped. NASA images are kept only when the credit is NASA's alone. Archive pages must be from 1930 or earlier. |
+| Clean | HTML is reduced to paragraphs and subheads. Players, share bars, contact blocks and navigation are removed. Anything removed from a story is listed in its credit line ("Images and audio omitted. Text unedited."). |
+| Score OCR | 1926 pages come as scanned text. Each story is scored against an English word list; only clean ones run, and unreadable words print as [illegible]. |
+| Select | A lead, two short front-page stories, one World, two Science, an optional Weather feature and up to four archive items, fitted to 4,800 words (about 20 minutes at 240 words a minute). Stories used in the last 60 days, near-duplicate headlines, and stories mentioning words in the `avoid` list are skipped. |
+| Fall back | A source that fails is logged and skipped. The lead falls back from The Conversation to Global Voices to NASA. With no forecast, the masthead shows sunrise and sunset. The build only fails if there is nothing at all to print. |
+
+Turn a source off in `courier.toml` (`conversation = false`) and the paper is built without it.
 
 ## How the layout works
 

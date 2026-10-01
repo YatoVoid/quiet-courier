@@ -21,7 +21,8 @@ def _chapters(edition: Edition, images: dict) -> list[tuple[str, str, str]]:
     all_front = len(edition.secondary_ids)
     base = dict(
         e=edition, images=images, date_long=long_date(edition.date),
-        today=edition.weather.periods[0], next_period=edition.weather.periods[1],
+        today=edition.weather.periods[0] if edition.weather else None,
+        next_period=edition.weather.periods[1] if edition.weather else None,
         ws=word_search(edition, SMALL), alm=almanac.compute(edition.location, edition.date),
     )
     out = [("front.xhtml", "Front Page", tpl.render(**base, kind="front", title="Front Page",
@@ -30,7 +31,7 @@ def _chapters(edition: Edition, images: dict) -> list[tuple[str, str, str]]:
         if sec.id == "puzzles":
             continue
         arts = edition.section_articles(sec.id, all_front)
-        if not arts and sec.id != "weather":
+        if not arts and not (sec.id == "weather" and edition.weather):
             continue
         out.append((f"{sec.id}.xhtml", sec.name, tpl.render(**base, kind="section", title=sec.name,
                                                             section=sec, articles=arts)))

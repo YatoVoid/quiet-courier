@@ -172,8 +172,9 @@ def render_html(edition: Edition, device: Device, plan: FrontPlan, images: dict[
     nameplate_pt = fit_font_size(edition.paper_name, content_width_pt * (1 - ear_share), device.nameplate_pt)
     splits = [plan.split(a) for a in [edition.lead, *edition.secondaries(device.front_secondaries)]]
     sections = [
-        (s, edition.section_articles(s.id, device.front_secondaries))
-        for s in edition.sections if s.id != "puzzles"
+        (s, arts) for s, arts in (
+            (s, edition.section_articles(s.id, device.front_secondaries)) for s in edition.sections if s.id != "puzzles")
+        if arts or (s.id == "weather" and edition.weather)
     ]
     ctx = dict(
         e=edition,
@@ -189,7 +190,7 @@ def render_html(edition: Edition, device: Device, plan: FrontPlan, images: dict[
         images={k: v.as_uri() for k, v in images.items()},
         alm=almanac.compute(edition.location, edition.date),
         ws=word_search(edition, device),
-        today=edition.weather.periods[0],
-        next_period=edition.weather.periods[1],
+        today=edition.weather.periods[0] if edition.weather else None,
+        next_period=edition.weather.periods[1] if edition.weather else None,
     )
     return jinja_env().get_template("edition.html.j2").render(**ctx)

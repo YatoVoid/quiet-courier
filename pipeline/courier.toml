@@ -1,0 +1,60 @@
+[paper]
+name = "The Quiet Courier"
+motto = "Read It to the Last Page"
+launch_date = "2026-10-01"
+
+[reading]
+# 240 words a minute puts 3,600-4,800 words at 15-20 minutes.
+words_per_minute = 240
+target_words = 4200
+max_words = 4800
+# Articles used in an edition are not reused for this many days.
+history_days = 60
+
+[sources]
+conversation = true
+globalvoices = true
+nasa = true
+nws = true
+chronicling_america = true
+
+[editorial]
+# Stories whose title or opening paragraph contains any of these are skipped.
+# The paper is meant to be calm; edit to taste.
+avoid = [
+  "shooting", "massacre", "murder", "killed", "rape", "suicide",
+  "war crimes", "genocide", "terror", "deepfake",
+]
+science_keywords = [
+  "science", "scientist", "research", "study", "species", "physics", "chemistry", "biology",
+  "planet", "space", "climate", "ocean", "ice", "bacteria", "cells", "fossil", "galaxy",
+  "quantum", "ecology", "astronom", "geolog",
+]
+weather_keywords = [
+  "weather", "storm", "hurricane", "rain", "flood", "drought", "snow", "heat wave",
+  "tornado", "el niño", "la niña", "forecast", "wind", "cyclone", "permafrost",
+]
+
+[[cities]]
+id = "kansas-city"
+name = "Kansas City"
+region = "Missouri"
+lat = 39.0997
+lon = -94.5786
+tz = "America/Chicago"
+
+[[cities]]
+id = "chicago"
+name = "Chicago"
+region = "Illinois"
+lat = 41.8781
+lon = -87.6298
+tz = "America/Chicago"
+
+[[cities]]
+id = "denver"
+name = "Denver"
+region = "Colorado"
+lat = 39.7392
+lon = -104.9903
+tz = "America/Denver"

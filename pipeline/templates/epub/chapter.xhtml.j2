@@ -34,7 +34,7 @@
   <h1 class="nameplate">{{ e.paper_name }}</h1>
   <p class="motto">“{{ e.motto }}”</p>
   <p class="folio">Vol. {{ e.volume | roman }} · No. {{ e.number }} · {{ date_long }} · {{ e.location.name }} Edition</p>
-  <p class="weather-line"><b>{{ today.name }}:</b> {{ today.short | sentence }}, {{ "high" if today.is_daytime else "low" }} {{ today.temperature }}°. <b>{{ next_period.name }}:</b> {{ next_period.short | sentence }}, {{ "high" if next_period.is_daytime else "low" }} {{ next_period.temperature }}°.</p>
+  {% if today %}  <p class="weather-line"><b>{{ today.name }}:</b> {{ today.short | sentence }}, {{ "high" if today.is_daytime else "low" }} {{ today.temperature }}°. <b>{{ next_period.name }}:</b> {{ next_period.short | sentence }}, {{ "high" if next_period.is_daytime else "low" }} {{ next_period.temperature }}°.</p>{% endif %}
 </header>
 <h2 class="lead-headline">{{ e.lead.title }}</h2>
 {{ story(e.lead, show_title=false) }}
@@ -42,7 +42,7 @@
 
 {% elif kind == "section" %}
 <h2 class="section-head">{{ section.name }}{% if section.subtitle %}<small>{{ section.subtitle }}</small>{% endif %}</h2>
-{% if section.id == "weather" %}
+{% if section.id == "weather" and e.weather %}
 <article class="story">
   <h3>The Forecast for {{ e.weather.city }}</h3>
   <table class="forecast">
@@ -78,7 +78,7 @@
   {% for a in e.all_sources() %}
   <li><b>{{ a.title }}</b>. {{ a.source_name }}{% if a.author and a.author != a.source_name %}, {{ a.author }}{% endif %}. {{ a.license.name }}{% if a.license.id.startswith("cc-") %} (<a href="{{ a.license.url }}">{{ a.license.url }}</a>){% endif %}. <a href="{{ a.source_url }}">{{ a.source_url }}</a></li>
   {% endfor %}
-  <li><b>Weather</b>. {{ e.weather.office }}. Public domain. <a href="{{ e.weather.source_url }}">{{ e.weather.source_url }}</a></li>
+  {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. Public domain. <a href="{{ e.weather.source_url }}">{{ e.weather.source_url }}</a></li>{% endif %}
   <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. <a href="{{ e.poem.source_url }}">{{ e.poem.source_url }}</a></li>
 </ol>
 

@@ -20,7 +20,7 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
 ### Global Voices
 - License: CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/). Commercial use and edits allowed.
 - Terms page: https://globalvoices.org/about/global-voices-attribution-policy/
-- Partner content is excluded. Their feed includes stories "originally published" by other outlets (Dialogue Earth, for one) that carry those outlets' terms. Phase 2 must detect and skip these.
+- Partner content is excluded: the pipeline skips posts that say they were "originally published" elsewhere or that come from Global Voices' partner programs. Their feed includes stories "originally published" by other outlets (Dialogue Earth, for one) that carry those outlets' terms. Phase 2 must detect and skip these.
 - Photos are often "used with permission" from the photographer, which does not pass to us. We omit images.
 - Some posts quote sources in the original language followed by an English translation. The paper's fonts are Latin-only, so we drop the original-language lines, keep the translation, and say so in the credit.
 
@@ -35,7 +35,8 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
 ### Library of Congress, Chronicling America
 - Newspapers published in the U.S. more than 95 years ago are public domain. As of 2026, that is anything published in 1930 or earlier.
 - "100 Years Ago Today" stays well inside that window. Do not use pages from 1931 or later.
-- The text comes from OCR and is often garbled. The sample was transcribed by hand from the OCR, with obvious scanning errors corrected and unreadable words marked [illegible]. The printed note says so. Phase 2 needs a cleaning step, and some pages will be too damaged to use.
+- The text comes from OCR and is often garbled. The three sample editions were transcribed by hand from the OCR. Live editions use the OCR directly: each story is scored against an English word list (SCOWL, permissive license, in `pipeline/courier/data/`), only stories that score well are used, a few common scanning errors are fixed (dates like "Oct. I.", the AP's logo read as "(/P)"), and unreadable words print as [illegible]. The printed note says the text is OCR.
+- Stories about deaths, crimes and similar are skipped to keep the section calm.
 
 ### Wikisource (poems, essays)
 - The underlying works are public domain if published before 1931. Use the original text, not a later edition's notes or translation, which may still be under copyright.
