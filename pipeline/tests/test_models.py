@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from broadsheet.models import ContentError, load_edition
+from courier.models import ContentError, load_edition
 
 
 @pytest.fixture

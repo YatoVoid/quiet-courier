@@ -1,6 +1,6 @@
 import pytest
 
-from broadsheet import puzzle
+from courier import puzzle
 
 TEXT = """Season of mists and mellow fruitfulness, close bosom-friend of the maturing sun;
 conspiring with him how to load and bless with fruit the vines that round the thatch-eaves run"""

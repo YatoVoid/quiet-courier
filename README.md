@@ -2,17 +2,41 @@
 
 A daily newspaper for e-ink readers, laid out like an early-1900s broadsheet. Every article is written by people and is either public domain or openly licensed.
 
+![Front pages of the Kansas City, Chicago and Denver editions for October 1, 2026](docs/showcase/front-pages.png)
+
 The name and motto are set in the edition data (`paper_name`, `motto`), so custom editions can carry a different masthead.
 
-## Status
+## Sample editions
 
-Phase 1 (newspaper design) is done. The pipeline renders a sample edition from hard-coded content to:
+Three city editions for Thursday, October 1, 2026, built from real articles published that week. Each city gets its own National Weather Service forecast, almanac, and a front page from a different 1926 newspaper.
+
+| Edition | Lead story | From the Archives (Oct. 1, 1926) | Poem |
+|---|---|---|---|
+| Kansas City | Schrödinger's equation at 100 (The Conversation) | The Cordele Dispatch, Georgia | Keats, "To Autumn" |
+| Chicago | Antarctic ice loss (The Conversation) | The Indianapolis Times | Frost, "October" |
+| Denver | Starship's heat shield (The Conversation) | The Bismarck Tribune, North Dakota | Jackson, "October's Bright Blue Weather" |
+
+Each edition renders three ways:
 
 | File | Page size | Columns | For |
 |---|---|---|---|
-| `out/sample_small.pdf` | 4.0 × 5.33 in | 2 | Kindle Paperwhite, Kobo Clara, other 6–7" readers |
-| `out/sample_large.pdf` | 6.2 × 8.27 in | 3 | Kindle Scribe, Boox Note, reMarkable |
-| `out/sample.epub` | reflowable | 1 | Any reader; Send-to-Kindle converts it |
+| `out/<city>_small.pdf` | 4.0 × 5.33 in | 2 | Kindle Paperwhite, Kobo Clara, other 6–7" readers |
+| `out/<city>_large.pdf` | 6.2 × 8.27 in | 3 | Kindle Scribe, Boox Note, reMarkable |
+| `out/<city>.epub` | reflowable | 1 | Any reader; Send-to-Kindle converts it |
+
+More pages are in [docs/showcase](docs/showcase):
+
+| | Kansas City | Chicago | Denver |
+|---|---|---|---|
+| Large, inside | [Science](docs/showcase/kansas-city-large-science.png) | [World](docs/showcase/chicago-large-world.png) | [Weather](docs/showcase/denver-large-weather.png) |
+| Large, archives | [1926](docs/showcase/kansas-city-large-archives.png) | [1926](docs/showcase/chicago-large-archives.png) | [1926](docs/showcase/denver-large-archives.png) |
+| Large, last page | [Puzzle](docs/showcase/kansas-city-large-last.png) | [Puzzle](docs/showcase/chicago-large-last.png) | [Puzzle](docs/showcase/denver-large-last.png) |
+| Small, page 1 | [Front](docs/showcase/kansas-city-small-front.png) | [Front](docs/showcase/chicago-small-front.png) | [Front](docs/showcase/denver-small-front.png) |
+| Small, page 2 | [Jump](docs/showcase/kansas-city-small-page2.png) | [Jump](docs/showcase/chicago-small-page2.png) | [Jump](docs/showcase/denver-small-page2.png) |
+
+## Status
+
+Phase 1 (newspaper design) is done. The editions above are rendered from content saved in `pipeline/samples/`.
 
 Not built yet: live fetching (Phase 2), website and signup (3), delivery (4), billing (5), launch tooling (6), monetization groundwork (7).
 
@@ -21,11 +45,11 @@ Not built yet: live fetching (Phase 2), website and signup (3), delivery (4), bi
 ```
 assets/fonts/        Fonts and their licenses (all SIL OFL 1.1)
 pipeline/            Python: fetch, clean, select, lay out, render
-  broadsheet/        The package
+  courier/           The package
   templates/         Print HTML/CSS (Jinja) and EPUB templates
   samples/           Sample edition data and images
   tests/
-docs/                Source licensing notes, screenshots
+docs/                Source licensing notes, showcase images
 web/                 Next.js site (Phase 3, not started)
 .github/workflows/   Daily build and send (Phase 4, not started)
 ```
@@ -41,11 +65,11 @@ Needs Python 3.11+ and Pango (WeasyPrint uses it for text layout).
 ```sh
 python -m venv .venv
 .venv/bin/pip install -e "pipeline[dev]"
-.venv/bin/python -m broadsheet sample        # writes out/sample_small.pdf, out/sample_large.pdf, out/sample.epub
-.venv/bin/python -m pytest pipeline          # about 15 seconds
+.venv/bin/python -m courier sample           # renders every edition in pipeline/samples/ into out/
+.venv/bin/python -m pytest pipeline          # about 40 seconds
 ```
 
-`--device small|large` renders one size. `--no-epub` skips the EPUB.
+`--edition pipeline/samples/denver.json` renders one edition (repeatable). `--device small|large` renders one size. `--no-epub` skips the EPUB.
 
 ## How the layout works
 

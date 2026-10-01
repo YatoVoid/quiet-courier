@@ -1,6 +1,6 @@
 import datetime as dt
 
-from broadsheet import almanac
+from courier import almanac
 
 
 def test_kansas_city_october(edition):

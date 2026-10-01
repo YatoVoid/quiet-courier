@@ -2,9 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from broadsheet.models import load_edition
+from courier.models import load_edition
 
-SAMPLE = Path(__file__).resolve().parent.parent / "samples" / "sample_edition.json"
+SAMPLE = Path(__file__).resolve().parent.parent / "samples" / "kansas-city.json"
 
 
 @pytest.fixture(scope="session")

@@ -48,7 +48,7 @@ def build_epub(edition: Edition, out_path: Path, work_dir: Path) -> Path:
     chapters = _chapters(edition, images)
 
     title = f"{edition.paper_name}, {long_date(edition.date)}"
-    book_id = f"urn:uuid:{uuid.uuid5(uuid.NAMESPACE_URL, f'broadsheet:{edition.paper_name}:{edition.date}')}"
+    book_id = f"urn:uuid:{uuid.uuid5(uuid.NAMESPACE_URL, f'quiet-courier:{edition.paper_name}:{edition.date}')}"
     modified = f"{edition.date.isoformat()}T06:00:00Z"
 
     manifest = ['<item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>',

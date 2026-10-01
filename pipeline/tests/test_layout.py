@@ -1,6 +1,6 @@
 import pytest
 
-from broadsheet.layout import FrontPlan, dropcap, fit_font_size, sentences, units
+from courier.layout import FrontPlan, dropcap, fit_font_size, sentences, units
 
 
 def _text(blocks):

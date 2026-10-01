@@ -33,6 +33,10 @@
   <p class="source">{{ a.attribution }}{% if a.license.id.startswith("cc-") %} License: {{ a.license.name }}.{% endif %}{% if a.changes %} {{ a.changes }}{% endif %}</p>
 {% endmacro %}
 
+{% macro ending(s) %}
+  {% if s.jumps %}<p class="jump">Continued on Page <a href="#cont-{{ s.article.id }}"></a></p>{% else %}{{ source(s.article) }}{% endif %}
+{% endmacro %}
+
 {% macro figure(a) %}
   {% if a.images %}
   <figure class="plate">
@@ -73,18 +77,18 @@
   </div>
 
   <div class="front-columns">
-    <article class="story lead">
-      {{ byline(lead.article) }}
-      {{ blocks(lead.front) }}
-      {% if lead.jumps %}<p class="jump">Continued on Page <a href="#cont-{{ lead.article.id }}"></a></p>{% else %}{{ source(lead.article) }}{% endif %}
-    </article>
-    {% for s in secondaries %}
-    <article class="story secondary">
-      <h3 class="headline">{{ s.article.title }}</h3>
-      {% if s.article.deck %}<p class="deck">{{ s.article.deck }}</p>{% endif %}
-      {{ byline(s.article) }}
-      {{ blocks(s.front) }}
-      {% if s.jumps %}<p class="jump">Continued on Page <a href="#cont-{{ s.article.id }}"></a></p>{% else %}{{ source(s.article) }}{% endif %}
+    {% for s in [lead] + secondaries %}
+    <article class="story {{ 'lead' if loop.first else 'secondary' }}">
+      {% set f = s.front %}
+      <div class="head">
+        {% if not loop.first %}
+        <h3 class="headline">{{ s.article.title }}</h3>
+        {% if s.article.deck %}<p class="deck">{{ s.article.deck }}</p>{% endif %}
+        {% endif %}
+        {{ byline(s.article) }}
+      </div>
+      {{ blocks(f[:-1]) }}
+      <div class="keep">{{ blocks(f[-1:], drop=(f | length == 1)) }}{{ ending(s) }}</div>
     </article>
     {% endfor %}
   </div>

@@ -1,5 +1,5 @@
 [project]
-name = "broadsheet"
+name = "quiet-courier"
 version = "0.1.0"
 description = "Builds a daily vintage-style newspaper for e-ink readers from public-domain and openly licensed sources."
 requires-python = ">=3.11"
@@ -14,14 +14,14 @@ dependencies = [
 dev = ["pytest>=8"]
 
 [project.scripts]
-broadsheet = "broadsheet.cli:main"
+courier = "courier.cli:main"
 
 [build-system]
 requires = ["setuptools>=70"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = ["broadsheet*"]
+include = ["courier*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

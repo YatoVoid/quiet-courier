@@ -1,0 +1,960 @@
+{
+  "paper_name": "The Quiet Courier",
+  "motto": "Read It to the Last Page",
+  "edition_number": 1,
+  "volume": 1,
+  "date": "2026-10-01",
+  "location": {
+    "name": "Denver",
+    "region": "Colorado",
+    "lat": 39.7392,
+    "lon": -104.9903,
+    "tz": "America/Denver"
+  },
+  "sections": [
+    {
+      "id": "world",
+      "name": "World"
+    },
+    {
+      "id": "science",
+      "name": "Science"
+    },
+    {
+      "id": "weather",
+      "name": "Weather"
+    },
+    {
+      "id": "archives",
+      "name": "From the Archives",
+      "subtitle": "One Hundred Years Ago Today"
+    },
+    {
+      "id": "puzzles",
+      "name": "Puzzles"
+    }
+  ],
+  "front": {
+    "lead": "conv-starship",
+    "secondary": [
+      "nasa-5g",
+      "nasa-overlap-zoo"
+    ]
+  },
+  "articles": [
+    {
+      "id": "conv-starship",
+      "section": "science",
+      "title": "Starship’s first orbital flight put its heat shield to the test – how it fares could determine if SpaceX’s vision is possible",
+      "deck": "Starship’s heat shield is made of up of an array of ceramic tiles. Each is a small component, but together they have large consequences.",
+      "author": "Sven Bilén",
+      "author_affiliation": "Professor of Engineering Design, Electrical Engineering and Aerospace Engineering, Penn State",
+      "source_name": "The Conversation",
+      "source_url": "https://theconversation.com/starships-first-orbital-flight-put-its-heat-shield-to-the-test-how-it-fares-could-determine-if-spacexs-vision-is-possible-292960",
+      "published": "2026-09-29T20:20:06Z",
+      "license": {
+        "id": "cc-by-nd-4.0",
+        "name": "CC BY-ND 4.0",
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "commercial": true,
+        "derivatives": false
+      },
+      "attribution": "This article is republished from The Conversation under a Creative Commons license. Read the original article at theconversation.com.",
+      "changes": "Images and video omitted. Text unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "SpaceX’s Starship, the most powerful launch vehicle ever developed, reached Earth orbit for the first time on Sept. 28, 2026. This mission, the rocket’s 14th test flight, also marked the first time that Starship deployed Starlink internet satellites into the existing larger constellation: 26 new next-generation nodes in total."
+        },
+        {
+          "kind": "p",
+          "text": "But not all went as planned. An engine went out, though SpaceX quickly determined Starship could still reach orbit without it. While SpaceX had planned for Starship to orbit the Earth six times, it changed gears and had Starship return after only two orbits. And the splashdown in the Pacific Ocean ended in a huge bang, rather than the soft landing the company had hoped for."
+        },
+        {
+          "kind": "p",
+          "text": "This flight can still be viewed as a success. It was an important step toward putting the enormous rocket to work by sending it into orbit. Starship is a key part of SpaceX’s vision. The company wants Starship to be a fully and rapidly reusable transport system that slashes the cost of spaceflight."
+        },
+        {
+          "kind": "p",
+          "text": "To realize this vision of extremely low-cost launches, SpaceX needs to be able to bring these spacecraft back from orbit, refurbish them and launch them again in short order."
+        },
+        {
+          "kind": "p",
+          "text": "Whether that all becomes quick and routine largely depends on dark ceramic tiles covering Starship’s underside. These tiles make up Starship’s heat shield."
+        },
+        {
+          "kind": "p",
+          "text": "I’m an engineer and professor who has researched the way heat shields respond when reentering the atmosphere, a process that is extremely harsh on a spacecraft. I see Starship’s heat shield as a technical challenge that also drives the company’s economics. Elon Musk has agreed."
+        },
+        {
+          "kind": "p",
+          "text": "A spacecraft that survives its return has passed an essential test. Next, engineers must establish how much work it will take to repair or replace the heat shield before its next launch."
+        },
+        {
+          "kind": "h",
+          "text": "Why is reentry so difficult?"
+        },
+        {
+          "kind": "p",
+          "text": "A spacecraft in low Earth orbit travels at roughly 17,500 miles per hour (28,000 kilometers per hour). Returning to Earth means shedding an enormous amount of energy to slow down. Some shedding happens higher up by igniting the engine, but a lot of it happens lower down as the spacecraft reenters through the atmosphere. During reentry, strong shock waves form and heat up the surrounding atmosphere. Much of that heat transfers to the spacecraft."
+        },
+        {
+          "kind": "p",
+          "text": "If you’ve ever experienced a rug burn, you understand what is happening. You trip and your arm slides to a stop on a rug, with your bare skin experiencing a painful burn. If you were wearing a long-sleeved shirt, you might still feel the heat, but you would likely escape a severe burn."
+        },
+        {
+          "kind": "p",
+          "text": "The role of a spacecraft’s heat shield is similar to the protection that the shirt provides: It limits how much of that heat reaches the spacecraft structure underneath it. Starship’s heat shield is composed of approximately 18,000 hexagonal tiles made of silica ceramic. You can think of them like the ceramic lining of a furnace: The fire in the furnace is extremely hot, but the tiles contain that heat."
+        },
+        {
+          "kind": "p",
+          "text": "To be reusable, the heat shield must withstand the mechanical demands of launch, such as pressure and vibrations, as well as the challenges of space, such as exposure to a vacuum. It should also withstand the repeated cycles of heating and cooling that the rocket experiences during flight."
+        },
+        {
+          "kind": "p",
+          "text": "How the tiles are attached and the spaces between them matter as much as the material itself. A tile that tolerates the heat does little good if it falls off. A gap that lets hot gas reach the structure underneath can lead to catastrophe, as in the space shuttle Columbia accident in 2003."
+        },
+        {
+          "kind": "p",
+          "text": "Before the flight, SpaceX engineers made some changes they wanted to test. They attached the tiles more securely in vulnerable areas. They also added measures that stop hot plasma from traveling behind tiles and added curved tiles to reduce heating in the gaps."
+        },
+        {
+          "kind": "p",
+          "text": "SpaceX also reflew two tiles recovered from a previous Starship. Repeating a flight with previously exposed material can test how the protection holds up over time. Two tiles, however, cannot establish how many flights an entire heat shield will last."
+        },
+        {
+          "kind": "h",
+          "text": "What exactly does a successful return mean?"
+        },
+        {
+          "kind": "p",
+          "text": "SpaceX equipped three of the Starlink satellites released on Monday with cameras to inspect Starship’s heat shield after deployment."
+        },
+        {
+          "kind": "p",
+          "text": "Their images could tell engineers about any damage the ship took as it launched and entered orbit. This way, they can compare the photos to the tiles after reentry to learn about the heat shield’s performance. Engineers will look at where the damage occurred, what caused it and whether the same hardware could fly again safely."
+        },
+        {
+          "kind": "h",
+          "text": "The business case requires reusability"
+        },
+        {
+          "kind": "p",
+          "text": "The logic behind reusable rockets is straightforward: Spreading the cost of building a vehicle over many missions lowers the hardware cost for each launch."
+        },
+        {
+          "kind": "p",
+          "text": "But the accounting also includes inspection, replacement parts, labor, propellant, ground facilities and the risk of losing a vehicle. A rocket waiting for repairs ties up capital."
+        },
+        {
+          "kind": "p",
+          "text": "My engineering assessment is that heat shield improvements can produce two kinds of savings: First, better heat shields require fewer repairs after each mission. And a more rapid turnaround time would allow each vehicle to fly more missions. This achievement could make reuse more valuable than simply recovering the expensive hardware from a used Starship, to be reinstalled on a new spacecraft."
+        },
+        {
+          "kind": "p",
+          "text": "SpaceX’s own investor disclosures make this connection explicit. They warn that failing to achieve full reuse and quick turnaround times between flights could increase launch costs. Delays could also stall the deployment of satellites in the Starlink constellation, which is a major source of revenue growth."
+        },
+        {
+          "kind": "h",
+          "text": "Satellites, the Moon and data centers"
+        },
+        {
+          "kind": "p",
+          "text": "NASA also plans to use Starship on future missions to the Moon, which will require Starship to be ready for a sequence of launches."
+        },
+        {
+          "kind": "p",
+          "text": "A March 2026 report from NASA’s inspector general described a plan requiring more than 10 Starship tanker flights. These Starship tankers would carry propellant to lunar orbit, where each would rendezvous with, dock to and transfer propellant to a storage depot. However, NASA’s timeline for returning to the Moon is already facing delays, and any delays with Starship could add further delay."
+        },
+        {
+          "kind": "p",
+          "text": "SpaceX has also proposed building orbital data centers, which would use Starship to launch the heavy computing satellites to orbit. But SpaceX’s prospectus says it will need Starship to be fully reusable for these plans to be economically attractive."
+        },
+        {
+          "kind": "p",
+          "text": "For me, the next telling milestone will be recovering a Starship and then inspecting it and preparing it to launch again. To date, SpaceX has successfully reused only its first-stage Super Heavy booster, not the Starship vehicle itself. SpaceX will need to show that this process is becoming predictable and routine. That feat would require a heat shield that protects both the spacecraft and the economics behind Starship."
+        },
+        {
+          "kind": "note",
+          "text": "Sven Bilén does not work for, consult, own shares in or receive funding from any company or organization that would benefit from this article, and has disclosed no relevant affiliations beyond their academic appointment."
+        }
+      ]
+    },
+    {
+      "id": "nasa-5g",
+      "section": "science",
+      "title": "NASA Awards Contract to Develop 5G Communications for Moon",
+      "deck": null,
+      "author": "Gerelle Q. Dodson",
+      "author_affiliation": null,
+      "source_name": "NASA",
+      "source_url": "https://www.nasa.gov/news-release/nasa-awards-contract-to-develop-5g-communications-for-moon/",
+      "published": "Wed, 30 Sep 2026 20:41:26 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA news release. U.S. government work, public domain. NASA does not endorse this publication.",
+      "changes": null,
+      "body": [
+        {
+          "kind": "p",
+          "text": "NASA has awarded Modulate Space Corporation a contract to develop key elements of a 5G communications system for use on the lunar surface with built-in Wi-Fi 6, for NASA’s Glenn Research Center in Cleveland."
+        },
+        {
+          "kind": "p",
+          "text": "This accelerated effort is organized into two primary work areas that together will develop a scalable, standards-based communications capability designed to support future Moon Base surface operations."
+        },
+        {
+          "kind": "p",
+          "text": "The 5G System and Lunar Surface Communications Evaluation and Radio Propagation Measurements contract is a firm-fixed-price contract with a value of approximately $38 million. The performance period for the 5G Network-in-a-Box Development and Lab Demonstration runs from Thursday, Oct. 1, through Jan. 31, 2028. The performance period for the Lunar 5G and Wi-Fi Integrated Surface Network and Flight Demonstration on the Lunar Surface runs from Monday, Nov. 30, through Dec. 31, 2028."
+        },
+        {
+          "kind": "p",
+          "text": "Through these demonstrations, NASA will acquire technology development of hardware, firmware, and software needed to advance the integrated lunar communications system. This effort will give NASA insight into the system architecture and operational performance while providing the flexibility needed to evolve the technology for future lunar surface communications."
+        }
+      ]
+    },
+    {
+      "id": "nasa-overlap-zoo",
+      "section": "science",
+      "title": "Help Overlap Zoo Reveal Cosmic Dust",
+      "deck": null,
+      "author": "",
+      "author_affiliation": null,
+      "source_name": "NASA",
+      "source_url": "https://science.nasa.gov/get-involved/citizen-science/help-overlap-zoo-reveal-cosmic-dust/",
+      "published": "Wed, 30 Sep 2026 21:19:33 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA. U.S. government work, public domain. NASA does not endorse this publication.",
+      "changes": null,
+      "body": [
+        {
+          "kind": "p",
+          "text": "Galaxies, vast collections of billions of stars, gas, and dust held together by gravity, are scattered across the immensity of space. But every so often, a coincidence occurs: Two galaxies line up from our point of view on Earth (or from a space telescope) and appear to overlap in the sky. These rare overlapping galaxies give astronomers a chance to study something normally difficult to see: the dust inside one of these distant cosmic objects. That’s the focus of NASA’s new Overlap Zoo project."
+        },
+        {
+          "kind": "p",
+          "text": "Picture the background galaxy acting like a cosmic flashlight, shining through the nearer galaxy. The backlit dust creates dark silhouettes, like shadows on a screen. By studying these silhouettes, astronomers can map how dust is distributed throughout galaxies and learn how it blocks, scatters, and dims starlight traveling through space. Measurements of how dust impacts light can even help astronomers refine estimates of the distances to faraway objects."
+        },
+        {
+          "kind": "p",
+          "text": "However, before we can study galaxy pairs and their dust, we first need to find them! Overlap Zoo is asking for your help with the search."
+        },
+        {
+          "kind": "p",
+          "text": "“As new and better observations of galaxies continue to multiply, it is becoming incredibly difficult for astronomers to classify every candidate galaxy pair,” said Trevor Butrum, Overlap Zoo project lead and graduate student. “Your help is invaluable to creating the biggest and cleanest catalog of overlapping galaxy pairs for further analysis.”"
+        },
+        {
+          "kind": "p",
+          "text": "As a volunteer in Overlap Zoo, you’ll view images that volunteers in the Galaxy Zoo project have identified as containing possible overlapping galaxies. The Overlap Zoo project will teach you how to verify the presence of galaxy pairs in these images, classify key features of each galaxy, and mark their outlines. You’ll learn as you go, classifying as many of these images as you like. Your contributions will help build the first large-scale catalog of galaxy pairs suitable for dust studies and enable a huge step forward in accuracy of astronomical estimates."
+        },
+        {
+          "kind": "p",
+          "text": "Head over to Overlap Zoo and start classifying galaxies today. No prior experience needed – just curiosity and a few minutes of your time. Your observations will help unlock the secrets hidden in these rare cosmic alignments!"
+        }
+      ]
+    },
+    {
+      "id": "gv-sahel-protest",
+      "section": "world",
+      "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
+      "deck": null,
+      "author": "Jean Sovon",
+      "author_affiliation": null,
+      "source_name": "Global Voices",
+      "source_url": "https://globalvoices.org/2026/09/30/who-can-speak-on-behalf-of-the-people-the-new-frontiers-of-protest-in-the-sahel/",
+      "published": "Wed, 30 Sep 2026 03:37:48 +0000",
+      "license": {
+        "id": "cc-by-3.0",
+        "name": "CC BY 3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "Originally published on Global Voices (globalvoices.org) under CC BY 3.0.",
+      "changes": "Images and photo captions omitted. Text otherwise unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "Can a democracy exist without the right to disagree?"
+        },
+        {
+          "kind": "p",
+          "text": "In the countries of the central Sahel, Mali, Burkina Faso, and Niger, military juntas present themselves as the voices of restored popular sovereignty. At the same time, political parties have been dissolved in all three countries, more than a thousand civil society organizations have been suspended in Burkina Faso, and labor unions are under attack in Niger. What becomes of the right to protest when those in power claim to embody the very people on whose behalf the protests are being held?"
+        },
+        {
+          "kind": "p",
+          "text": "On the night of August 28–29, 2026, heavy gunfire and explosions rang out in Niamey, Niger. An attempted military mutiny targeting the presidency, the airport, and national television was repelled by General Abdourahamane Tiani’s regime, with the support of Russian forces. The incident served as yet another reminder of the fragility of the military regimes that have been in power in the Sahel since 2020 and the ease with which every upheaval — whether it comes from within the military or from civil society — is then used to justify a further crackdown on civic space."
+        },
+        {
+          "kind": "p",
+          "text": "On June 30, 2026, the Office of the United Nations High Commissioner for Human Rights announced the permanent closure of its office in Burkina Faso, after authorities had suspended its activities in February. On July 29, 2026, CIVICUS added Burkina Faso to its international watch list, documenting at least 1,174 civil society organizations that had been suspended or dissolved since the beginning of the year."
+        },
+        {
+          "kind": "h",
+          "text": "Three countries, one institutional path"
+        },
+        {
+          "kind": "p",
+          "text": "Before the military took power, thousands of citizens had already taken to the streets in Mali, Burkina Faso, and Niger to protest poor governance, insecurity, and corruption. In Mali, the 2020 protests contributed to the context in which the army overthrew President Ibrahim Boubacar Keïta. In Burkina Faso, the two coups of 2022 occurred amid widespread frustration over insecurity. In Niger, the ouster of elected President Mohamed Bazoum in July 2023 was also followed by a military statement emphasizing national sovereignty."
+        },
+        {
+          "kind": "p",
+          "text": "In all three cases, the military then set about methodically dismantling the pluralism they had promised to revitalize."
+        },
+        {
+          "kind": "p",
+          "text": "In Mali, a national consultation, boycotted by a large portion of the political class, recommended in late April 2025 the dissolution of political parties and the installation of General Assimi Goïta as president for a five-year term. The decree dissolving the parties was signed on May 13, 2025, despite two protests organized in early May in Bamako by political parties and civil society organizations to oppose it. These were the first opposition demonstrations in Bamako since 2020, according to a regional situation report. Independent UN experts warned that the measure paved the way for the criminalization of all political activity."
+        },
+        {
+          "kind": "p",
+          "text": "On July 3, 2025, Goïta’s term was set at five years, renewable “as many times as necessary,” according to France 24. Since early May 2026, Malian authorities have also intensified their crackdown on the political opposition through arbitrary arrests, documented by a recurring pattern of abductions attributed to the National Agency for State Security."
+        },
+        {
+          "kind": "p",
+          "text": "As of September 30, 2022, political activities were suspended in Burkina Faso, and all political parties were formally dissolved on January 29, 2026, a move described as “definitive” by CIVICUS. On April 15, 2026, 118 civil society organizations active in human rights, health, or education were dissolved under a July 2025 law on freedom of association. When asked about this situation, Binta Sidibé Gascon, President of the Kisal Observatory, told Human Rights Watch:"
+        },
+        {
+          "kind": "p",
+          "text": "La dissolution massive des organisations de la société civile n’est que le dernier acte de la junte du Burkina Faso pour faire taire la dissidence et éviter toute analyse de son bilan peu reluisant en matière de droits humains. Cette décision renforce un climat de peur qui paralyse l'activité civique indépendante."
+        },
+        {
+          "kind": "p",
+          "text": "The mass dissolution of civil society organizations is merely the latest move by the Burkina Faso junta to silence dissent and prevent any scrutiny of its dismal human rights record. This decision reinforces a climate of fear that paralyzes independent civic activity."
+        },
+        {
+          "kind": "p",
+          "text": "In Niger, on March 26, 2025, President Abdourahamane Tiani signed a decree dissolving all political parties, which had already been suspended since the July 2023 coup. In August 2025, several labor unions representing legal professionals were in turn dissolved, prompting condemnation from the Niger Bar Association and a two-day general strike by lawyers, according to Human Rights Watch. In its July 2026 report, HRW lists several restrictive measures taken by the military authorities. These include dissolving political parties and independent unions, detaining journalists under a cybercrime law, revoking citizenship from opponents, announcing a withdrawal from the International Criminal Court, and extending the transition period with no prospect of elections."
+        },
+        {
+          "kind": "h",
+          "text": "Who speaks for the people?"
+        },
+        {
+          "kind": "p",
+          "text": "The three juntas justify these measures using the same rhetoric: sovereignty, national renewal, and the fight against foreign interference. Amnesty International formalized this observation in a statement presented to the UN Human Rights Council: in Mali, Niger, and Burkina Faso, military regimes are gradually restricting freedoms in the name of the fight against imperialism and the protection of national sovereignty, with laws being enforced by decree, without parliamentary oversight or constitutional review."
+        },
+        {
+          "kind": "p",
+          "text": "This situation raises a simple question that is rarely asked so directly: If part of the population supports the new authorities, does that mean those who criticize them are no longer part of the people?"
+        },
+        {
+          "kind": "p",
+          "text": "This is the situation facing the few journalists who continue to work in the three countries. Amnesty International collected testimonies from three of them, using pseudonyms, in a report published on April 30, 2026. One, identified as Mohamed C., believes that:"
+        },
+        {
+          "kind": "p",
+          "text": "I think the crackdown is most severe in Burkina Faso, but in all three countries, there’s been a major setback. Quality media outlets, with history and tradition, are at risk of disappearing (…)."
+        },
+        {
+          "kind": "p",
+          "text": "The same report notes that Amnesty had already documented the crackdown on the media in Niger in a March 2025 report, before launching a campaign in October 2025 dedicated to the situation of activists and journalists in the three countries."
+        },
+        {
+          "kind": "h",
+          "text": "When political parties and unions disappear"
+        },
+        {
+          "kind": "p",
+          "text": "The disappearance of organized structures does not mean the disappearance of dissent. It changes its form and often its scale."
+        },
+        {
+          "kind": "p",
+          "text": "In Burkina Faso, on May 26, 2026, the arrest of Imam Mohamed Ishaq Kindo, a critic of a bill regulating religious practices, sparked outrage among his followers, who protested in the capital, Ouagadougou, before being dispersed by law enforcement. This serves as proof that the streets remain a possible outlet, even if only sporadically and at great risk, in a country where political parties no longer exist. In Niger, it was lawyers, through their professional association, who led the protest following the dissolution of the judicial unions in 2025, another form of institutional resistance rather than street protest, as documented by HRW."
+        },
+        {
+          "kind": "p",
+          "text": "Elsewhere, protest has taken refuge in less visible spaces: social media, satirical content, private messaging groups, and campaigns led by the diaspora. These forms are, by their very nature, harder to gauge and therefore harder to suppress entirely, but they are also less capable of producing lasting political organization."
+        },
+        {
+          "kind": "h",
+          "text": "Security as a barrier to protest"
+        },
+        {
+          "kind": "p",
+          "text": "Any analysis of protest in the Sahel must take into account a factor that distinguishes it from other authoritarian contexts: war. Mali, Burkina Faso, and Niger are facing armed groups linked to Al-Qaeda (JNIM) and the Islamic State. Civilians are the primary victims: In Burkina Faso, Amnesty International documented that between March 10 and 11, 2026, the army and its VDP auxiliaries unlawfully killed at least 58 unarmed civilians in and around Solenzo."
+        },
+        {
+          "kind": "p",
+          "text": "This security situation serves as a recurring justification for restrictions on civic space. HRW notes that in all three countries, governments have continued to restrict freedom of expression, dissent, and the media while pursuing their disengagement from regional and international bodies — effective withdrawal from the Economic Community of West African States (ECOWAS) and all three countries’ withdrawal from the International Criminal Court."
+        },
+        {
+          "kind": "p",
+          "text": "For observers of the Central Sahel, the major challenge lies in determining where legitimate protection of the population ends and where the manipulation of fear to stifle dissent begins."
+        },
+        {
+          "kind": "h",
+          "text": "Can a democracy exist without the right to disagree?"
+        },
+        {
+          "kind": "p",
+          "text": "Although they share the same context, the three countries have not followed identical paths. The levels of popular support for the authorities differ, as does the intensity of the armed conflict. But one phenomenon is common across recent reports: the systematic shrinking of civic space, barely a year after the juntas promised to give the people a voice."
+        },
+        {
+          "kind": "p",
+          "text": "A citizen may support breaking away from former colonial powers and, at the same time, demand that the new authorities be held accountable. They may have approved a coup and now ask why political parties are banned, why labor unions are dissolved, and why journalists are being prosecuted. From the perspective of citizen oversight of public action, these positions are complementary rather than contradictory: Being part of the people does not mean agreeing with those who govern in their name."
+        },
+        {
+          "kind": "p",
+          "text": "While this new configuration in the central Sahel positions military authorities as those who speak on behalf of the people, it raises one of the region’s most significant democratic questions. Do those who govern on behalf of the people still accept hearing a portion of that people respond to them in the streets or from exile, saying, “We do not agree”?"
+        }
+      ]
+    },
+    {
+      "id": "conv-receipts",
+      "section": "science",
+      "title": "Are there toxic chemicals in your grocery store receipt?",
+      "deck": "For most people, handling receipts is a low-risk activity, but if you’re concerned, there are some straightforward precautions you can take.",
+      "author": "Sean McCann",
+      "author_affiliation": "Assistant Professor of Emergency Medicine, University of Illinois Chicago",
+      "source_name": "The Conversation",
+      "source_url": "https://theconversation.com/are-there-toxic-chemicals-in-your-grocery-store-receipt-291246",
+      "published": "2026-09-28T12:41:58Z",
+      "license": {
+        "id": "cc-by-nd-4.0",
+        "name": "CC BY-ND 4.0",
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "commercial": true,
+        "derivatives": false
+      },
+      "attribution": "This article is republished from The Conversation under a Creative Commons license. Read the original article at theconversation.com.",
+      "changes": "Images and video omitted. Text unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "“Would you like your receipt?”"
+        },
+        {
+          "kind": "p",
+          "text": "It’s a question you’re likely to hear every time you pop into the grocery store or stop for a latte on the way to work. Some people may also have heard warnings that have circulated for more than 15 years that if you say yes, toxic chemicals might rub off on your fingertips."
+        },
+        {
+          "kind": "p",
+          "text": "As a recent example, a 2025 study from the Center for Environmental Health, a nonprofit advocacy organization focused on toxic chemicals in consumer products, claimed that holding a paper receipt for only 10 seconds could result in exposure to unsafe levels of toxic chemicals."
+        },
+        {
+          "kind": "p",
+          "text": "Could something so commonplace really be slowly poisoning people?"
+        },
+        {
+          "kind": "p",
+          "text": "I am a medical toxicologist – a physician who specializes in the diagnosis and treatment of poisoning. I see patients in my clinic for everything from severe lead poisoning to questions about exposure to chemicals that are mostly harmless."
+        },
+        {
+          "kind": "p",
+          "text": "Receipts are printed on a special type of paper – thermal paper – which often contains chemicals called bisphenols. These chemicals are potentially – but not necessarily – toxic. So, like many questions in toxicology, the answer to whether receipts are dangerous to handle is: It depends."
+        },
+        {
+          "kind": "h",
+          "text": "What are bisphenols and where are they found?"
+        },
+        {
+          "kind": "p",
+          "text": "Bisphenols are human-made chemicals that have been widely used in industrial manufacturing since the 1950s."
+        },
+        {
+          "kind": "p",
+          "text": "Several different types exist, each with a letter standing for the chemical they are made from. The bisphenol produced using a molecule called acetone is called bisphenol A, or BPA. Bisphenol S (BPS) is made using a sulfur atom, and bisphenol F (BPF) is made using formaldehyde."
+        },
+        {
+          "kind": "p",
+          "text": "These chemicals are used to create a type of transparent and shatter-resistant plastic called polycarbonate, found in products including hard plastic water bottles, food storage containers and eyeglass lenses. Bisphenols are also ingredients in epoxy resins, which are used to coat the inside of bottle caps and metal food and drink containers. Some products still use these chemicals, though many manufacturers have phased them out."
+        },
+        {
+          "kind": "p",
+          "text": "Thermal receipt paper uses bisphenol – usually BPA or BPS – as a developer. The bisphenol is combined with a colorless ink and applied as a microscopic, heat-sensitive film to the paper. Instead of using ink, a receipt printer applies heat to this thermal paper, causing the bisphenol and the dye to react and changing the dye from colorless to black. Fax machines, back in the day, also relied on this technology."
+        },
+        {
+          "kind": "h",
+          "text": "How do bisphenols affect the human body?"
+        },
+        {
+          "kind": "p",
+          "text": "Toxicologists classify bisphenols as toxins called endocrine disruptors. This means that they interfere with the body’s endocrine system, which controls vital body functions like growth, reproduction and metabolism."
+        },
+        {
+          "kind": "p",
+          "text": "The endocrine system includes multiple organs, including the thyroid, pancreas and pituitary gland, which is a tiny structure at the base of the brain. These organs send messages throughout the body to control many vital functions, and the molecules that carry that message are called hormones."
+        },
+        {
+          "kind": "p",
+          "text": "Most research on bisphenol toxicity has focused on BPA. Research shows that BPA interrupts the messaging sent through multiple hormones, but most notably through estrogen."
+        },
+        {
+          "kind": "p",
+          "text": "Many people think of estrogen as the “female” hormone, but all people make estrogen, no matter what sex chromosomes they have. Estrogen helps control the growth and development of organs as they first form during fetal development, among other important roles in the body."
+        },
+        {
+          "kind": "p",
+          "text": "That’s why exposure to endocrine disruptors is potentially more serious for a developing fetus than it is for adults. BPA exposure has been linked to preterm birth and abnormal fetal brain development"
+        },
+        {
+          "kind": "p",
+          "text": "Exposure to high amounts of BPA could also increase a person’s chances of developing heart disease, high blood pressure, diabetes, obesity and other health problems. Research also shows that BPA can cause oxidative stress – chemical damage to the molecules that make up cells. Exposure to BPA might also cause changes to how genes are turned on or off, and some of these changes can be passed on to future generations."
+        },
+        {
+          "kind": "p",
+          "text": "These findings have led to a ban on BPA in Europe. In the United States, its use is banned in baby bottles, but no ban exists for most other products. However, many manufacturers have voluntarily replaced BPA with alternative chemicals – you have probably seen plastic products advertised as “BPA free.”"
+        },
+        {
+          "kind": "p",
+          "text": "Unfortunately, companies often simply switch out BPA for another bisphenol, such as BPS, and it turns out that BPS shares much of its cousin molecule’s toxic traits. Recently, though, concern about all bisphenols has led many companies to move away from them entirely."
+        },
+        {
+          "kind": "p",
+          "text": "Research has also shown that bisphenols can be absorbed through the skin – for example, when handling a receipt printed on thermal paper. Touching bisphenols with greasy hands, perhaps because you’ve just applied moisturizer or hand sanitizer, can increase absorption through the skin."
+        },
+        {
+          "kind": "h",
+          "text": "What’s the dose?"
+        },
+        {
+          "kind": "p",
+          "text": "You have probably heard the old saying “the dose makes the poison.” This is a foundational principle of toxicology originally written by the Swiss physician and chemist Paracelsus in 1538."
+        },
+        {
+          "kind": "p",
+          "text": "Consider the classic poison cyanide. A dose capable of killing an average person weighs less than 10 grains of rice. However, the human body actually makes tiny amounts of cyanide every day. A natural detoxification system clears it out of the body so it causes no harm."
+        },
+        {
+          "kind": "p",
+          "text": "Similarly, though we all require a fair amount of water every day to survive, there is such a thing as water toxicity. Too much water can cause your brain to swell and can be fatal, as several tragic cases over the years have shown."
+        },
+        {
+          "kind": "p",
+          "text": "In 2023, researchers estimated the daily “dose” of exposure to BPA from thermal paper receipts and found levels somewhere between about 5,000 to 50 million times lower than European Food Safety Authority standards. That’s less than one drop in an 8-ounce glass of water."
+        },
+        {
+          "kind": "p",
+          "text": "That said, this estimate is for the average person. Retail, food service and other workers who handle many receipts every day would be exposed to doses about 100 times higher than that, the researchers estimated. This is potentially more concerning, but still probably well below safety standard levels."
+        },
+        {
+          "kind": "p",
+          "text": "Bisphenols are found in many products and do have potential to harm our health, but most human exposure to these chemicals comes from food or beverages packaged in containers made with bisphenols. Exposure from handling receipts is a small piece of the pie."
+        },
+        {
+          "kind": "h",
+          "text": "Taking reasonable precautions"
+        },
+        {
+          "kind": "p",
+          "text": "The upshot is that for most people, handling receipts is a pretty low-risk activity. But if you’re concerned, you can take a few straightforward precautions."
+        },
+        {
+          "kind": "p",
+          "text": "People who handle receipts at work could protect themselves by avoiding the use of sanitizer and other skin care products on their hands before work, wearing gloves or encouraging their employer to use bisphenol-free thermal paper."
+        },
+        {
+          "kind": "p",
+          "text": "People who might be sensitive to endocrine effects of bisphenols – pregnant people, infants, children and those with certain endocrine diseases – might want to avoid contact with thermal paper receipts."
+        },
+        {
+          "kind": "p",
+          "text": "For people outside of these sensitive groups, handling a receipt is probably a very low-risk activity. But if you are concerned, some commonsense strategies that could minimize your exposure include opting for emailed receipts when available, or tucking a printed receipt into a bag or pocket rather than holding on to it for a prolonged period of time."
+        },
+        {
+          "kind": "p",
+          "text": "Personally, I avoid paper receipts for the most part – I don’t like making extra trash."
+        },
+        {
+          "kind": "note",
+          "text": "Sean McCann is affiliated with the American College of Medical Toxicology, the American Academy of Clinical Toxicology and the American Academy of Emergency Medicine."
+        }
+      ]
+    },
+    {
+      "id": "nasa-curiosity",
+      "section": "science",
+      "title": "Curiosity Blog, Sols 5016–5021: Fantastic Minerals and How To Detect Them",
+      "deck": null,
+      "author": "Lucy Lim",
+      "author_affiliation": "Planetary Scientist at NASA Goddard Space Flight Center",
+      "source_name": "NASA",
+      "source_url": "https://science.nasa.gov/blog/curiosity-blog-sols-5016-5021-fantastic-minerals-and-how-to-detect-them/",
+      "published": "Wed, 30 Sep 2026 23:37:47 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA. U.S. government work, public domain. NASA does not endorse this publication.",
+      "changes": "Image converted to monochrome.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "Earth planning date: Friday, Sept. 18, 2026"
+        },
+        {
+          "kind": "p",
+          "text": "Curiosity surprised us at the beginning of the week with a change in rock texture — instead of the finely layered bedrock blocks we’ve been seeing in our recent sulfate unit workspaces, suddenly we were looking at blocks covered (and likely filled) with a jumble of small disc-shaped lumps. We’ve seen somewhat similar features before much earlier in the mission — for example, close to the Pahrump Hills back in the Murray mudstones, and they’re sometimes seen in Earth rocks as well, especially in settings in which minerals were precipitating from an evaporating fluid. The disc-like shapes could be created by the growth habits of a specific crystalline mineral that is known to grow into similar shapes, or they could be bits of a harder rock layer that broke up and collected here. We planned Mastcam and MAHLI imaging for more morphological detail on the jumbled disc blocks (“Yungay,” “Chiu Chiu”) as well as LIBS (“Puya Raimondii,” “Liolaemus Tacnae,” “Pisqu Warkatana”) and APXS (“Salar de Vacas”) to investigate their composition."
+        },
+        {
+          "kind": "p",
+          "text": "Ongoing long-distance imaging projects were furthered by ChemCam long-distance remote imager (RMI) and Mastcam mosaics of the buttes on either side of Valle Grande. These “cutaway”-view images of the strata above the rover will help us map sedimentary structures in these upcoming units and understand how these rocks formed and eroded. Views of more recent erosional deposits will also help us to understand the formation of Valle Grande itself."
+        },
+        {
+          "kind": "p",
+          "text": "In order to identify minerals, Curiosity needs data from the CheMin X-ray diffraction instrument, which means a drill campaign. We’ve driven over a kilometer since our last drill site at Campo Marte, and this will be our first drill above the erosional supersurface. The Wednesday plan’s drive brought us up next to a promising drill workspace a little beyond where we saw the disc-shaped features discussed above (imaged as “Torres del Paine” by Mastcam) and Friday’s planning included site characterization with the instruments on Curiosity’s arm (“Alberta Wild Rose,” “Moonraker Mountain”), ChemCam LIBS (“Osoyoos”), and Mastcam (“Trincomali Channel,” “Yellow Lady’s Slipper”). The team also selected a specific drill target and planned a very short drive to bring it in range of the arm — first for contact science and then, if all goes well, for the preload test and drill."
+        },
+        {
+          "kind": "p",
+          "text": "I’ll be back on planning on Monday as Geology and Mineralogy Science Theme Lead for Drill Sol 1 (Triage Contact Science) and we’ll see how things go from there!"
+        }
+      ],
+      "images": [
+        {
+          "path": "images/nasa-curiosity-mount-sharp.jpg",
+          "caption": "Curiosity at the base of Mount Sharp",
+          "credit": "NASA/JPL-Caltech/MSSS",
+          "license": {
+            "id": "us-gov-pd",
+            "name": "Public domain (U.S. government work)",
+            "url": "https://www.usa.gov/government-copyright",
+            "commercial": true,
+            "derivatives": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "nasa-eo-storms",
+      "section": "weather",
+      "title": "Powerful Storms Continue to Prowl the Pacific",
+      "deck": null,
+      "author": "NASA Earth Observatory",
+      "author_affiliation": null,
+      "source_name": "NASA Earth Observatory",
+      "source_url": "https://science.nasa.gov/earth/earth-observatory/powerful-storms-continue-to-prowl-the-pacific/",
+      "published": "Wed, 30 Sep 2026 04:01:00 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA Earth Observatory. U.S. government work, public domain.",
+      "changes": "Image converted to monochrome.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "An image from NASA’s EPIC (Earth Polychromatic Imaging Camera) on the DSCOVR (Deep Space Climate Observatory) satellite, acquired on September 27, shows the basin again rife with powerful storms. Hurricane Nolo near Hawaii and Hurricane Polo off the Baja California peninsula were lashing land with high winds, storm surge, and heavy rain. On either side of Polo, Tropical Storm Rachel and Post-Tropical Cyclone Odalys were contributing to treacherous conditions along the Mexican coast and in the southwestern U.S., respectively."
+        },
+        {
+          "kind": "p",
+          "text": "Hurricane Polo (below) made landfall in Baja California Sur around 11 p.m. local time on September 28 (06:00 Universal Time on September 29). Before encountering land, the storm had undergone extreme rapid intensification while churning over the unusually warm ocean surface, catapulting to category 5 status on September 22. Polo waned in intensity on its approach to the coast and likely made landfall as a category 2 storm, according to the National Hurricane Center (NHC)."
+        },
+        {
+          "kind": "p",
+          "text": "Polo then continued across the peninsula and the Gulf of California and made a second landfall, near Guaymas, as a further weakened system around midday on September 29. The NHC warned of dangerous winds and storm surge, as well as heavy rains capable of triggering flooding and mudslides in parts of Baja California Sur and Sonora."
+        },
+        {
+          "kind": "p",
+          "text": "The hurricane’s effects were expected to be even more widespread. Polo and its remnants, combined with moisture from Post-Tropical Cyclone Odalys, were likely to push over the southwestern U.S. and southern Plains over several days, forecasters said, fueling yet more heavy rain and flood risk. Next in the train of storms, Tropical Storm Rachel was tracking parallel to the southwest Mexico coast, where the NHC forecast strong winds and dangerous surf and rip current conditions."
+        },
+        {
+          "kind": "p",
+          "text": "Meanwhile, the third hurricane of the season to pass close to Hawaii was delivering yet another deluge to the islands. Hurricane Nolo, though it did not make landfall, dropped more than 12 inches (30 centimeters) of rain on parts of Maui and the Island of Hawaiʻi. The storm flooded roads, toppled trees, and triggered landslides, according to news reports, but the Island of Hawaiʻi was spared some of the more severe effects wrought by Hurricane Lala in mid-August."
+        },
+        {
+          "kind": "p",
+          "text": "As of September 28, the accumulated cyclone energy in the Northeast Pacific was more than twice the norm, according to data from Colorado State University. Scientists expect an increase in tropical cyclone activity in this ocean basin during an El Niño, which has been underway since June. Warm water in the equatorial Pacific and low wind shear in the region, both typical El Niño patterns, encourage tropical storms to develop and strengthen."
+        },
+        {
+          "kind": "p",
+          "text": "The NASA Disasters Program, in coordination with FEMA, is supporting the State of Hawaii’s response to Hurricane Nolo. The team will be posting maps and data products on its open-access mapping portal as new information becomes available."
+        },
+        {
+          "kind": "p",
+          "text": "NASA Earth Observatory images by Lauren Dauphin, using data from DSCOVR EPIC and VIIRS data from NASA EOSDIS LANCE, GIBS/Worldview, and the Suomi National Polar-orbiting Partnership. Story by Lindsey Doermann."
+        }
+      ],
+      "images": [
+        {
+          "path": "images/eo-hurricane-polo-20260928.jpg",
+          "caption": "Hurricane Polo nears Baja California Sur, September 28, 2026",
+          "credit": "NASA Earth Observatory/Lauren Dauphin",
+          "license": {
+            "id": "us-gov-pd",
+            "name": "Public domain (U.S. government work)",
+            "url": "https://www.usa.gov/government-copyright",
+            "commercial": true,
+            "derivatives": true
+          }
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": null,
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Bismarck Tribune, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/sn85042243/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Bismarck Tribune (Bismarck, N.D.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-cobham",
+      "title": "Alan J. Cobham Lands at London After Completing Round Trip to Australia",
+      "body": [
+        {
+          "kind": "p",
+          "text": "London, Oct. 1.—(AP)—Alan J. Cobham, Great Britain's leading long distance aviator, arrived here today, completing his sensational 28,000 mile flight to Australia and return."
+        },
+        {
+          "kind": "p",
+          "text": "The plane came to rest on the water by the parliament building while huge crowds, lining the banks of the river, gave the flier a tremendous ovation."
+        },
+        {
+          "kind": "p",
+          "text": "No airplane voyage since the late Captain Sir John Alcock and Lieut. Brown of the British army flew from Newfoundland across the Atlantic to Clifton, Ireland, in 1919 had aroused public interest equal to that of Cobham's."
+        },
+        {
+          "kind": "p",
+          "text": "The last lap of his flight started from Sartrouville, near Paris, at 11:15 a. m."
+        },
+        {
+          "kind": "p",
+          "text": "Cobham, in a long dispatch sent from France to the Daily Mail, paid tribute to Mechanician Ward, who succeeded A. G. Elliott, who died on the outward trip, and to Mechanician Captel, who joined him in Australia for the return trip. Elliott died from a bullet wound received when an Arab tribesman fired at the plane near Basra, in Irak."
+        },
+        {
+          "kind": "p",
+          "text": "Cobham estimated the distance covered by him during his three months aerial journey at 28,000 miles, or more than the earth's equatorial girth. His actual flying time was only about 320 hours."
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": null,
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Bismarck Tribune, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/sn85042243/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Bismarck Tribune (Bismarck, N.D.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-king-albert",
+      "title": "King of Belgium Gives Up Autos for Motorcycle",
+      "body": [
+        {
+          "kind": "p",
+          "text": "Brussels, Oct. 1.—(AP)—Albert, King of the Belgians, rigorously obeying his country's economy laws as an aid in budget balancing, eating only black bread instead of white, also has given up the use of his three automobiles to save gasoline."
+        },
+        {
+          "kind": "p",
+          "text": "The King was riding from his palace to [illegible] Brussels on a motorcycle. He was exceeding the speed limit. Two gendarmes stopped him, demanding to see his papers. When they read the driver's permit they found it was made out to “Albert of Belgium.”"
+        },
+        {
+          "kind": "p",
+          "text": "The policemen, somewhat flustered, were put at their ease by the King saying:"
+        },
+        {
+          "kind": "p",
+          "text": "“You are right. The King has done wrong. But you will excuse me, this time, won't you? I am a bit late for [illegible].”"
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": null,
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Bismarck Tribune, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/sn85042243/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Bismarck Tribune (Bismarck, N.D.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-channel-swim",
+      "title": "English Girl Quits Channel When Only 3 Miles From Dover",
+      "body": [
+        {
+          "kind": "p",
+          "text": "Dover, Oct. 1.—(AP)—Jane Darwin, English girl who started on a swim from Cape Gris Nez across the English channel yesterday, abandoned her efforts this morning when three miles off Dover. She had been in the water [illegible] hours and [illegible] minutes. She was numbed from the cold water when she gave up."
+        },
+        {
+          "kind": "p",
+          "text": "This was her fourth attempt to cross the channel this year. Her real name is Lorna [illegible]."
+        }
+      ]
+    }
+  ],
+  "weather": {
+    "city": "Denver, Colo.",
+    "office": "NWS Denver/Boulder (BOU)",
+    "generated": "2026-10-01T15:39:34+00:00",
+    "source_url": "https://forecast.weather.gov/MapClick.php?lat=39.7392&lon=-104.9903",
+    "license": {
+      "id": "us-gov-pd",
+      "name": "Public domain (U.S. government work)",
+      "url": "https://www.usa.gov/government-copyright",
+      "commercial": true,
+      "derivatives": true
+    },
+    "attribution": "Forecast from the National Weather Service. Public domain.",
+    "periods": [
+      {
+        "name": "Today",
+        "temperature": 72,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Mostly Sunny",
+        "detail": "Mostly sunny. High near 72, with temperatures falling to around 70 in the afternoon. East northeast wind around 7 mph."
+      },
+      {
+        "name": "Tonight",
+        "temperature": 49,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Mostly Clear",
+        "detail": "Mostly clear. Low around 49, with temperatures rising to around 51 overnight. South southeast wind 3 to 9 mph, with gusts as high as 16 mph."
+      },
+      {
+        "name": "Friday",
+        "temperature": 81,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Sunny",
+        "detail": "Sunny. High near 81, with temperatures falling to around 79 in the afternoon. South southeast wind 2 to 7 mph, with gusts as high as 16 mph."
+      },
+      {
+        "name": "Friday Night",
+        "temperature": 53,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Mostly Clear",
+        "detail": "Mostly clear, with a low around 53. South southwest wind 5 to 9 mph, with gusts as high as 20 mph."
+      },
+      {
+        "name": "Saturday",
+        "temperature": 85,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Sunny",
+        "detail": "Sunny, with a high near 85. East wind 3 to 7 mph, with gusts as high as 16 mph."
+      },
+      {
+        "name": "Saturday Night",
+        "temperature": 54,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Mostly Clear",
+        "detail": "Mostly clear, with a low around 54."
+      },
+      {
+        "name": "Sunday",
+        "temperature": 81,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Sunny",
+        "detail": "Sunny, with a high near 81."
+      },
+      {
+        "name": "Sunday Night",
+        "temperature": 54,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Mostly Clear",
+        "detail": "Mostly clear, with a low around 54."
+      }
+    ]
+  },
+  "poem": {
+    "id": "pd-jackson-october",
+    "title": "October's Bright Blue Weather",
+    "author": "Helen Hunt Jackson",
+    "year": 1892,
+    "source_name": "Wikisource, from Poems (1892)",
+    "source_url": "https://en.wikisource.org/wiki/Poems_(Jackson)/October%27s_Bright_Blue_Weather",
+    "license": {
+      "id": "pd-expired",
+      "name": "Public domain (published before 1931)",
+      "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+      "commercial": true,
+      "derivatives": true
+    },
+    "attribution": "First published 1892. Public domain.",
+    "stanzas": [
+      [
+        "Suns and skies and clouds of June,",
+        "And flowers of June together,",
+        "Ye cannot rival for one hour",
+        "October's bright blue weather,"
+      ],
+      [
+        "When loud the bumble-bee makes haste,",
+        "Belated, thriftless vagrant,",
+        "And Golden-Rod is dying fast,",
+        "And lanes with grapes are fragrant;"
+      ],
+      [
+        "When Gentians roll their fringes tight",
+        "To save them for the morning,",
+        "And chestnuts fall from satin burrs",
+        "Without a sound of warning;"
+      ],
+      [
+        "When on the ground red apples lie",
+        "In piles like jewels shining,",
+        "And redder still on old stone walls",
+        "Are leaves of woodbine twining;"
+      ],
+      [
+        "When all the lovely wayside things",
+        "Their white-winged seeds are sowing,",
+        "And in the fields, still green and fair,",
+        "Late aftermaths are growing;"
+      ],
+      [
+        "When springs run low, and on the brooks,",
+        "In idle golden freighting,",
+        "Bright leaves sink noiseless in the hush",
+        "Of woods, for winter waiting;"
+      ],
+      [
+        "When comrades seek sweet country haunts,",
+        "By twos and twos together,",
+        "And count like misers hour by hour,",
+        "October's bright blue weather."
+      ],
+      [
+        "O suns and skies and flowers of June,",
+        "Count all your boasts together,",
+        "Love loveth best of all the year",
+        "October's bright blue weather."
+      ]
+    ]
+  }
+}

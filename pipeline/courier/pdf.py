@@ -28,15 +28,20 @@ def _front_fits(edition: Edition, device: Device, plan: FrontPlan, images: dict)
     return len(HTML(string=html).render().pages) == 1
 
 
-def _largest_fitting(lo: int, hi: int, fits) -> int | None:
-    # Assumes fits() is monotone: more text never fits where less did not.
-    best = None
-    while lo <= hi:
-        mid = (lo + hi) // 2
+def _largest_fitting(lo: int, hi: int, fits, scan: int = 10) -> int | None:
+    # Binary search, then a short linear scan upward: keeping a paragraph together with
+    # its jump line means more text sometimes fits where slightly less did not.
+    best, a, b = None, lo, hi
+    while a <= b:
+        mid = (a + b) // 2
         if fits(mid):
-            best, lo = mid, mid + 1
+            best, a = mid, mid + 1
         else:
-            hi = mid - 1
+            b = mid - 1
+    start = best if best is not None else lo - 1
+    for n in range(start + 1, min(hi, start + scan) + 1):
+        if fits(n):
+            best = n
     return best
 
 

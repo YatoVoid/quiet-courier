@@ -1,13 +1,15 @@
 import re
 import xml.dom.minidom
 import zipfile
+from pathlib import Path
 
 import pytest
 from weasyprint import HTML
 
-from broadsheet.devices import DEVICES
-from broadsheet.epub import build_epub
-from broadsheet.pdf import build_pdf
+from courier.devices import DEVICES
+from courier.models import load_edition
+from courier.epub import build_epub
+from courier.pdf import build_pdf
 
 
 def _page_text(page) -> str:
@@ -23,8 +25,13 @@ def _page_text(page) -> str:
     return " ".join(" ".join(out).split())
 
 
+SAMPLES = sorted((Path(__file__).resolve().parent.parent / "samples").glob("*.json"))
+
+
+@pytest.mark.parametrize("sample", SAMPLES, ids=[p.stem for p in SAMPLES])
 @pytest.mark.parametrize("device", DEVICES.values(), ids=list(DEVICES))
-def test_pdf_layout(edition, device, tmp_path):
+def test_pdf_layout(sample, device, tmp_path):
+    edition = load_edition(sample)
     result = build_pdf(edition, device, tmp_path / "out.pdf", tmp_path)
     assert (tmp_path / "out.pdf").stat().st_size > 10_000
 

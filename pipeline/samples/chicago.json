@@ -1,0 +1,1033 @@
+{
+  "paper_name": "The Quiet Courier",
+  "motto": "Read It to the Last Page",
+  "edition_number": 1,
+  "volume": 1,
+  "date": "2026-10-01",
+  "location": {
+    "name": "Chicago",
+    "region": "Illinois",
+    "lat": 41.8781,
+    "lon": -87.6298,
+    "tz": "America/Chicago"
+  },
+  "sections": [
+    {
+      "id": "world",
+      "name": "World"
+    },
+    {
+      "id": "science",
+      "name": "Science"
+    },
+    {
+      "id": "weather",
+      "name": "Weather"
+    },
+    {
+      "id": "archives",
+      "name": "From the Archives",
+      "subtitle": "One Hundred Years Ago Today"
+    },
+    {
+      "id": "puzzles",
+      "name": "Puzzles"
+    }
+  ],
+  "front": {
+    "lead": "conv-antarctica",
+    "secondary": [
+      "nasa-overlap-zoo",
+      "nasa-moon-base"
+    ]
+  },
+  "articles": [
+    {
+      "id": "conv-antarctica",
+      "section": "science",
+      "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
+      "deck": "The Antarctic ice sheet’s future depends how a chain of events plays out. A new study finds the evidence points in one direction.",
+      "author": "Yucheng Lin",
+      "author_affiliation": "Assistant Professor of Energy and Environment, City University of Hong Kong",
+      "source_name": "The Conversation",
+      "source_url": "https://theconversation.com/antarcticas-ice-loss-is-locked-in-and-extra-snowfall-wont-save-it-thats-bad-news-for-low-lying-coastal-areas-elsewhere-293066",
+      "published": "2026-09-30T12:47:28Z",
+      "license": {
+        "id": "cc-by-nd-4.0",
+        "name": "CC BY-ND 4.0",
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "commercial": true,
+        "derivatives": false
+      },
+      "attribution": "This article is republished from The Conversation under a Creative Commons license. Read the original article at theconversation.com.",
+      "changes": "Images and video omitted. Text unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "Sea-level rise is one of the most visible signs of climate change, one that is threatening low-lying coastal communities around the world. Today, about 1 billion people live in coastal areas; about 100 million live within 1 meter (3.3 feet) of sea level, highly exposed to coastal flooding."
+        },
+        {
+          "kind": "p",
+          "text": "Over the long term, when it comes to future sea-level rise, one place matters more than any other: Antarctica."
+        },
+        {
+          "kind": "p",
+          "text": "The frozen continent holds enough ice to raise global sea level by about 190 feet (58 meters). Yet scientists have disagreed on a fundamental question: Will Antarctica gain more ice than it loses this century or lose more ice than it gains?"
+        },
+        {
+          "kind": "p",
+          "text": "In a new study published in the scientific journal Nature Geoscience, we looked at hundreds of thousands of potential futures and the impact of each on the ice sheet."
+        },
+        {
+          "kind": "p",
+          "text": "We found that Antarctica’s ice loss this century is locked in – even if the world limits global warming to 1.5 degrees Celsius (2.7 degrees Fahrenheit), the 2015 international Paris climate agreement’s most ambitious goal."
+        },
+        {
+          "kind": "h",
+          "text": "Why the Antarctic ice sheet is so hard to predict"
+        },
+        {
+          "kind": "p",
+          "text": "The Antarctic ice sheet’s future depends on a chain of events."
+        },
+        {
+          "kind": "p",
+          "text": "Greenhouse gas emissions from vehicles, coal- and natural gas-fueled power plants and other sources around the world determine how much the ocean and air around Antarctica warms. That warming shapes how ice shelves around the continent’s margins melt, and how quickly the glaciers behind them slide over the bedrock. When those ice shelves thin or collapse, studies show the glacier flow speeds up."
+        },
+        {
+          "kind": "p",
+          "text": "Each step relies on assumptions that scientists have yet to agree on, such as how ice shelves collapse. Different assumptions give different answers, and because each step feeds the next, the differences grow – what scientists call cascading uncertainty. As a result, research teams around the world can’t agree on whether Antarctica will gain or lose ice this century."
+        },
+        {
+          "kind": "p",
+          "text": "Snow is part of the puzzle. Warmer air holds more moisture, so as temperatures rise, more snow will likely fall on Antarctica. In some projections, that extra snow outweighs the ice lost to the warming ocean, and the ice sheet actually grows."
+        },
+        {
+          "kind": "h",
+          "text": "Auditioning possible futures"
+        },
+        {
+          "kind": "p",
+          "text": "A big reason for this persistent disagreement involves the cost of computing."
+        },
+        {
+          "kind": "p",
+          "text": "Each ice-sheet simulation runs with just one set of assumptions for every step in the chain, from how much greenhouse gas we emit to how the ice behaves. One run can keep a supercomputer busy for days, so no team can test every plausible combination."
+        },
+        {
+          "kind": "p",
+          "text": "Our team of data scientists, glaciologists and oceanographers took a shortcut. An international project called the Ice Sheet Model Intercomparison Project, or ISMIP6, has built a large archive of Antarctic simulations showing how the ice responds under different circumstances. We trained a physics-informed machine learning model on that archive to learn how each simulation’s outcome depends on its physical assumptions, such as how easily ice slides over bedrock. The machine learning model does in a fraction of a second what took the original models days, predicting sea-level change with similar accuracy."
+        },
+        {
+          "kind": "p",
+          "text": "That speed let us run millions of combinations and check hundreds of thousands of possible futures against data from satellites that weigh the ice sheet from space by sensing tiny changes in Earth’s gravity. Only scenarios that were able to match what the satellites have seen since 2002 made the cut."
+        },
+        {
+          "kind": "p",
+          "text": "The scenarios that did make the cut point one direction: Antarctica will lose more ice than it gains this century, even if humanity is able to limit global warming to 1.5 C."
+        },
+        {
+          "kind": "p",
+          "text": "That means Antarctica will contribute more to sea-level rise that’s already being driven by melting of the Greenland ice sheet and mountain glaciers and from warming ocean temperatures that cause water to expand."
+        },
+        {
+          "kind": "h",
+          "text": "What a clearer forecast can do"
+        },
+        {
+          "kind": "p",
+          "text": "The biggest lessons from our study are that greenhouse gas emissions matter and extra snowfall won’t save Antarctica. Every ton of greenhouse gas that humans can avoid releasing today reduces how much ice Antarctica loses this century, and the benefit – slower and less sea-level rise – lasts for hundreds of years."
+        },
+        {
+          "kind": "p",
+          "text": "In a scenario with very high emissions, our results show a potential faster domino effect. A fast-warming ocean thins the ice shelves, weakened shelves break apart, and glacier ice flows into the ocean faster. Each step makes the next one easier. Together, these steps could add up to 10 inches (25 centimeters) of sea-level rise from Antarctica alone by 2100 – enough to permanently flood the homes of more than 10 million people."
+        },
+        {
+          "kind": "p",
+          "text": "Of more than 20 physical assumptions about Antarctica, three matter most for understanding future sea-level rise: how ice shelves respond to a warming ocean, how ice slides over bedrock, and how fast the ocean and air around Antarctica warm. Gaining a better understanding of these processes would do the most to sharpen sea-level projections."
+        },
+        {
+          "kind": "h",
+          "text": "What’s still missing"
+        },
+        {
+          "kind": "p",
+          "text": "Our study is far from the final word."
+        },
+        {
+          "kind": "p",
+          "text": "Some processes are missing from today’s simulations, so our machine learning model can’t learn about them – for example, how ice cracks and breaks, and how rivers and lakes beneath the ice sheet change over time. Any of these could change our understanding of how quickly Antarctica’s ice reaches the sea and whether coastal communities have enough time to adapt."
+        },
+        {
+          "kind": "p",
+          "text": "What our study does offer is a much faster way to test combinations of assumptions that are too costly to simulate one by one. That provides a clearer basis for the decisions coastal communities around the world are already having to make."
+        },
+        {
+          "kind": "note",
+          "text": "Yucheng Lin receives funding from City University of Hong Kong (project number 9610793)."
+        },
+        {
+          "kind": "note",
+          "text": "Robert Kopp receives funding from the U.S. National Science Foundation (NSF) and the National Aeronautics and Space Administration (NASA)."
+        }
+      ]
+    },
+    {
+      "id": "nasa-overlap-zoo",
+      "section": "science",
+      "title": "Help Overlap Zoo Reveal Cosmic Dust",
+      "deck": null,
+      "author": "",
+      "author_affiliation": null,
+      "source_name": "NASA",
+      "source_url": "https://science.nasa.gov/get-involved/citizen-science/help-overlap-zoo-reveal-cosmic-dust/",
+      "published": "Wed, 30 Sep 2026 21:19:33 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA. U.S. government work, public domain. NASA does not endorse this publication.",
+      "changes": null,
+      "body": [
+        {
+          "kind": "p",
+          "text": "Galaxies, vast collections of billions of stars, gas, and dust held together by gravity, are scattered across the immensity of space. But every so often, a coincidence occurs: Two galaxies line up from our point of view on Earth (or from a space telescope) and appear to overlap in the sky. These rare overlapping galaxies give astronomers a chance to study something normally difficult to see: the dust inside one of these distant cosmic objects. That’s the focus of NASA’s new Overlap Zoo project."
+        },
+        {
+          "kind": "p",
+          "text": "Picture the background galaxy acting like a cosmic flashlight, shining through the nearer galaxy. The backlit dust creates dark silhouettes, like shadows on a screen. By studying these silhouettes, astronomers can map how dust is distributed throughout galaxies and learn how it blocks, scatters, and dims starlight traveling through space. Measurements of how dust impacts light can even help astronomers refine estimates of the distances to faraway objects."
+        },
+        {
+          "kind": "p",
+          "text": "However, before we can study galaxy pairs and their dust, we first need to find them! Overlap Zoo is asking for your help with the search."
+        },
+        {
+          "kind": "p",
+          "text": "“As new and better observations of galaxies continue to multiply, it is becoming incredibly difficult for astronomers to classify every candidate galaxy pair,” said Trevor Butrum, Overlap Zoo project lead and graduate student. “Your help is invaluable to creating the biggest and cleanest catalog of overlapping galaxy pairs for further analysis.”"
+        },
+        {
+          "kind": "p",
+          "text": "As a volunteer in Overlap Zoo, you’ll view images that volunteers in the Galaxy Zoo project have identified as containing possible overlapping galaxies. The Overlap Zoo project will teach you how to verify the presence of galaxy pairs in these images, classify key features of each galaxy, and mark their outlines. You’ll learn as you go, classifying as many of these images as you like. Your contributions will help build the first large-scale catalog of galaxy pairs suitable for dust studies and enable a huge step forward in accuracy of astronomical estimates."
+        },
+        {
+          "kind": "p",
+          "text": "Head over to Overlap Zoo and start classifying galaxies today. No prior experience needed – just curiosity and a few minutes of your time. Your observations will help unlock the secrets hidden in these rare cosmic alignments!"
+        }
+      ]
+    },
+    {
+      "id": "nasa-moon-base",
+      "section": "science",
+      "title": "NASA Adds New Science Investigations for Moon Base",
+      "deck": null,
+      "author": "Lauren E. Low",
+      "author_affiliation": null,
+      "source_name": "NASA",
+      "source_url": "https://www.nasa.gov/news-release/nasa-adds-new-science-investigations-for-moon-base/",
+      "published": "Wed, 30 Sep 2026 21:11:23 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA news release. U.S. government work, public domain. NASA does not endorse this publication.",
+      "changes": null,
+      "body": [
+        {
+          "kind": "p",
+          "text": "NASA selected three new scientific investigations and their payload suites to advance our knowledge of the Moon and help pave the way for building humanity’s first lunar outpost, Moon Base."
+        },
+        {
+          "kind": "p",
+          "text": "The suite of science instruments and technologies was selected through NASA’s Payloads and Research Investigations on the Surface of the Moon (PRISM) program and will fly to the lunar surface using the CLPS (Commercial Lunar Payload Services) initiative as part of the agency’s Moon Base Program. The payloads will help researchers understand lunar resources, map natural shelters, and assess environmental hazards, laying the foundational groundwork for a safe and sustained human presence under the agency’s Artemis and Moon Base programs."
+        },
+        {
+          "kind": "p",
+          "text": "“NASA Science is building the ultimate interplanetary survival guide to ensure that science goes first to the lunar surface to provide our future astronaut crews with the vital information, resources, and safety precautions needed ahead of time to survive the night on the Moon,” said Nicky Fox, associate administrator, Science Mission Directorate, at NASA Headquarters in Washington. “These PRISM selections will directly help NASA minimize risks to our astronauts while maximizing our agency goals as we set up humanity’s first lunar outpost in preparation for sending the first astronauts to Mars.”"
+        },
+        {
+          "kind": "p",
+          "text": "The three payload suites are:"
+        },
+        {
+          "kind": "label",
+          "text": "Lunar Environment Monitoring Station – South Pole (LEMS-SP):"
+        },
+        {
+          "kind": "p",
+          "text": "Principal Investigator: Dr. Mehdi Benna, University of Maryland, Baltimore County"
+        },
+        {
+          "kind": "label",
+          "text": "Geophysical Investigation for Mapping Lunar Interior (GIMLI):"
+        },
+        {
+          "kind": "p",
+          "text": "Principal Investigator: Dr. Nathaniel Putzig, Planetary Science Institute"
+        },
+        {
+          "kind": "label",
+          "text": "Depth Imager with Spectral and Color Optics (DISCO):"
+        },
+        {
+          "kind": "p",
+          "text": "Principal Investigator: Dr. Ariel Deutsch, NASA’s Ames Research Center in California’s Silicon Valley"
+        },
+        {
+          "kind": "p",
+          "text": "“Each new PRISM selection strengthens our ability to deliver ambitious, transformative science to the lunar surface,” said Brad Bailey, director of the Exploration Science Strategy Integration Office in NASA’s Science Mission Directorate. “These investigations exemplify how Artemis and Moon Base are expanding the frontier of lunar exploration, advancing innovative technologies, deepening our understanding of the Moon’s environment, and paving the way for future astronaut missions.”"
+        },
+        {
+          "kind": "p",
+          "text": "NASA is increasing its cadence of lunar missions to build a Moon Base, delivering science investigations and technology payloads that contribute to American scientific preeminence, strengthen a sustained presence on the Moon, and advance future human exploration."
+        },
+        {
+          "kind": "p",
+          "text": "NASA’s CLPS initiative supports the Moon Base Program, as the agency works with American companies to deliver scientific, exploration, and technology payloads to the Moon’s surface and orbit."
+        }
+      ]
+    },
+    {
+      "id": "gv-japan-peace",
+      "section": "world",
+      "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
+      "deck": null,
+      "author": "Jo Carter",
+      "author_affiliation": null,
+      "source_name": "Global Voices",
+      "source_url": "https://globalvoices.org/2026/09/25/young-japanese-find-new-outlets-for-peace-activism-amid-rising-tensions-in-the-pacific/",
+      "published": "Fri, 25 Sep 2026 06:52:28 +0000",
+      "license": {
+        "id": "cc-by-3.0",
+        "name": "CC BY 3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "Originally published on Global Voices (globalvoices.org) under CC BY 3.0.",
+      "changes": "Images, photo captions and original-language quotations omitted; the article's own English translations are kept. Text otherwise unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "Young activists are reshaping protest into something accessible, individual, and nonhierarchical"
+        },
+        {
+          "kind": "p",
+          "text": "August 15, 2026, marks the 81st anniversary of the end of World War II — a date when Allied nations celebrated victory over the Axis powers, including Japan. The date triggers a complex collective emotion in Japan: For some Japanese, it is a moment for deep reflection over the country’s history of wartime violence. For others, the anniversary dredges up feelings of remorse, pain, or humiliation, as the war and the atomic bomb that ended it, took hundreds of thousands of their countrymen’s lives."
+        },
+        {
+          "kind": "p",
+          "text": "This year, the anniversary landed amid Japanese Prime Minister Sanae Takaichi’s push, as part of her broader right-leaning agenda, to amend the country’s pacifist postwar constitution, stepping away from a strictly pacifist framework."
+        },
+        {
+          "kind": "p",
+          "text": "Meanwhile, Japanese peace activists commemorated the date with a variety of events and rallies. Attending several of these gatherings, Global Voices observed Japanese peace activism shifting from a more ideological, often confrontational and hierarchical approach among the older generation to a more individualized, accessible, pop-culture-centered approach among young people."
+        },
+        {
+          "kind": "h",
+          "text": "The academic left"
+        },
+        {
+          "kind": "p",
+          "text": "The first event was a leftist symposium, “The 81st Year of the Post-War Era: A Dialogue to Halt the Collapse of Democracy,” organized by Civic Cultural Forum on August 15 at the Japan Education Center, a few miles away from Yasukuni Shrine — a controversial site which has been criticized by China, Korea, and even Japan’s own left-wingers for including more than 1,000 convicted WWII war criminals’ names in its “Book of Souls,” an honored list of people who have devoted their lives to Japanese society."
+        },
+        {
+          "kind": "p",
+          "text": "Three professors from The University of Tokyo opened the discussion with their critical perspectives on the current civil society crisis in Japan."
+        },
+        {
+          "kind": "p",
+          "text": "Among them, Professor Tetsuya Takahashi, who is a known critic of Japanese nationalism, pointed out that the Japan-U.S. security treaty signed in 1951, which grants the U.S. military forces access to its land, air, and sea for mutual defence purposes, had led to the “colonization” of Okinawa, as much of the island was handed over to the U.S. military, while Indigenous people there were stripped of their lands and rights."
+        },
+        {
+          "kind": "p",
+          "text": "Takahashi criticized the mainland liberal left for failing Okinawans, as they did not challenge the structural discrimination against minority citizens."
+        },
+        {
+          "kind": "p",
+          "text": "The 156-seat venue was packed, with some standing through the whole three and a half hour gathering. The vast majority of attendees were well-educated retirees in their 60s and older, comfortable with academic discussions on complex issues such as geopolitics and post-war political theory."
+        },
+        {
+          "kind": "p",
+          "text": "Some participants expressed concern about the very few young faces in the room. Sociologist Yuki Honda explained this by noting that the younger generation was overwhelmed by despair of an unjust society:"
+        },
+        {
+          "kind": "p",
+          "text": "Despair is driving young people to authoritarianism. These days, they are desperate to survive and often end up trying to suck up to the powerful and punch down on the vulnerable."
+        },
+        {
+          "kind": "h",
+          "text": "Stressed street protests"
+        },
+        {
+          "kind": "p",
+          "text": "On the same day, numerous protests took place near Yasukuni Shrine, including one from conservative groups advocating for “reverence for the heroic spirits of the war dead,” and another by anti-war left-wing groups calling for “the pledge of non-war and peace.”"
+        },
+        {
+          "kind": "p",
+          "text": "An Okinawan activist, Takamatsu Gushiken, known as the “bone hunter,” because he has spent nearly 40 years searching caves in southern Okinawa for the remains of soldiers from the Battle of Okinawa, held a symbolic hunger strike to protest the government’s plan to relocate U.S. Marine Corps Air Station Futenma to a new location in Henoko, which would require mass land reclamation using sand from southern Okinawa. Many remains have yet to be excavated from Southern Okinawa, and Gushiken argues that the project is disrespectful to the dead on both sides of the battle."
+        },
+        {
+          "kind": "p",
+          "text": "During the Battle of Okinawa (April 1–June 22, 1945), at least 149,425 Okinawan people were killed or forced into suicide upon defeat, with their remains yet to be recovered. Gushiken launched his first hunger strike in 2021, when the relocation plan was made public."
+        },
+        {
+          "kind": "p",
+          "text": "On the eve of the anniversary of the end of WWII on August 14, Gushiken expressed worries at the event “A Talk by Takamatsu Gushiken: No More Battle of Okinawa, No More War” about the Prime Minister’s remarks on Taiwan and its implications for Okinawa:"
+        },
+        {
+          "kind": "p",
+          "text": "We are basically told to die if war breaks out. […] If a Taiwan contingency happens, the large population on Okinawa’s main island makes it impossible for us to evacuate outside the prefecture."
+        },
+        {
+          "kind": "p",
+          "text": "Highlighting U.S. Secretary of Defense Pete Hegseth’s statement in March 2025, that “Japan would be on the front lines of any contingency we might face in the western Pacific,” he appealed to the young generation to see the war in terms of human lives rather than geopolitical interests."
+        },
+        {
+          "kind": "p",
+          "text": "On August 15, as Gushiken approached the Yasukuni Shrine, a right-winger blocked his way and shoved him and his team down to the small corner of the slope."
+        },
+        {
+          "kind": "p",
+          "text": "In the afternoon, another confrontation took place as 50 activists from Hantenren (the Anti-Emperor Association) held their annual protest near the Shrine; a group of right-wing protesters attacked them while shouting discriminatory slurs such as “Korean, go back to your country!” and “you old hag.” Eventually, police officers had to move in to separate the two groups."
+        },
+        {
+          "kind": "h",
+          "text": "Young people forging their own path to peace"
+        },
+        {
+          "kind": "p",
+          "text": "Many young Japanese find academic talks and street conflicts unappealing and far removed from conventional activism. However, that doesn’t mean they don’t care about politics and peace issues."
+        },
+        {
+          "kind": "p",
+          "text": "Young activist Tattsu (@kizuki11674), for example, created his own strategy to make political action more accessible. Every Monday and Friday, he spreads out placards about government policies, from health care to peace issues, on a blue tarp in Hibiya Park during lunch hours, inviting people to sit and discuss with him over lunch. The park is highly symbolic and considered Japan’s first people’s park, as it hosted the first large-scale social protest in 1905 to challenge the imperial state. Tattsu brands his activism “Hibiya Kōen Lunch Protest” — a way to transform intense political debate into a calm, friendly conversation."
+        },
+        {
+          "kind": "p",
+          "text": "On August 13, Tattsu explained the rationale behind his action to Global Voices:"
+        },
+        {
+          "kind": "p",
+          "text": "Street speeches or standing on the sidewalk always expose us to harassment and absurd questions. In particular when one challenges the government, opponents often look for debate: ‘So, what's your alternative?’ This raises the hurdle for people to join protests."
+        },
+        {
+          "kind": "p",
+          "text": "He believed that ordinary people should be involved in political deliberation regardless of their knowledge. Rather than directly criticizing the government, Tattsu’s placards adopt manga-style or pop aesthetics, and their messages appeal to individual choices and their effects, such as:"
+        },
+        {
+          "kind": "p",
+          "text": "I wish the people I care about wouldn’t be hurt in war, and that wish includes you."
+        },
+        {
+          "kind": "p",
+          "text": "Staying silent changes nothing. Raise your voice and society moves."
+        },
+        {
+          "kind": "p",
+          "text": "This shift toward individual autonomy over party-driven dogma was emphasized by a Park Lunch Protest participant Yuichi Nakata, who became a peace activist in 2015 when the Abe administration passed the peace and security legislation:"
+        },
+        {
+          "kind": "p",
+          "text": "With the spread of the internet, demonstrations moved beyond the politicians’ control. Beyond online solidarity, face-to-face dialogue among citizens is now necessary."
+        },
+        {
+          "kind": "p",
+          "text": "Tattsu is not alone; young activists are reshaping protests into something accessible, individual, and nonhierarchical. This trend of people valuing participation of their own free will was also evident at the August 15 anti-war rally at downtown Shinjuku South Gate. The event drew participants of all ages and genders, with participants sporting idol penlights and brightly colored, pop-style placards borrowed from popular fandom culture."
+        },
+        {
+          "kind": "p",
+          "text": "One participant wore a protest sign that read, “General Citizen: I have no affiliation with any political party.” Indeed, unlike conventional political gatherings, about 100 people stood in a circle, passing a microphone in an open, free-speech format. The messages, mostly from younger speakers, leaned on gut-level appeals: “I just want to keep enjoying violent action movies in peace — so, no war.” “I have two high schoolers. I’m not sending them to the battlefield. Don’t kill children! Don’t kill adults! Don’t kill anybody!”"
+        },
+        {
+          "kind": "p",
+          "text": "The atmosphere was relaxed and encouraging; many spoke up against politicians’ view that nukes are a crucial deterrent in navigating current global tensions."
+        },
+        {
+          "kind": "p",
+          "text": "Watching this open-mic circle, a veteran participant who had attended the afternoon’s academic symposium marvelled with tears in her eyes,"
+        },
+        {
+          "kind": "p",
+          "text": "In the past, protests were just about holding union-made placards and chanting union-made slogans. But now, there are so many young people here…seeing everyone speak in their own words here is wonderful."
+        }
+      ]
+    },
+    {
+      "id": "conv-bacteria",
+      "section": "science",
+      "title": "Hibernating bacteria can invade hospitals and survive outer space – but their high energy bill is a weakness that scientists can strike",
+      "deck": "Bacteria make a survival gamble when they devote all their energy to forming spores. Evolution is quick to get rid of this function, and researchers did the accounting to understand why.",
+      "author": "Canan Karakoç",
+      "author_affiliation": "Postdoctoral Scholar in Biological Sciences, Georgia Institute of Technology",
+      "source_name": "The Conversation",
+      "source_url": "https://theconversation.com/hibernating-bacteria-can-invade-hospitals-and-survive-outer-space-but-their-high-energy-bill-is-a-weakness-that-scientists-can-strike-289354",
+      "published": "2026-09-28T12:39:23Z",
+      "license": {
+        "id": "cc-by-nd-4.0",
+        "name": "CC BY-ND 4.0",
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "commercial": true,
+        "derivatives": false
+      },
+      "attribution": "This article is republished from The Conversation under a Creative Commons license. Read the original article at theconversation.com.",
+      "changes": "Images omitted. Text unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "A spore is a bacterium’s survival capsule: dried almost solid, wrapped in protein armor and chemical processes shut down. Bacteria enter this state of hibernation when environmental conditions are unfavorable. What’s left is close to indestructible: It can survive boiling, desiccation, radiation and the vacuum of space. NASA once bolted Bacillus spores to the outside of a satellite and left them in orbit for nearly six years; the ones shielded from sunlight were able to come back to life upon returning to Earth."
+        },
+        {
+          "kind": "p",
+          "text": "Out in the dirt, bacteria have handed this spore-forming ability down for roughly 3 billion years. But if you put this bacterium in a comfortable laboratory flask and feed it well, within a few thousand generations it will lose the ability to make spores altogether."
+        },
+        {
+          "kind": "p",
+          "text": "Why would a trait this useful, conserved for 3 billion years, vanish in a few thousand generations? This paradox has bothered microbiologists like me for decades."
+        },
+        {
+          "kind": "p",
+          "text": "In our research, my colleagues Jay Lennon and William Shoemaker and I think the answer comes down to energy: We added up what it costs a bacterium to go dormant and wake up again, and the energy bill is large enough for evolution to push it to lose its spore-making genes if they aren’t being used."
+        },
+        {
+          "kind": "p",
+          "text": "This same arithmetic runs on any costly trait in any organism. Building the first complete energy budget of forming and sending out a bacterial spore also shows where a spore is most vulnerable – an important data point to fight the bacteria behind some of the hardest hospital infections to treat."
+        },
+        {
+          "kind": "h",
+          "text": "Expensive insurance"
+        },
+        {
+          "kind": "p",
+          "text": "Cells run on a molecule called adenosine triphosphate, or ATP, which acts like a rechargeable battery. Because every job in a cell is paid for with ATP, we can treat this molecule like a real currency: It lets you directly compare the cost of producing a spore with the cost of producing a swimming tail."
+        },
+        {
+          "kind": "p",
+          "text": "Starting with Bacillus subtilis, a harmless soil bacterium, we gathered information in the scientific literature on which genes switch on as it builds spores, hour by hour, as well as how many copies of each type of protein one bacterium carries. Proteins are what a cell actually builds – the armor, the machinery, the enzymes that do every job — and they are also where most of a cell’s energy goes, which makes them the main thing to follow in energy accounting."
+        },
+        {
+          "kind": "p",
+          "text": "This data let us price every step for making a spore – copying genetic material, reading genes, assembling proteins, building membranes – into one bill, and a second bill for bringing a spore back to life as a new bacterium."
+        },
+        {
+          "kind": "p",
+          "text": "We then fed those numbers into a mathematical model of a starving population of Bacillus to ask what the cost of a spore does to a bacterial colony and whether evolution would notice – that is, whether a bacterium that quietly deleted its spore-making genes would end up with more descendants than one that kept them."
+        },
+        {
+          "kind": "p",
+          "text": "The full cycle of forming a spore and then reviving it came to nearly 10 billion ATP molecules, one of the most expensive things a bacterium ever does. Growing a flagellum and swimming away in search of food costs a fraction as much."
+        },
+        {
+          "kind": "p",
+          "text": "Moreover, most of that ATP isn’t fuel burned outright but an opportunity cost – building blocks that could’ve become a new cell go instead into the spore’s armor and protective proteins. A sporulating bacterium is not only spending energy, it’s also giving up the chance to reproduce while its neighboring bacteria are actively dividing."
+        },
+        {
+          "kind": "h",
+          "text": "High risk, uncertain reward"
+        },
+        {
+          "kind": "p",
+          "text": "Our accounting also turned up something even stranger. A dormant spore also holds almost no ready-made fuel – nearly five orders of magnitude short of what it needs to wake up."
+        },
+        {
+          "kind": "p",
+          "text": "What it carries instead is raw material. Packed around its DNA are small proteins it can tear apart for amino acids, along with stored carbon compounds it can start burning within minutes of getting wet. Think of it as a stocked pantry that helps carry the spore through the first steps of germination."
+        },
+        {
+          "kind": "p",
+          "text": "The cost of building a spore falls unevenly. The mother cell generating the spore covers roughly 87% of the cost of building it, feeding materials to it through a narrow channel, before dissolving herself to set the spore free. Still, to finish waking up, the spore needs to find food in the world outside."
+        },
+        {
+          "kind": "p",
+          "text": "In comparison, when a bacterium lives somewhere where resources are abundant, its sporulation genes sit idle and unactivated. But these genes still get copied every time the bacterium divides, and copying DNA costs energy. Our numbers suggest this cost is high enough for natural selection to push bacteria to lose these genes."
+        },
+        {
+          "kind": "p",
+          "text": "Evolution isn’t only letting the bacteria’s survival kit corrode. Where life is easy, it is actively throwing it out."
+        },
+        {
+          "kind": "h",
+          "text": "From soil to hospital ward"
+        },
+        {
+          "kind": "p",
+          "text": "Spores are not only a curiosity of soil microbiology. For example, Clostridioides difficile is a spore-forming bacterium that infects the gut and causes severe diarrhea and colitis. The bacteria’s spores allow it to spread through hospitals and nursing homes."
+        },
+        {
+          "kind": "p",
+          "text": "The infectious diseases anthrax and botulism come from spore-forming bacteria, too. The armor that carries a bacterium through a drought can also carry it through disinfectant and alcohol hand gel, keeping these chemicals from getting inside a cell. While bleach can chew through the armor itself, it’s too harsh on skin. For hands, the advice is plain soap and water to wash the spores away."
+        },
+        {
+          "kind": "p",
+          "text": "Our energy accounting points at a weak spot in the spore’s defenses."
+        },
+        {
+          "kind": "p",
+          "text": "Waking up happens in two stages. Germination comes first and is quick: In about 15 minutes, the spore rehydrates and sheds the armor that made it so hard to kill. Then comes outgrowth, three or four hours of rebuilding the proteins and machinery of a working cell. Only at the end of that is the bacterium alive and growing again."
+        },
+        {
+          "kind": "p",
+          "text": "That process leaves a gap: A spore cannot finish waking using only its internal reserves. If it wakes up where there is nothing to eat, it has given up its armor without finishing the job of coming back alive. Here is where scientists can attack."
+        },
+        {
+          "kind": "p",
+          "text": "Researchers have successfully triggered spores to germinate on skin and hospital surfaces and then killed them before they can finish developing into infectious bacteria. Our numbers show why this strategy works, suggesting that the tightest bottleneck – the point where a waking spore is most likely to run out of energy and die – is not germination but the outgrowth that follows, which consumes 88% of revival’s energy."
+        },
+        {
+          "kind": "h",
+          "text": "Putting a price on life"
+        },
+        {
+          "kind": "p",
+          "text": "Our findings explain both why bacteria hold onto the spore-making habit where life is hard and why they shed it where life is easy."
+        },
+        {
+          "kind": "p",
+          "text": "In the 1920s, mathematician Alfred Lotka argued that evolution favors whatever captures and puts to use the most energy. Researchers have since measured the cost of building a single gene, a virus particle and an entire animal body."
+        },
+        {
+          "kind": "p",
+          "text": "Biologist Christopher Kempes pushed our team’s arithmetic further: The cost of building a spore and the cost of idling both depend on cell size, but not at the same rate. So a large bacterium recoups the cost of a spore sooner than a small one does – meaning dormancy is a better bet the bigger you are."
+        },
+        {
+          "kind": "p",
+          "text": "Follow that relationship down to the smallest cells and it implies a floor: Below some size, a bacterium could never recover what a spore costs to build. So no spore-forming bacterium smaller than that should exist. Nobody has checked yet."
+        },
+        {
+          "kind": "note",
+          "text": "This research was funded by the NSF, NASA and the U.S. Army Research Office Grant."
+        }
+      ]
+    },
+    {
+      "id": "nasa-space-crops",
+      "section": "science",
+      "title": "NASA, International Partners Advance Work on Space Crops",
+      "deck": null,
+      "author": "",
+      "author_affiliation": null,
+      "source_name": "NASA",
+      "source_url": "https://science.nasa.gov/science-research/biological-physical-sciences/nasa-international-partners-advance-work-on-space-crops/",
+      "published": "Wed, 30 Sep 2026 18:38:20 +0000",
+      "license": {
+        "id": "us-gov-pd",
+        "name": "Public domain (U.S. government work)",
+        "url": "https://www.usa.gov/government-copyright",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "NASA. U.S. government work, public domain. NASA does not endorse this publication.",
+      "changes": "Image converted to monochrome.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "The Lunar Agriculture Module-Ground Test Demonstrator aims to develop the technologies needed to grow space crops and study how they perform under atmospheres and controlled environments similar to those expected during missions at Moon Base. Through Moon Base, NASA and its partners will build the infrastructure to support an enduring human presence near the Moon’s South Pole, advancing science and technology while preparing for future human missions to Mars."
+        },
+        {
+          "kind": "p",
+          "text": "Space crops will provide deep space crews with whole-food nutrition and increase dietary variety. They can also absorb carbon dioxide, produce oxygen, and recycle water. These capabilities will become increasingly important as human missions extend farther from our home planet."
+        }
+      ],
+      "images": [
+        {
+          "path": "images/nasa-space-crops-ksc.jpg",
+          "caption": "Moisture sensors for the Advanced Plant Imaging project, Kennedy Space Center",
+          "credit": "NASA/Isaac Watson",
+          "license": {
+            "id": "us-gov-pd",
+            "name": "Public domain (U.S. government work)",
+            "url": "https://www.usa.gov/government-copyright",
+            "commercial": true,
+            "derivatives": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "conv-permafrost",
+      "section": "weather",
+      "title": "Arctic infrastructure was built on frozen ground – drones and digital twins can help spot the permafrost thaw coming",
+      "deck": "A regional permafrost map can’t tell a builder if a particular foundation or road will survive as temperatures rise. Engineers need to see beneath the surface to find the weaknesses.",
+      "author": "Ming Xiao",
+      "author_affiliation": "Professor of Civil Engineering, Penn State",
+      "source_name": "The Conversation",
+      "source_url": "https://theconversation.com/arctic-infrastructure-was-built-on-frozen-ground-drones-and-digital-twins-can-help-spot-the-permafrost-thaw-coming-292097",
+      "published": "2026-09-29T12:45:24Z",
+      "license": {
+        "id": "cc-by-nd-4.0",
+        "name": "CC BY-ND 4.0",
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "commercial": true,
+        "derivatives": false
+      },
+      "attribution": "This article is republished from The Conversation under a Creative Commons license. Read the original article at theconversation.com.",
+      "changes": "Images and video omitted. Text unedited.",
+      "body": [
+        {
+          "kind": "p",
+          "text": "From the air, Wainwright, Alaska, looks like a perfectly stable band of homes and roads between the Chukchi Sea and a vast, flat tundra. But just below the surface, the frozen ground that this town was built on contains large bodies of ice. Along the eroding coastal bluffs, that hidden ice is becoming exposed and literally melting away."
+        },
+        {
+          "kind": "p",
+          "text": "This is more than a landscape change. When ice within frozen ground, known as permafrost, melts, roads can sink, buildings can tilt, pipelines can crack and leak, and shorelines can retreat, leaving homes precariously close to the ocean’s edge. A study in 2025 estimated that permafrost thaw could cost Alaska US$37 billion to $51 billion just in building and road damage."
+        },
+        {
+          "kind": "p",
+          "text": "As a civil engineer, I have spent the past decade studying how permafrost and infrastructure respond as Arctic temperatures rise two to three times faster than the global average."
+        },
+        {
+          "kind": "p",
+          "text": "A regional permafrost map alone cannot tell a builder how a particular foundation or road will survive as temperatures rise. Engineers need methods that can help them see beneath the surface and find the weaknesses. Using drones and digital twin technology, my colleagues and I have been developing those techniques."
+        },
+        {
+          "kind": "h",
+          "text": "When frozen ground is part of the foundation"
+        },
+        {
+          "kind": "p",
+          "text": "Permafrost is ground that stays at or below 32 degrees Fahrenheit (0 degrees Celsius) for at least two consecutive years. Where permafrost is rich in ground ice, thawing can fundamentally change its ability to support infrastructure."
+        },
+        {
+          "kind": "p",
+          "text": "Frozen soil that has held buildings, roads and pipelines for decades can start to sink as temperatures rise and the ice that bonds soil particles weakens. When ground ice melts and water drains away, the surface can subside. The weight of homes, roads and other infrastructure can cause the ground to sink even more."
+        },
+        {
+          "kind": "p",
+          "text": "This process is highly uneven. Locations a city block apart can contain very different amounts of ice and unfrozen water. Roads and buildings also change how snow accumulates and water drains."
+        },
+        {
+          "kind": "p",
+          "text": "Along the coast, thawing permafrost can leave coastal areas more vulnerable to waves and erosion. In Utqiaġvik, a bluff’s partial collapse in 2023 and 2024 brought the bluff’s eroding edge close to roads and buildings. Waves removed material from the bottom while thaw weakened frozen ground above, causing the edge to slump."
+        },
+        {
+          "kind": "h",
+          "text": "Seeing what lies beneath the tundra"
+        },
+        {
+          "kind": "p",
+          "text": "Much of the critical information that developers need to know before building a home or road is underground. However, drilling dense grids of boreholes in frozen soil to take samples of the ground below is expensive, disruptive and extremely labor intensive."
+        },
+        {
+          "kind": "p",
+          "text": "Geophysical imaging can help fill the gaps."
+        },
+        {
+          "kind": "p",
+          "text": "One method my team is working with is very low frequency electromagnetic surveying, or VLF-EM. It uses electromagnetic signals from distant transmitters and measures how the ground responds. Because it does not require direct ground contact, a lightweight sensor can be carried by a drone over wetlands and tundra that are susceptible to thawing."
+        },
+        {
+          "kind": "p",
+          "text": "Electromagnetic surveying is especially useful along Arctic coasts. Salty water that isn’t frozen conducts electricity much better than ice-rich frozen ground, so the differences that show up can reveal areas where the ground has thawed."
+        },
+        {
+          "kind": "p",
+          "text": "VLF-EM does not produce a perfect underground picture – depth estimates can be uncertain – but it can identify where subsurface conditions have changed so engineers know where to look closely."
+        },
+        {
+          "kind": "h",
+          "text": "From measurements to forecasts"
+        },
+        {
+          "kind": "p",
+          "text": "Infrastructure may remain in service for 20, 50 or more years, so mapping today’s underground conditions is not enough. Builders need to know what conditions are likely to look like decades into the future."
+        },
+        {
+          "kind": "p",
+          "text": "My research group has been working on ways to project how thaw affects two quantities that engineers care about: how much the ground settles, and how much load a foundation can support."
+        },
+        {
+          "kind": "p",
+          "text": "In a 2026 study, we looked at permafrost stability across Alaska’s Arctic Coastal Plain, the northern coastal region that includes Prudhoe Bay and much of Alaska’s oil industry operations."
+        },
+        {
+          "kind": "p",
+          "text": "We found that if the world emits greenhouse gases at a high rate that continues to raise temperatures quickly, the proportion of infrastructure at risk remains below 10% around mid-century, then rises rapidly between the 2060s and 2080s. By the 2090s, about 80% of buildings, 60% of roads and 90% of pipelines are projected to be at risk of damage from sinking land."
+        },
+        {
+          "kind": "p",
+          "text": "We are also developing computer models called digital twins for monitoring cold regions’ infrastructure. The digital twins replicate the real-world changing environments and aging infrastructure and can be used to predict what is likely to occur."
+        },
+        {
+          "kind": "p",
+          "text": "At a road embankment in Utqiaġvik, our team used fiber-optic cables to collect temperature and seismic data. In a 2026 study, we used measurements from a roughly 330-foot (100 meter) section to update a computer model that combines heat-transfer physics and machine learning. As new data arrives, the digital twin adjusts to improve predictions of how permafrost temperature changes and how infrastructure performs."
+        },
+        {
+          "kind": "p",
+          "text": "Our goal is to use drones and geophysics to map the land, sensors to track changes, and computer models to forecast how those changes affect infrastructure."
+        },
+        {
+          "kind": "h",
+          "text": "Preparing for the future"
+        },
+        {
+          "kind": "p",
+          "text": "Communities need easy-to-use tools showing where hazards may develop, how those hazards may change over coming decades, and what infrastructure could be affected."
+        },
+        {
+          "kind": "p",
+          "text": "Permafrost thaw is often described as an environmental problem. In the Arctic, it is also an engineering problem. The better that engineers can see what is happening beneath the surface – and anticipate what comes next – the more time communities have to decide where to monitor, reinforce, repair or adapt."
+        },
+        {
+          "kind": "note",
+          "text": "Ming Xiao receives funding from the U.S. National Science Foundation and the U.S. Department of Defense."
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": "Students Go on Strike When Old Rule, Compelling Coeds to Stay at Home Nights, Is Revived.",
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Indianapolis Times, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/sn82015313/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Indianapolis Times (Indianapolis, Ind.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-hanover",
+      "title": "Demand Lifting of Hanover Date Ban",
+      "body": [
+        {
+          "kind": "p",
+          "text": "HANOVER, Ind., Oct. 1.—Hanover College students are united in protesting revival of an ancient rule prohibiting co-eds from leaving their residences after 6 p. m."
+        },
+        {
+          "kind": "p",
+          "text": "Practically all of the 280 students struck Thursday when Mrs. William Alfred Millis, dean of women, and wife of President Millis, announced the rule which had not been enforced for nearly ten years, would be adhered to strictly."
+        },
+        {
+          "kind": "p",
+          "text": "Strikers attended a monster pep fest this morning before a committee of five upper classmen conferred with a faculty committee to demand lifting of the rule. The students decided to “stick together” [illegible] until the rule is [illegible]."
+        },
+        {
+          "kind": "p",
+          "text": "The ban prevents popular moonlight strolls and picnics on the beautiful rolling hills of southern Indiana, attendance at picture shows and other social engagements except college functions."
+        },
+        {
+          "kind": "p",
+          "text": "The only time co-eds and their “boy friends” may be outdoors together is at college functions and in the afternoons."
+        },
+        {
+          "kind": "p",
+          "text": "George H. Prime, a senior of Robinson, Ill., who led the general walkout following chapel Thursday, announced the strike will continue until the ruling is lifted."
+        },
+        {
+          "kind": "p",
+          "text": "The football squad continued to practice for the Butler game at Indianapolis Saturday."
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": null,
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Indianapolis Times, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/sn82015313/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Indianapolis Times (Indianapolis, Ind.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-series-radio",
+      "title": "The Series by Air, by Wire",
+      "body": [
+        {
+          "kind": "p",
+          "text": "An all-star line-up will bring the world series to the home of every Times reader."
+        },
+        {
+          "kind": "p",
+          "text": "Carl Fohl, Times radio editor, will broadcast United Press play by play description of each game, relaying the U. P. dispatches through W. F. B. M., the Merchants Heat and Light Company broadcasting station, direct from The Times editorial rooms."
+        },
+        {
+          "kind": "p",
+          "text": "Henry Farrell, United Press sports editor; Billy Evans, noted American League umpire; Joe Williams, NEA sports editor, and, egad, Major Hoople, will cover the games by wires direct to The Times from the playing fields in New York and St. Louis."
+        },
+        {
+          "kind": "p",
+          "text": "Broadcasting will start fifteen minutes before each game. New York games begin at 12:30 Indianapolis time; St. Louis games at 1:30 Indianapolis time. Times extras will be on the street immediately after the games."
+        }
+      ]
+    },
+    {
+      "section": "archives",
+      "deck": "Transport Gets in Touch With Freighter Racing to Savannah.",
+      "author": null,
+      "author_affiliation": null,
+      "source_name": "The Indianapolis Times, Oct. 1, 1926",
+      "source_url": "https://www.loc.gov/resource/sn82015313/1926-10-01/ed-1/?sp=1",
+      "published": "1926-10-01",
+      "license": {
+        "id": "pd-expired",
+        "name": "Public domain (published before 1931)",
+        "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+        "commercial": true,
+        "derivatives": true
+      },
+      "attribution": "The Indianapolis Times (Indianapolis, Ind.), October 1, 1926, page 1. Library of Congress, Chronicling America. Public domain. Transcribed from the page scan's OCR; obvious scanning errors corrected, [illegible] marks words that could not be read.",
+      "changes": "Transcribed from OCR.",
+      "id": "ca-1926-ship-fire",
+      "title": "Ship Conquers Fire at Sea; No Help Is Needed",
+      "body": [
+        {
+          "kind": "p",
+          "text": "WASHINGTON, Oct. 1.—(United Press)—Fire aboard the steamer New Britain, off Savannah, Ga., is under control and she no longer needs an escort, the Navy Department was advised today by the transport Chaumont. The Chaumont got in touch with the burning ship during the night, and ascertaining she needed no aid, proceeded on her way to Guantanamo."
+        },
+        {
+          "kind": "p",
+          "text": "The New Britain is a 8,174-ton freighter, owned by the Great Northern Shipping Corporation. It was bound for San Diego from Philadelphia under charter of the Williams Steamship Line."
+        },
+        {
+          "kind": "h",
+          "text": "Men Will Be Rescued"
+        },
+        {
+          "kind": "p",
+          "text": "SAVANNAH, Ga., Oct. 1.—(United Press)—The crew of the freighter New Britain will be rescued by the steamship Furmore if the fire menace on the New Britain grows more critical, the Furmore advised the United States naval radio station here early today. The Furmore is following the New Britain toward this port."
+        },
+        {
+          "kind": "p",
+          "text": "The coast guard cutter Seneca and an Atlantic Towing Company tug are en route to meet the burning boat. No lives have been lost, according to radio messages."
+        }
+      ]
+    }
+  ],
+  "weather": {
+    "city": "Chicago, Ill.",
+    "office": "NWS Chicago (LOT)",
+    "generated": "2026-10-01T15:20:09+00:00",
+    "source_url": "https://forecast.weather.gov/MapClick.php?lat=41.8781&lon=-87.6298",
+    "license": {
+      "id": "us-gov-pd",
+      "name": "Public domain (U.S. government work)",
+      "url": "https://www.usa.gov/government-copyright",
+      "commercial": true,
+      "derivatives": true
+    },
+    "attribution": "Forecast from the National Weather Service. Public domain.",
+    "periods": [
+      {
+        "name": "Today",
+        "temperature": 70,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Showers And Thunderstorms",
+        "detail": "Rain showers likely before noon, then showers and thunderstorms. Some of the storms could produce heavy rain. Cloudy. High near 70, with temperatures falling to around 66 in the afternoon. West southwest wind around 10 mph, with gusts as high as 20 mph. Chance of precipitation is 100%. New rainfall amounts between three quarters and one inch possible."
+      },
+      {
+        "name": "Tonight",
+        "temperature": 60,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Rain Showers",
+        "detail": "Rain showers before 5am. Cloudy, with a low around 60. North northwest wind 10 to 15 mph, with gusts as high as 25 mph. Chance of precipitation is 100%. New rainfall amounts between 1 and 2 inches possible."
+      },
+      {
+        "name": "Friday",
+        "temperature": 61,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Mostly Sunny",
+        "detail": "Mostly sunny. High near 61, with temperatures falling to around 58 in the afternoon. North wind around 15 mph, with gusts as high as 25 mph. New rainfall amounts less than a tenth of an inch possible."
+      },
+      {
+        "name": "Friday Night",
+        "temperature": 54,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Mostly Clear",
+        "detail": "Mostly clear, with a low around 54. Northeast wind 10 to 15 mph."
+      },
+      {
+        "name": "Saturday",
+        "temperature": 61,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Sunny",
+        "detail": "Sunny, with a high near 61. East southeast wind 5 to 10 mph."
+      },
+      {
+        "name": "Saturday Night",
+        "temperature": 52,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Mostly Clear",
+        "detail": "Mostly clear, with a low around 52."
+      },
+      {
+        "name": "Sunday",
+        "temperature": 67,
+        "unit": "F",
+        "is_daytime": true,
+        "short": "Sunny",
+        "detail": "Sunny, with a high near 67."
+      },
+      {
+        "name": "Sunday Night",
+        "temperature": 54,
+        "unit": "F",
+        "is_daytime": false,
+        "short": "Mostly Clear",
+        "detail": "Mostly clear, with a low around 54."
+      }
+    ]
+  },
+  "poem": {
+    "id": "pd-frost-october",
+    "title": "October",
+    "author": "Robert Frost",
+    "year": 1913,
+    "source_name": "Wikisource, from A Boy's Will (1913)",
+    "source_url": "https://en.wikisource.org/wiki/A_Boy%27s_Will/October",
+    "license": {
+      "id": "pd-expired",
+      "name": "Public domain (published before 1931)",
+      "url": "https://www.copyright.gov/help/faq/faq-duration.html",
+      "commercial": true,
+      "derivatives": true
+    },
+    "attribution": "First published 1913. Public domain.",
+    "stanzas": [
+      [
+        "O hushed October morning mild,",
+        "Thy leaves have ripened to the fall;",
+        "To-morrow's wind, if it be wild,",
+        "Should waste them all.",
+        "The crows above the forest call;",
+        "To-morrow they may form and go.",
+        "O hushed October morning mild,",
+        "Begin the hours of this day slow,",
+        "Make the day seem to us less brief.",
+        "Hearts not averse to being beguiled,",
+        "Beguile us in the way you know;",
+        "Release one leaf at break of day;",
+        "At noon release another leaf;",
+        "One from our trees, one far away;",
+        "Retard the sun with gentle mist;",
+        "Enchant the land with amethyst.",
+        "Slow, slow!",
+        "For the grapes' sake, if they were all,",
+        "Whose leaves already are burnt with frost,",
+        "Whose clustered fruit must else be lost—",
+        "For the grapes' sake along the wall."
+      ]
+    ]
+  }
+}

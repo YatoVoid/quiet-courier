@@ -22,6 +22,7 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
 - Terms page: https://globalvoices.org/about/global-voices-attribution-policy/
 - Partner content is excluded. Their feed includes stories "originally published" by other outlets (Dialogue Earth, for one) that carry those outlets' terms. Phase 2 must detect and skip these.
 - Photos are often "used with permission" from the photographer, which does not pass to us. We omit images.
+- Some posts quote sources in the original language followed by an English translation. The paper's fonts are Latin-only, so we drop the original-language lines, keep the translation, and say so in the credit.
 
 ### NASA
 - U.S. government work, public domain in the U.S.

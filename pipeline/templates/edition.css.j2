@@ -233,9 +233,9 @@ p.drop, p.pcont { text-indent: 0; }
   margin: 3pt 0 4pt;
   break-inside: avoid;
 }
-.plate-row { display: flex; gap: 4pt; }
-.plate-cell { flex: 1; text-align: center; }
-.plate-cell img { width: 100%; border: 1pt solid #000; display: block; }
+.plate-row { display: table; width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 3pt 0; }
+.plate-cell { display: table-cell; vertical-align: top; text-align: center; }
+.plate-cell img { width: 100%; height: auto; border: 1pt solid #000; display: block; }
 .plate-cap { font-family: "Fell SC"; font-size: 0.82em; display: block; margin-top: 1pt; }
 .plate figcaption { font-style: italic; font-size: 0.85em; text-align: center; margin-top: 2pt; }
 .plate-credit { font-style: normal; font-family: "Fell SC"; }
@@ -338,3 +338,5 @@ p.drop, p.pcont { text-indent: 0; }
 .end-words { font-family: "Nameplate"; font-size: {{ 1.9 if d.id == "small" else 2.4 }}em; line-height: 1.1; }
 .end-sub { font-style: italic; font-size: 0.9em; }
 .end-mark { font-family: "Fell SC"; margin-top: 3pt; letter-spacing: 0.1em; }
+.keep, .head { break-inside: avoid; }
+.head { break-after: avoid; }
