@@ -104,8 +104,9 @@ h1, h2, h3, h4 { hyphens: manual; break-after: avoid; font-weight: 700; }
   border-top: 2.4pt solid #000;
   border-bottom: 1pt solid #000;
   box-shadow: none;
+  /* WeasyPrint ignores string-set on flex items, so set it here. */
+  string-set: date "{{ date_long }}";
 }
-.folio-date { string-set: date content(); }
 .folio + * { margin-top: 0; }
 
 .front { break-after: page; }

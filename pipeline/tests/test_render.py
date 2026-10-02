@@ -9,6 +9,7 @@ from weasyprint import HTML
 from courier.devices import DEVICES
 from courier.models import load_edition
 from courier.epub import build_epub
+from courier.layout import long_date
 from courier.pdf import build_pdf
 
 
@@ -55,6 +56,9 @@ def test_pdf_layout(sample, device, tmp_path):
     assert jump_targets <= {f"cont-{i}" for i in front_ids}
 
     assert anchors["final-start"] == anchors["the-end"] == len(doc.pages) - 1
+
+    header = f"{edition.paper_name} · {long_date(edition.date)} · Page 2"
+    assert header in _page_text(doc.pages[1])
 
 
 def test_every_source_is_credited(edition, tmp_path):
