@@ -12,7 +12,8 @@ from .layout import PIPELINE_DIR
 from .models import load_edition
 from .pdf import build_pdf
 from .build import BuildError, build
-from .config import DEFAULT_PATH, load_config
+from .config import DEFAULT_PATH, GENERAL, City, load_config
+from .models import Location
 from .store import Store
 
 SAMPLES = sorted((PIPELINE_DIR / "samples").glob("*.json"))
@@ -35,6 +36,12 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--db", type=Path, default=PIPELINE_DIR.parent / "data" / "courier.db")
     b.add_argument("--config", type=Path, default=DEFAULT_PATH)
     b.add_argument("--no-render", action="store_true", help="select and store only, skip PDF/EPUB")
+    b.add_argument("--general", action="store_true", help="build the edition without local weather or almanac")
+    b.add_argument("--place", metavar="KEY", help="build for any place, e.g. gn-2996944; needs the options below")
+    for flag in ("--name", "--region", "--country", "--tz"):
+        b.add_argument(flag)
+    b.add_argument("--lat", type=float)
+    b.add_argument("--lon", type=float)
     args = parser.parse_args(argv)
 
     if args.cmd == "build":
@@ -56,22 +63,32 @@ def main(argv: list[str] | None = None) -> int:
 def run_build(args) -> int:
     logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
     config = load_config(args.config)
-    cities = list(config.cities) if args.city == "all" else [args.city]
-    unknown = [c for c in cities if c not in config.cities]
-    if unknown:
-        print(f"unknown city: {', '.join(unknown)}. Known: {', '.join(config.cities)}", file=sys.stderr)
-        return 2
+    if args.general:
+        targets = [GENERAL]
+    elif args.place:
+        missing = [f for f in ("name", "region", "country", "tz", "lat", "lon") if getattr(args, f) is None]
+        if missing:
+            print(f"--place needs --{', --'.join(missing)}", file=sys.stderr)
+            return 2
+        targets = [City(args.place, Location(args.name, args.region, args.lat, args.lon, args.tz, args.country.upper()))]
+    else:
+        ids = list(config.cities) if args.city == "all" else [args.city]
+        unknown = [c for c in ids if c not in config.cities]
+        if unknown:
+            print(f"unknown city: {', '.join(unknown)}. Known: {', '.join(config.cities)}", file=sys.stderr)
+            return 2
+        targets = [config.cities[c] for c in ids]
     store = Store(args.db)
     failed = 0
     try:
-        for city_id in cities:
-            tz = ZoneInfo(config.cities[city_id].location.tz)
+        for city in targets:
+            tz = ZoneInfo(city.location.tz if city.location else args.tz or "UTC")
             date = args.date or dt.datetime.now(tz).date()
             t = time.monotonic()
             try:
-                r = build(config, city_id, date, args.out, store, render=not args.no_render)
+                r = build(config, city, date, args.out, store, render=not args.no_render)
             except BuildError as e:
-                print(f"FAILED {city_id}: {e}", file=sys.stderr)
+                print(f"FAILED {city.id}: {e}", file=sys.stderr)
                 failed += 1
                 continue
             print(f"{r.edition_id}: {r.words} words, about {r.reading_min} min ({time.monotonic() - t:.0f}s)")

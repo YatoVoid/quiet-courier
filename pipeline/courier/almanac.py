@@ -16,9 +16,9 @@ _PHASES = [
 
 @dataclass(frozen=True)
 class Almanac:
-    sunrise: dt.datetime
-    sunset: dt.datetime
-    daylight: dt.timedelta
+    sunrise: dt.datetime | None
+    sunset: dt.datetime | None
+    daylight: dt.timedelta | None
     moon_age_days: float
     moon_phase: str
     moonrise: dt.datetime | None
@@ -34,11 +34,19 @@ def moon_phase_name(age_days: float) -> str:
     return "New Moon"
 
 
-def compute(location: Location, date: dt.date) -> Almanac:
+def compute(location: Location | None, date: dt.date) -> Almanac:
+    year_days = 366 if (date.year % 4 == 0 and date.year % 100 != 0) or date.year % 400 == 0 else 365
+    doy = date.timetuple().tm_yday
+    age = moon.phase(date)
+    if location is None:
+        return Almanac(None, None, None, age, moon_phase_name(age), None, None, doy, year_days - doy)
+
     tz = ZoneInfo(location.tz)
     info = LocationInfo(location.name, location.region, location.tz, location.lat, location.lon)
-    s = sun(info.observer, date=date, tzinfo=tz)
-    age = moon.phase(date)
+    try:
+        s = sun(info.observer, date=date, tzinfo=tz)
+    except ValueError:  # polar day or night: the sun doesn't rise or set
+        s = None
 
     def safe(fn):
         try:
@@ -46,10 +54,8 @@ def compute(location: Location, date: dt.date) -> Almanac:
         except ValueError:  # astral raises when the moon does not rise or set that day
             return None
 
-    year_days = 366 if (date.year % 4 == 0 and date.year % 100 != 0) or date.year % 400 == 0 else 365
-    doy = date.timetuple().tm_yday
     return Almanac(
-        sunrise=s["sunrise"], sunset=s["sunset"], daylight=s["sunset"] - s["sunrise"],
+        sunrise=s and s["sunrise"], sunset=s and s["sunset"], daylight=s and s["sunset"] - s["sunrise"],
         moon_age_days=age, moon_phase=moon_phase_name(age),
         moonrise=safe(moon.moonrise), moonset=safe(moon.moonset),
         day_of_year=doy, days_remaining=year_days - doy,

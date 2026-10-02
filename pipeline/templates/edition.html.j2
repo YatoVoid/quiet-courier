@@ -56,9 +56,12 @@
       {% if today %}
       <p class="ear-title">{{ today.name }}’s Weather</p>
       <p class="ear-body">{{ today.short | sentence }}. {{ "High" if today.is_daytime else "Low" }} {{ today.temperature }}°.</p>
-      {% else %}
+      {% elif alm.sunrise %}
       <p class="ear-title">Sunrise</p>
       <p class="ear-body">{{ alm.sunrise | clock }}</p>
+      {% else %}
+      <p class="ear-title">The Moon</p>
+      <p class="ear-body">{{ alm.moon_phase }}</p>
       {% endif %}
     </div>
     <div class="nameplate-wrap">
@@ -69,16 +72,19 @@
       {% if next_period %}
       <p class="ear-title">{{ next_period.name }}</p>
       <p class="ear-body">{{ next_period.short | sentence }}. {{ "High" if next_period.is_daytime else "Low" }} {{ next_period.temperature }}°.</p>
-      {% else %}
+      {% elif alm.sunset %}
       <p class="ear-title">Sunset</p>
       <p class="ear-body">{{ alm.sunset | clock }}</p>
+      {% else %}
+      <p class="ear-title">The Year</p>
+      <p class="ear-body">Day {{ alm.day_of_year }}. {{ alm.days_remaining }} days remain.</p>
       {% endif %}
     </div>
   </header>
   <div class="folio">
     <span>Vol. {{ e.volume | roman }} · No. {{ e.number }}</span>
     <span class="folio-date">{{ date_long }}</span>
-    <span>{{ e.location.name }} Edition</span>
+    <span>{{ e.location.name if e.location else "General" }} Edition</span>
   </div>
 
   <div class="lead-head">
@@ -193,7 +199,7 @@
     {% for a in e.all_sources() %}
     <li><b>{{ a.title }}</b>. {{ a.source_name }}{% if a.author and a.author != a.source_name %}, {{ a.author }}{% endif %}. {{ a.license.name }}{% if a.license.id.startswith("cc-") %} ({{ a.license.url }}){% endif %}. {{ a.source_url }}</li>
     {% endfor %}
-    {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. Public domain. {{ e.weather.source_url }}</li>{% endif %}
+    {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. {{ e.weather.license_name }}. {{ e.weather.source_url }}</li>{% endif %}
     <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. {{ e.poem.source_url }}</li>
   </ol>
 </section>
@@ -209,12 +215,18 @@
   <p class="answers-note">Answers in tomorrow’s edition.</p>
 
   <div class="almanac">
-    <h3 class="almanac-title">The Almanac <span class="almanac-place">for {{ e.location.name }}, {{ e.location.region }}</span></h3>
+    <h3 class="almanac-title">The Almanac{% if e.location %} <span class="almanac-place">for {{ e.location.name }}, {{ e.location.region }}</span>{% endif %}</h3>
+    {% if e.location %}
     <table>
       <tr><th>Sunrise</th><td>{{ alm.sunrise | clock }}</td><th>Sunset</th><td>{{ alm.sunset | clock }}</td></tr>
-      <tr><th>Daylight</th><td>{{ alm.daylight.seconds // 3600 }} h {{ (alm.daylight.seconds % 3600) // 60 }} min</td><th>Moon</th><td>{{ alm.moon_phase }}</td></tr>
+      <tr><th>Daylight</th><td>{% if alm.daylight %}{{ alm.daylight.seconds // 3600 }} h {{ (alm.daylight.seconds % 3600) // 60 }} min{% else %}none{% endif %}</td><th>Moon</th><td>{{ alm.moon_phase }}</td></tr>
       <tr><th>Moonrise</th><td>{{ alm.moonrise | clock }}</td><th>Moonset</th><td>{{ alm.moonset | clock }}</td></tr>
     </table>
+    {% else %}
+    <table>
+      <tr><th>Moon</th><td>{{ alm.moon_phase }}</td></tr>
+    </table>
+    {% endif %}
     <p class="almanac-year">Day {{ alm.day_of_year }} of the year. {{ alm.days_remaining }} days remain.</p>
   </div>
 

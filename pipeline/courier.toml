@@ -16,6 +16,7 @@ conversation = true
 globalvoices = true
 nasa = true
 nws = true
+metno = true
 chronicling_america = true
 
 [editorial]

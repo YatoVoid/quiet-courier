@@ -16,6 +16,8 @@ from ..http import Http
 LICENSES = {
     "cc-by-nd-4.0": {"id": "cc-by-nd-4.0", "name": "CC BY-ND 4.0",
                      "url": "https://creativecommons.org/licenses/by-nd/4.0/", "commercial": True, "derivatives": False},
+    "cc-by-4.0": {"id": "cc-by-4.0", "name": "CC BY 4.0",
+                  "url": "https://creativecommons.org/licenses/by/4.0/", "commercial": True, "derivatives": True},
     "cc-by-3.0": {"id": "cc-by-3.0", "name": "CC BY 3.0",
                   "url": "https://creativecommons.org/licenses/by/3.0/", "commercial": True, "derivatives": True},
     "us-gov-pd": {"id": "us-gov-pd", "name": "Public domain (U.S. government work)",

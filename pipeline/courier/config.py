@@ -12,7 +12,10 @@ DEFAULT_PATH = Path(__file__).resolve().parent.parent / "courier.toml"
 @dataclass(frozen=True)
 class City:
     id: str
-    location: Location
+    location: Location | None
+
+
+GENERAL = City("general", None)
 
 
 @dataclass(frozen=True)
@@ -42,7 +45,7 @@ class Config:
 def load_config(path: Path = DEFAULT_PATH) -> Config:
     d = tomllib.loads(Path(path).read_text(encoding="utf-8"))
     cities = {
-        c["id"]: City(c["id"], Location(c["name"], c["region"], c["lat"], c["lon"], c["tz"]))
+        c["id"]: City(c["id"], Location(c["name"], c["region"], c["lat"], c["lon"], c["tz"], c.get("country", "US")))
         for c in d["cities"]
     }
     ed = d.get("editorial", {})

@@ -2,8 +2,9 @@ import datetime as dt
 
 import pytest
 
-from courier.config import load_config
-from courier.sources import Context, chronicling, conversation, globalvoices, nasa, nws, poems
+from courier.config import City, load_config
+from courier.models import Location
+from courier.sources import Context, chronicling, conversation, globalvoices, metno, nasa, nws, poems
 
 from fakes import FakeHttp
 
@@ -99,3 +100,33 @@ def test_poem_follows_season_and_avoids_repeats():
     assert again["id"] != autumn["id"]
     winter = poems.choose(dt.date(2026, 12, 20))
     assert "winter" in lib[winter["id"]]["seasons"]
+
+
+def test_metno_symbols_read_as_plain_english():
+    assert metno.describe("clearsky_day") == "Sunny"
+    assert metno.describe("clearsky_night") == "Clear"
+    assert metno.describe("lightrainshowers_day") == "Light rain showers"
+    assert metno.describe("heavysnowandthunder") == "Heavy snow and thunderstorms"
+    assert metno.describe("lightssleetshowersandthunder_night") == "Light sleet showers and thunderstorms"
+    assert metno.describe("rain") == "Rain"
+
+
+def test_metno_forecast_for_lyon():
+    config = load_config()
+    lyon = City("gn-2996944", Location("Lyon", "France", 45.74846, 4.84671, "Europe/Paris", "FR"))
+    http = FakeHttp()
+    w = metno.fetch(Context(http, config, dt.date(2026, 10, 2), lyon))
+    assert "lat=45.7484&lon=4.8467" in http.requests[0]
+    assert w["license"]["id"] == "cc-by-4.0"
+    names = [p["name"] for p in w["periods"]]
+    assert names[:4] == ["Today", "Tonight", "Saturday", "Saturday Night"] and len(names) == 8
+    today = w["periods"][0]
+    assert today["unit"] == "C" and today["is_daytime"]
+    assert today["detail"].startswith(today["short"] + ".")
+    assert f"High near {today['temperature']}°C." in today["detail"]
+
+
+def test_metno_uses_fahrenheit_in_the_us():
+    config = load_config()
+    w = metno.fetch(Context(FakeHttp(), config, dt.date(2026, 10, 2), config.cities["denver"]))
+    assert all(p["unit"] == "F" for p in w["periods"])

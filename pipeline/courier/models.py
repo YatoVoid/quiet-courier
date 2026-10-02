@@ -103,6 +103,7 @@ class Weather:
     source_url: str
     attribution: str
     periods: tuple[ForecastPeriod, ...]
+    license_name: str = "Public domain"
 
 
 @dataclass(frozen=True)
@@ -124,6 +125,7 @@ class Location:
     lat: float
     lon: float
     tz: str
+    country: str = "US"
 
 
 @dataclass(frozen=True)
@@ -140,7 +142,7 @@ class Edition:
     volume: int
     number: int
     date: dt.date
-    location: Location
+    location: Location | None
     sections: list[Section]
     articles: dict[str, Article]
     lead_id: str
@@ -179,16 +181,18 @@ def load_edition(path: Path) -> Edition:
             raise ContentError(f"front page references unknown article {aid}")
     w = d.get("weather")
     p = d["poem"]
-    loc = d["location"]
+    loc = d.get("location")
     return Edition(
         paper_name=d["paper_name"], motto=d["motto"], volume=d["volume"], number=d["edition_number"],
         date=dt.date.fromisoformat(d["date"]),
-        location=Location(loc["name"], loc["region"], loc["lat"], loc["lon"], loc["tz"]),
+        location=Location(loc["name"], loc["region"], loc["lat"], loc["lon"], loc["tz"], loc.get("country", "US"))
+        if loc else None,
         sections=[Section(s["id"], s["name"], s.get("subtitle")) for s in d["sections"]],
         articles=articles, lead_id=front["lead"], secondary_ids=list(front["secondary"]),
         weather=Weather(
             w["city"], w["office"], w["source_url"], w["attribution"],
             tuple(ForecastPeriod(**x) for x in w["periods"]),
+            w.get("license", {}).get("name", "Public domain"),
         ) if w and len(w["periods"]) >= 2 else None,
         poem=Poem(
             p["title"], p["author"], p["year"], tuple(tuple(s) for s in p["stanzas"]),

@@ -6,14 +6,14 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
-from .config import Config
+from .config import City, Config
 from .devices import DEVICES
 from .epub import build_epub
 from .http import Http
 from .models import load_edition
 from .pdf import build_pdf
 from .select import select
-from .sources import Context, chronicling, conversation, globalvoices, nasa, nws, poems
+from .sources import Context, chronicling, conversation, globalvoices, metno, nasa, nws, poems
 from .store import SourceRun, Store
 
 log = logging.getLogger("courier")
@@ -82,9 +82,23 @@ def _download_images(articles: list[dict], http: Http, dest: Path) -> list[str]:
     return failures
 
 
-def build(config: Config, city_id: str, date: dt.date, out_root: Path, store: Store,
+def _weather(ctx: Context) -> dict:
+    loc = ctx.city.location
+    if loc.country == "US" and ctx.config.enabled("nws"):
+        try:
+            return nws.fetch(ctx)
+        except Exception as e:
+            if not ctx.config.enabled("metno"):
+                raise
+            log.warning("nws failed for %s, using MET Norway: %s", loc.name, e)
+    if not ctx.config.enabled("metno"):
+        raise RuntimeError("no weather source enabled for this location")
+    return metno.fetch(ctx)
+
+
+def build(config: Config, city: City, date: dt.date, out_root: Path, store: Store,
           http: Http | None = None, render: bool = True) -> BuildResult:
-    city = config.cities[city_id]
+    city_id = city.id
     http = http or Http(config.user_agent, cache_dir=out_root / "cache" / date.isoformat())
     ctx = Context(http, config, date, city)
 
@@ -93,7 +107,8 @@ def build(config: Config, city_id: str, date: dt.date, out_root: Path, store: St
     pools: dict[str, list[dict]] = {}
     with ThreadPoolExecutor(max_workers=5) as pool:
         futures = {name: pool.submit(_timed, name, lambda f=fn: f(ctx), []) for name, fn in jobs.items()}
-        weather_f = pool.submit(_timed, "nws", lambda: nws.fetch(ctx), None) if config.enabled("nws") else None
+        wants_weather = city.location is not None and (config.enabled("nws") or config.enabled("metno"))
+        weather_f = pool.submit(_timed, "weather", lambda: _weather(ctx), None) if wants_weather else None
         for name, fut in futures.items():
             pools[name], run = fut.result()
             runs.append(run)
@@ -122,7 +137,8 @@ def build(config: Config, city_id: str, date: dt.date, out_root: Path, store: St
         "volume": max(1, days // 365 + 1),
         "date": date.isoformat(),
         "location": {"name": city.location.name, "region": city.location.region, "lat": city.location.lat,
-                     "lon": city.location.lon, "tz": city.location.tz},
+                     "lon": city.location.lon, "tz": city.location.tz, "country": city.location.country}
+        if city.location else None,
         "sections": SECTIONS,
         "front": {"lead": sel.lead["id"], "secondary": [a["id"] for a in sel.secondaries]},
         "articles": articles,

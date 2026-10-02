@@ -30,6 +30,8 @@ class FakeHttp:
             return "nasa", (FIXTURES / "nasa.xml").read_bytes()
         if "api.weather.gov/points" in url:
             return "nws", (FIXTURES / "nws-points.json").read_bytes()
+        if "api.met.no/weatherapi/locationforecast" in url:
+            return "metno", (FIXTURES / "metno-lyon.json").read_bytes()
         if "api.weather.gov/gridpoints" in url:
             return "nws", (FIXTURES / "nws-forecast.json").read_bytes()
         if "collections/chronicling-america" in url:

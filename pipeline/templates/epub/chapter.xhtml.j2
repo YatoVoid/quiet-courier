@@ -33,7 +33,7 @@
 <header class="masthead">
   <h1 class="nameplate">{{ e.paper_name }}</h1>
   <p class="motto">“{{ e.motto }}”</p>
-  <p class="folio">Vol. {{ e.volume | roman }} · No. {{ e.number }} · {{ date_long }} · {{ e.location.name }} Edition</p>
+  <p class="folio">Vol. {{ e.volume | roman }} · No. {{ e.number }} · {{ date_long }} · {{ e.location.name if e.location else "General" }} Edition</p>
   {% if today %}  <p class="weather-line"><b>{{ today.name }}:</b> {{ today.short | sentence }}, {{ "high" if today.is_daytime else "low" }} {{ today.temperature }}°. <b>{{ next_period.name }}:</b> {{ next_period.short | sentence }}, {{ "high" if next_period.is_daytime else "low" }} {{ next_period.temperature }}°.</p>{% endif %}
 </header>
 <h2 class="lead-headline">{{ e.lead.title }}</h2>
@@ -78,7 +78,7 @@
   {% for a in e.all_sources() %}
   <li><b>{{ a.title }}</b>. {{ a.source_name }}{% if a.author and a.author != a.source_name %}, {{ a.author }}{% endif %}. {{ a.license.name }}{% if a.license.id.startswith("cc-") %} (<a href="{{ a.license.url }}">{{ a.license.url }}</a>){% endif %}. <a href="{{ a.source_url }}">{{ a.source_url }}</a></li>
   {% endfor %}
-  {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. Public domain. <a href="{{ e.weather.source_url }}">{{ e.weather.source_url }}</a></li>{% endif %}
+  {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. {{ e.weather.license_name }}. <a href="{{ e.weather.source_url }}">{{ e.weather.source_url }}</a></li>{% endif %}
   <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. <a href="{{ e.poem.source_url }}">{{ e.poem.source_url }}</a></li>
 </ol>
 
@@ -92,11 +92,12 @@
 <p class="center wordlist">{{ ws.words | join(" · ") }}</p>
 <p class="center"><i>Answers in tomorrow’s edition.</i></p>
 <h3>The Almanac</h3>
-<p class="center"><i>{{ e.location.name }}, {{ e.location.region }}</i></p>
+{% if e.location %}<p class="center"><i>{{ e.location.name }}, {{ e.location.region }}</i></p>
 <p class="center">Sunrise {{ alm.sunrise | clock }} · Sunset {{ alm.sunset | clock }}<br/>
-Daylight {{ alm.daylight.seconds // 3600 }} h {{ (alm.daylight.seconds % 3600) // 60 }} min<br/>
+{% if alm.daylight %}Daylight {{ alm.daylight.seconds // 3600 }} h {{ (alm.daylight.seconds % 3600) // 60 }} min<br/>{% endif %}
 Moon: {{ alm.moon_phase }}. Moonrise {{ alm.moonrise | clock }}, moonset {{ alm.moonset | clock }}<br/>
-Day {{ alm.day_of_year }} of the year. {{ alm.days_remaining }} days remain.</p>
+{% else %}<p class="center">Moon: {{ alm.moon_phase }}<br/>
+{% endif %}Day {{ alm.day_of_year }} of the year. {{ alm.days_remaining }} days remain.</p>
 <div class="the-end">
   <p class="end-words">That’s all for today.</p>
   <p class="center"><i>The next edition arrives tomorrow morning.</i></p>

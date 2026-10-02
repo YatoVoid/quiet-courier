@@ -47,7 +47,7 @@ class Store:
         items.append(("poem", edition["poem"]))
         if edition.get("weather"):
             w = edition["weather"]
-            items.append(("weather", {"id": f"nws-{city_id}", "title": f"Forecast for {w['city']}",
+            items.append(("weather", {"id": f"weather-{city_id}", "title": f"Forecast for {w['city']}",
                                       "source_name": w["office"], "source_url": w["source_url"],
                                       "license": w["license"], "attribution": w["attribution"]}))
         with self.db:
