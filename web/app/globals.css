@@ -781,3 +781,63 @@ fieldset {
   font-weight: 700;
   margin-bottom: 0.3rem;
 }
+
+.tally {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+
+.tally > div {
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.5rem 0.75rem 0.6rem;
+}
+
+.tally dt {
+  font-family: var(--font-caps), serif;
+  font-size: var(--step--1);
+}
+
+.tally dd {
+  margin: 0.1rem 0 0;
+  font-size: var(--step-2);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.small-note {
+  font-size: var(--step--1);
+  font-style: italic;
+  margin: 0.6rem 0 0;
+}
+
+.figures-wrap {
+  overflow-x: auto;
+}
+
+.figures {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.figures th {
+  font-family: var(--font-caps), serif;
+  font-weight: 400;
+  text-align: left;
+  border-bottom: 1.5px solid var(--rule);
+  padding: 0.3rem 0.75rem 0.3rem 0;
+}
+
+.figures td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.4rem 0.75rem 0.4rem 0;
+  vertical-align: top;
+}
+
+.error-text {
+  font-size: var(--step--1);
+  overflow-wrap: anywhere;
+}

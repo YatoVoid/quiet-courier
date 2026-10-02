@@ -157,6 +157,7 @@ The city only changes the forecast and the almanac. Test editions are read from 
 | Delivery address | `@kindle.com`, `@free.kindle.com` and `@pbsync.com` only accept mail from approved senders, so they are trusted as entered. Any other address must open a confirmation link before anything is sent there. |
 | Terms | Accepted with an unticked checkbox during setup. The version and time are stored. |
 | Audit log | Sign-ins, failures, throttling and account changes, with IP, kept 90 days. No email addresses or names. |
+| Admin page | `/admin` shows reader counts, the last 30 days of sign-ups, pauses and deletions, deliveries and failed sends, recent editions to download, and what was sent to The Conversation. Only addresses in `ADMIN_EMAILS` can open it; everyone else gets the normal 404. Views and downloads are written to the audit log. The figures come from the database, with no tracking on the pages. |
 | Headers | CSP with a per-request script nonce, `frame-ancestors 'none'`, `nosniff`, a strict referrer policy. HSTS comes from nginx. Server action bodies are capped at 32 KB. |
 
 Deleting an account removes the row and its sessions and tokens. Nightly backups are kept 30 days.
