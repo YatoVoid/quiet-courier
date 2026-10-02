@@ -41,7 +41,8 @@ More pages are in [docs/showcase](docs/showcase):
 | 1. Newspaper design | Done |
 | 2. Content pipeline | Done: `courier build` makes today's edition from live sources |
 | 3. Website and registration | Built, not deployed: landing page, email sign-in, setup, Kindle guide, account page, draft legal pages |
-| 4–7. Delivery, billing, launch, monetization | Not started |
+| 4. Delivery | Built, not deployed: every 15 minutes, 5 a.m. in each reader's time zone, retries, alerts, copies and monthly report for The Conversation |
+| 5–7. Billing, launch, monetization | Not started |
 
 The sample editions above are rendered from content saved in `pipeline/samples/`. Editions built with `courier build` use whatever the sources published that day.
 
@@ -63,7 +64,7 @@ web/                 Next.js site: sign-up, accounts, setup guide
   lib/server/        Sign-in, sessions, rate limits, mail, account changes
   db/                Drizzle schema and SQL migrations
 deploy/              systemd unit, nginx site, deploy and backup scripts
-.github/workflows/   Daily build and send (Phase 4, not started)
+docs/OTHER_READERS.md  Kobo, Boox and reMarkable delivery options
 ```
 
 ## Setup
@@ -97,6 +98,25 @@ export COURIER_CONTACT_EMAIL=you@example.com   # sent to the Weather Service and
 An edition is keyed by `general`, a GeoNames id (`gn-<id>`), or a city id from `courier.toml`. Files go to `out/<date>/<key>/<key>_small.pdf`, `<key>_large.pdf` and `<key>.epub`. The website stores each reader's choice in those same terms.
 
 Output goes to `out/<date>/<city>/`: `edition.json`, the two PDFs and the EPUB. Every edition, every article in it with its license and attribution, and whether each source succeeded are recorded in `data/courier.db` (SQLite; the schema in `pipeline/courier/schema.sql` is plain SQL so it can move to Supabase). Feeds are cached in `out/cache/<date>/`, so rebuilding the same day does not refetch.
+
+## Delivery
+
+`courier deliver` runs every 15 minutes from a systemd timer on the server (see [docs/DEPLOY.md](docs/DEPLOY.md)). It reads readers from the site's Postgres database.
+
+| | |
+|---|---|
+| When | Editions are built from 4 a.m. in each reader's time zone and emailed from 5 a.m. Each reader gets the edition for their own local date. |
+| What is built | One article selection per date, shared by every edition. Then one edition per place that has readers, in only the formats they use. |
+| Once only | One row per reader per date in `deliveries`. A row marked sent is never sent again, and each email carries an idempotency key, so a crash between sending and recording can't send twice. |
+| Retries | A failed send is retried once an hour until 10 a.m., five tries in all. Then the owner gets an alert email. |
+| Limits | Sending stops for the run when the Resend plan's daily or monthly limit is close, keeping room for sign-in links. |
+| The Conversation | After the first reader receives a date's edition, one copy goes to The Conversation listing their articles. On the 1st of each month, a report lists every article used, the dates it ran, and the circulation. Both are recorded so they go once. |
+| Off switch | Nothing is sent unless `DELIVERY_ENABLED=1`. |
+| Clean-up | Editions older than 14 days are deleted. |
+
+Without `RESEND_API_KEY`, every email is written to `out/outbox/` instead of being sent.
+
+The delivery tests run against an in-memory Postgres with the site's real migrations, so they need `npm ci` in `web/` first. Without it they are skipped.
 
 ## Website
 

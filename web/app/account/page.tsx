@@ -7,6 +7,7 @@ import { DeleteAccount } from "@/components/delete-account";
 import { pauseAction, resendDeliveryVerificationAction, resumeAction, updateProfileAction } from "@/app/actions/account";
 import { signOutAction, signOutEverywhereAction } from "@/app/actions/auth";
 import { describeWeatherChoice } from "@/lib/server/places";
+import { deliveryLive, describeDelivery, lastDelivery } from "@/lib/server/deliveries";
 import { profileInitial, TIME_ZONES } from "@/lib/server/profile-initial";
 import { requireOnboardedUser } from "@/lib/server/session";
 import { formatLabel } from "@/lib/formats";
@@ -26,6 +27,8 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   const { notice } = await searchParams;
   const paused = user.deliveryStatus === "paused";
   const verified = user.deliveryEmailVerifiedAt != null;
+  const live = deliveryLive();
+  const latest = describeDelivery(await lastDelivery(user.id), user.timeZone);
 
   return (
     <PageShell>
@@ -36,17 +39,25 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           <p>{NOTICES[notice]}</p>
         </div>
       )}
-      <div className="notice">
-        <p>
-          Daily delivery hasn&rsquo;t started yet. We&rsquo;ll email {user.email} before the first edition goes out. Until
-          then you can send yourself a test edition.
-        </p>
-      </div>
+      {!live && (
+        <div className="notice">
+          <p>
+            Daily delivery hasn&rsquo;t started yet. We&rsquo;ll email {user.email} before the first edition goes out.
+            Until then you can send yourself a test edition.
+          </p>
+        </div>
+      )}
 
       <h2>Delivery</h2>
       <dl className="ledger">
         <dt>Status</dt>
-        <dd>{paused ? "Paused" : "On"}</dd>
+        <dd>{paused ? "Paused" : live ? "On, each morning at 5 a.m. your time" : "On"}</dd>
+        {latest && (
+          <>
+            <dt>Last paper</dt>
+            <dd>{latest}</dd>
+          </>
+        )}
         <dt>Delivered to</dt>
         <dd className="address">{user.deliveryEmail}</dd>
         <dt>Address</dt>

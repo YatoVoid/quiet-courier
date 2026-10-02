@@ -1,0 +1,18 @@
+[Unit]
+Description=The Quiet Courier delivery run
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=courier
+Group=courier
+WorkingDirectory=/srv/quiet-courier/app/pipeline
+EnvironmentFile=/srv/quiet-courier/pipeline.env
+ExecStart=/srv/quiet-courier/venv/bin/python -m courier deliver
+TimeoutStartSec=50min
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/quiet-courier/editions /srv/quiet-courier/data /srv/quiet-courier/.cache
+PrivateTmp=true

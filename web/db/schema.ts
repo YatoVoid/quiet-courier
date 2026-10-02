@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { bigserial, boolean, check, doublePrecision, index, integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { bigserial, boolean, check, date, doublePrecision, index, integer, jsonb, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
 
 // Every city and town with 1,000 or more people, from GeoNames (CC BY 4.0). Loaded by db/import-places.mjs.
 export const places = pgTable(
@@ -100,6 +100,46 @@ export const auditEvents = pgTable(
   },
   (t) => [index("audit_events_time").on(t.createdAt), index("audit_events_user").on(t.userId)],
 );
+
+// Written by the pipeline's delivery job. One row per reader per local date, so a rerun
+// can never send the same day's paper twice.
+export const deliveries = pgTable(
+  "deliveries",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    editionDate: date("edition_date").notNull(),
+    editionKey: text("edition_key").notNull(),
+    format: text("format").notNull(),
+    status: text("status", { enum: ["pending", "sent", "failed"] }).notNull(),
+    attempts: integer("attempts").notNull().default(0),
+    providerId: text("provider_id"),
+    error: text("error"),
+    sentAt: timestamp("sent_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    unique("deliveries_user_date").on(t.userId, t.editionDate),
+    index("deliveries_date").on(t.editionDate),
+    check("deliveries_status", sql`${t.status} in ('pending', 'sent', 'failed')`),
+  ],
+);
+
+// What was sent to The Conversation under the republishing agreement: one copy per
+// edition date that ran their articles, and one usage report per month.
+export const partnerCopies = pgTable("partner_copies", {
+  editionDate: date("edition_date").primaryKey(),
+  articles: integer("articles").notNull(),
+  sentAt: timestamp("sent_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const partnerReports = pgTable("partner_reports", {
+  month: text("month").primaryKey(),
+  articles: integer("articles").notNull(),
+  subscribers: integer("subscribers").notNull(),
+  sentAt: timestamp("sent_at", { withTimezone: true }).notNull().defaultNow(),
+});
 
 export type User = typeof users.$inferSelect;
 export type Place = typeof places.$inferSelect;

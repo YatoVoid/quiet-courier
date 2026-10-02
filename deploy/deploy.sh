@@ -42,6 +42,7 @@ as_courier 'git pull --ff-only && npm ci --no-audit --no-fund'
 # Before the build, so a refused migration fails while the running build is still intact.
 as_courier 'node db/migrate.mjs'
 as_courier 'npm run build'
+sudo -u courier /srv/quiet-courier/venv/bin/pip install --quiet -e "$APP/pipeline"
 systemctl restart quiet-courier-web
 if ! up; then
   journalctl -u quiet-courier-web -n 40 --no-pager >&2

@@ -42,7 +42,12 @@ def main(argv: list[str] | None = None) -> int:
         b.add_argument(flag)
     b.add_argument("--lat", type=float)
     b.add_argument("--lon", type=float)
+    d = sub.add_parser("deliver", help="build and email due editions; run every 15 minutes")
+    d.add_argument("--config", type=Path, default=DEFAULT_PATH)
     args = parser.parse_args(argv)
+
+    if args.cmd == "deliver":
+        return run_deliver(args)
 
     if args.cmd == "build":
         return run_build(args)
@@ -58,6 +63,21 @@ def main(argv: list[str] | None = None) -> int:
         if not args.no_epub:
             print(build_epub(edition, args.out / f"{path.stem}.epub", work))
     return 0
+
+
+def run_deliver(args) -> int:
+    from .delivery import Settings, run_once
+
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s %(message)s")
+    for noisy in ("weasyprint", "fontTools"):
+        logging.getLogger(noisy).setLevel(logging.WARNING)
+    report = run_once(load_config(args.config), Settings.from_env())
+    if report is None:
+        return 0
+    print(f"sent {report.sent}, failed {len(report.failed)}, gave up {len(report.gave_up)}, "
+          f"build errors {len(report.build_errors)}, copies to The Conversation {report.partner_copies}, "
+          f"monthly reports {report.partner_reports}")
+    return 1 if report.needs_alert else 0
 
 
 def run_build(args) -> int:
