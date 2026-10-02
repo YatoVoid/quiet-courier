@@ -1,4 +1,5 @@
 import datetime as dt
+import fcntl
 import json
 import logging
 import time
@@ -6,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
-from .config import City, Config
+from .config import GENERAL, City, Config
 from .devices import DEVICES
 from .epub import build_epub
 from .http import Http
@@ -96,38 +97,69 @@ def _weather(ctx: Context) -> dict:
     return metno.fetch(ctx)
 
 
+def _core_path(out_root: Path, date: dt.date) -> Path:
+    return out_root / date.isoformat() / "core" / "core.json"
+
+
+# Every edition of a date shares one selection. The weather is the only local part, so a
+# reader in Tokyo and one in Chicago get the same stories, and The Conversation's daily
+# limit holds however many places are built.
+def prepare_core(config: Config, date: dt.date, out_root: Path, store: Store, http: Http | None = None) -> dict:
+    path = _core_path(out_root, date)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path.parent / "core.lock", "w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        if path.exists():
+            return json.loads(path.read_text(encoding="utf-8"))
+        http = http or Http(config.user_agent, cache_dir=out_root / "cache" / date.isoformat())
+        ctx = Context(http, config, date, GENERAL)
+        jobs = {name: fn for name, fn in ARTICLE_SOURCES.items() if config.enabled(name)}
+        runs: list[SourceRun] = []
+        pools: dict[str, list[dict]] = {}
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            futures = {name: pool.submit(_timed, name, lambda f=fn: f(ctx), []) for name, fn in jobs.items()}
+            for name, fut in futures.items():
+                pools[name], run = fut.result()
+                runs.append(run)
+
+        poem = poems.fetch(ctx, store.recent_poems(date, 30))
+        sel = select(pools, config, store.recent_urls(date, config.history_days))
+        if not sel.lead:
+            failed = ", ".join(f"{r.source} ({r.error})" for r in runs if not r.ok) or "none"
+            raise BuildError(f"no usable articles for {date}; failed sources: {failed}")
+
+        articles = sel.articles()
+        for f in _download_images(articles, http, path.parent / "images"):
+            log.warning("image skipped: %s", f)
+        for a in articles:
+            for img in a.get("images", []):
+                img["path"] = f"../core/{img['path']}"
+        core = {
+            "date": date.isoformat(),
+            "front": {"lead": sel.lead["id"], "secondary": [a["id"] for a in sel.secondaries]},
+            "articles": articles,
+            "poem": poem,
+            "words": sel.words,
+            "runs": [r.__dict__ for r in runs],
+        }
+        tmp = path.with_suffix(".tmp")
+        tmp.write_text(json.dumps(core, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        tmp.replace(path)
+        return core
+
+
 def build(config: Config, city: City, date: dt.date, out_root: Path, store: Store,
-          http: Http | None = None, render: bool = True) -> BuildResult:
+          http: Http | None = None, render: bool = True, devices: list[str] | None = None,
+          epub: bool = True) -> BuildResult:
     city_id = city.id
     http = http or Http(config.user_agent, cache_dir=out_root / "cache" / date.isoformat())
-    ctx = Context(http, config, date, city)
+    core = prepare_core(config, date, out_root, store, http)
+    runs = [SourceRun(**r) for r in core["runs"]]
 
-    jobs = {name: fn for name, fn in ARTICLE_SOURCES.items() if config.enabled(name)}
-    runs: list[SourceRun] = []
-    pools: dict[str, list[dict]] = {}
-    with ThreadPoolExecutor(max_workers=5) as pool:
-        futures = {name: pool.submit(_timed, name, lambda f=fn: f(ctx), []) for name, fn in jobs.items()}
-        wants_weather = city.location is not None and (config.enabled("nws") or config.enabled("metno"))
-        weather_f = pool.submit(_timed, "weather", lambda: _weather(ctx), None) if wants_weather else None
-        for name, fut in futures.items():
-            pools[name], run = fut.result()
-            runs.append(run)
-        weather = None
-        if weather_f:
-            weather, run = weather_f.result()
-            runs.append(run)
-
-    poem = poems.fetch(ctx, store.recent_poems(date, 30))
-    sel = select(pools, config, store.recent_urls(date, config.history_days))
-    if not sel.lead:
-        failed = ", ".join(f"{r.source} ({r.error})" for r in runs if not r.ok) or "none"
-        raise BuildError(f"no usable articles for {date} {city_id}; failed sources: {failed}")
-
-    out_dir = out_root / date.isoformat() / city_id
-    articles = sel.articles()
-    image_failures = _download_images(articles, http, out_dir / "images")
-    for f in image_failures:
-        log.warning("image skipped: %s", f)
+    weather = None
+    if city.location is not None and (config.enabled("nws") or config.enabled("metno")):
+        weather, run = _timed("weather", lambda: _weather(Context(http, config, date, city)), None)
+        runs.append(run)
 
     days = (date - config.launch_date).days
     edition = {
@@ -140,11 +172,12 @@ def build(config: Config, city: City, date: dt.date, out_root: Path, store: Stor
                      "lon": city.location.lon, "tz": city.location.tz, "country": city.location.country}
         if city.location else None,
         "sections": SECTIONS,
-        "front": {"lead": sel.lead["id"], "secondary": [a["id"] for a in sel.secondaries]},
-        "articles": articles,
+        "front": core["front"],
+        "articles": core["articles"],
         "weather": weather,
-        "poem": poem,
+        "poem": core["poem"],
     }
+    out_dir = out_root / date.isoformat() / city_id
     out_dir.mkdir(parents=True, exist_ok=True)
     json_path = out_dir / "edition.json"
     json_path.write_text(json.dumps(edition, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -154,10 +187,12 @@ def build(config: Config, city: City, date: dt.date, out_root: Path, store: Stor
         loaded = load_edition(json_path)
         work = out_root / "work" / date.isoformat() / city_id
         for device in DEVICES.values():
-            files.append(build_pdf(loaded, device, out_dir / f"{city_id}_{device.id}.pdf", work).path)
-        files.append(build_epub(loaded, out_dir / f"{city_id}.epub", work))
+            if devices is None or device.id in devices:
+                files.append(build_pdf(loaded, device, out_dir / f"{city_id}_{device.id}.pdf", work).path)
+        if epub:
+            files.append(build_epub(loaded, out_dir / f"{city_id}.epub", work))
 
-    words = sel.words
+    words = core["words"]
     reading_min = round(words / config.words_per_minute)
     edition_id = store.save(edition, city_id, words, reading_min, runs)
     return BuildResult(edition_id, json_path, files, words, reading_min, runs)

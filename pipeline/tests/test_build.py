@@ -115,3 +115,20 @@ def test_rendered_edition(tmp_path, store):
     r = build(*at("denver"), DATE, tmp_path, store, http=FakeHttp(), render=True)
     assert {p.suffix for p in r.files} == {".pdf", ".epub"}
     assert all(p.stat().st_size > 10_000 for p in r.files)
+
+
+def test_every_place_on_a_date_gets_the_same_stories(tmp_path, store):
+    config = load_config()
+    http = FakeHttp()
+    chicago = build(config, config.cities["chicago"], DATE, tmp_path, store, http=http, render=False)
+    general = build(config, GENERAL, DATE, tmp_path, store, http=http, render=False)
+    ids = lambda r: [a["id"] for a in json.loads(r.json_path.read_text())["articles"]]
+    assert ids(chicago) == ids(general)
+    assert sum("theconversation.com" in u and u.endswith(".atom") for u in http.requests) == 1
+    conversation = [a for a in json.loads(chicago.json_path.read_text())["articles"] if a["source_name"] == "The Conversation"]
+    assert len(conversation) <= 3
+
+
+def test_renders_only_the_formats_asked_for(tmp_path, store):
+    r = build(*at("denver"), DATE, tmp_path, store, http=FakeHttp(), devices=["small"], epub=False)
+    assert [p.name for p in r.files] == ["denver_small.pdf"]
