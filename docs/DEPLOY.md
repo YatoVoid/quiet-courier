@@ -24,7 +24,7 @@ The site runs on a shared Ubuntu server that already hosts other sites behind ng
    sudo -u courier mkdir -p /srv/quiet-courier/backups /srv/quiet-courier/editions
    sudo chmod 750 /srv/quiet-courier
    ```
-4. Clone with a read-only deploy key in `/srv/quiet-courier/.ssh`, into `/srv/quiet-courier/app`.
+4. The repo is public, so clone over HTTPS into `/srv/quiet-courier/app`. No deploy key needed.
 5. Database. The role owns only its own database and is not a superuser:
    ```sh
    sudo -u postgres createuser --pwprompt quietcourier
@@ -37,7 +37,10 @@ The site runs on a shared Ubuntu server that already hosts other sites behind ng
    ```
    The place list only needs reloading occasionally. Rerunning `node db/import-places.mjs` updates rows in place and never deletes any, since readers point at them.
 8. systemd: copy `deploy/quiet-courier-web.service` to `/etc/systemd/system/`, then `daemon-reload`, `enable --now quiet-courier-web`.
-9. nginx: copy `deploy/nginx-courier-limits.conf` to `/etc/nginx/conf.d/` and the site file to `sites-available`. Get the certificate first with `certbot certonly --nginx -d quietcourier.com -d www.quietcourier.com`, then link the site, `nginx -t`, and `systemctl reload nginx`. Reload, never restart.
+9. nginx 1.18 on Ubuntu 22.04 doesn't know `http2 on;`, and turning HTTP/2 on in a `listen` line would turn it on for every site on port 443, so the site file leaves it off.
+   1. Copy `deploy/nginx-courier-limits.conf` to `/etc/nginx/conf.d/`.
+   2. The site file needs the certificate to exist, so get it first with a temporary port-80-only site: a `server` block for both names with `location /.well-known/acme-challenge/ { root /var/www/html; }`, then `certbot certonly --webroot -w /var/www/html -d quietcourier.com -d www.quietcourier.com`. This touches no other site's certificate.
+   3. Replace the temporary file with `deploy/nginx-quietcourier.com.conf`, `nginx -t`, `systemctl reload nginx`. Reload, never restart.
 10. Backups: `/etc/cron.d/quiet-courier-backup` with `15 3 * * * courier /srv/quiet-courier/app/deploy/backup.sh`. Restore one into a scratch database once to prove it works.
 
 ## Delivery job
