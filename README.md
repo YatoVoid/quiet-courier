@@ -40,9 +40,11 @@ More pages are in [docs/showcase](docs/showcase):
 |---|---|
 | 1. Newspaper design | Done |
 | 2. Content pipeline | Done: `courier build` makes today's edition from live sources |
-| 3. Website and registration | Built, not deployed: landing page, email sign-in, setup, Kindle guide, account page, draft legal pages |
-| 4. Delivery | Built, not deployed: every 15 minutes, 5 a.m. in each reader's time zone, retries, alerts, copies and monthly report for The Conversation |
-| 5–7. Billing, launch, monetization | Not started |
+| 3. Website and registration | Live at quietcourier.com: landing page, email sign-in, setup, Kindle guide, account page, terms and privacy policy |
+| 4. Delivery | Deployed, switched off until launch: every 15 minutes, 5 a.m. in each reader's time zone, retries, alerts, copies and monthly report for The Conversation |
+| 5. Billing | Not started |
+| 6. Launch readiness | In progress: admin page and counts done; launch waits for billing |
+| 7. Monetization | Not started |
 
 The sample editions above are rendered from content saved in `pipeline/samples/`. Editions built with `courier build` use whatever the sources published that day.
 

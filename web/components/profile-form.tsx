@@ -145,7 +145,8 @@ export function ProfileForm({
             <input type="checkbox" name="acceptTerms" defaultChecked={values.acceptTerms === "on"}
               aria-describedby={describedBy("acceptTerms")} aria-invalid={errors.acceptTerms ? true : undefined} />
             <span>
-              I agree to the <a href="/terms" target="_blank">terms of service</a> and have read the{" "}
+              I agree to the <a href="/terms" target="_blank">terms of service</a>, including the{" "}
+              <a href="/terms#disputes" target="_blank">arbitration agreement and class action waiver</a>, and have read the{" "}
               <a href="/privacy" target="_blank">privacy policy</a>.
             </span>
           </label>

@@ -690,12 +690,6 @@ fieldset {
   margin-bottom: 0.4rem;
 }
 
-.draft-flag {
-  border: 1.5px dashed var(--rule);
-  padding: 0.6rem 0.9rem;
-  margin: 0 0 1.5rem;
-  font-size: var(--step--1);
-}
 
 .guide-shot {
   margin: 1rem 0 1.5rem;
