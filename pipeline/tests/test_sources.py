@@ -77,6 +77,51 @@ def test_archives_from_ocr(ctx):
         assert all(len(b["text"].split()) >= 4 for b in a["body"])
 
 
+def test_archives_use_the_index_without_searching(ctx, archive_index):
+    chronicling.update_index(ctx.http, [dt.date(1926, 10, 1)], pause=0)
+    ctx.http.requests.clear()
+    arts = chronicling.fetch(ctx)
+    assert arts and arts[0]["source_name"].startswith("The Indianapolis Times")
+    assert not any("www.loc.gov" in u for u in ctx.http.requests)
+    assert ("https://tile.loc.gov/storage-services/service/ndnp/in/batch_in_ellis_ver01/data/sn82015313/"
+            "00383348948/1926100101/0247.xml") in ctx.http.requests
+
+
+def test_index_update_skips_known_days_and_keeps_empty_ones_open(ctx, archive_index):
+    days = [dt.date(1926, 10, 1), dt.date(1926, 10, 2)]
+    assert chronicling.update_index(ctx.http, days, pause=0) == 1
+    assert chronicling.update_index(ctx.http, days, pause=0) == 0
+    assert set(chronicling._index()) == {"1926-10-01"}
+
+
+def test_index_update_carries_on_past_a_failed_day(archive_index):
+    http = FakeHttp(fail={"chronicling_america"})
+    assert chronicling.update_index(http, [dt.date(1926, 10, 1)], pause=0) == 0
+    assert chronicling.update_index(FakeHttp(), [dt.date(1926, 10, 1)], pause=0) == 1
+
+
+def test_index_update_stops_when_loc_keeps_failing(archive_index):
+    http = FakeHttp(fail={"chronicling_america"})
+    days = [dt.date(1926, 10, 1) + dt.timedelta(n) for n in range(20)]
+    chronicling.update_index(http, days, pause=0)
+    assert len(http.requests) == 5
+
+
+def test_archives_search_when_the_index_lacks_the_day(ctx):
+    assert chronicling.fetch(ctx)
+    assert any("collections/chronicling-america" in u for u in ctx.http.requests)
+
+
+def test_capitals_byline_is_not_a_headline():
+    alto = b"""<alto xmlns="http://www.loc.gov/standards/alto/ns-v3#"><Layout><Page><PrintSpace>
+<TextBlock HPOS="0" WIDTH="1000">
+<TextLine HPOS="0" WIDTH="1000"><String CONTENT="By"/><String CONTENT="BRIAN"/><String CONTENT="BELL."/></TextLine>
+<TextLine HPOS="0" WIDTH="1000"><String CONTENT="The"/><String CONTENT="president"/><String CONTENT="spoke."/></TextLine>
+</TextBlock></PrintSpace></Page></Layout></alto>"""
+    (story,) = chronicling.stories(alto)
+    assert story.headline == []
+
+
 def test_archive_quality_rejects_garbage():
     s = chronicling.Story(["HEADLINE HERE"], ["Tbe qqz xvw ot lhe [illegible] ;' rn ui " * 6], 0.5)
     assert not chronicling.acceptable(s, ())

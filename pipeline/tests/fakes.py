@@ -36,8 +36,6 @@ class FakeHttp:
             return "nws", (FIXTURES / "nws-forecast.json").read_bytes()
         if "collections/chronicling-america" in url:
             return "chronicling_america", (FIXTURES / "loc-search.json").read_bytes()
-        if "loc.gov/item/" in url:
-            return "chronicling_america", (FIXTURES / "loc-item.json").read_bytes()
         if url.endswith(".xml") and "tile.loc.gov" in url:
             return "chronicling_america", (FIXTURES / "alto-indianapolis-times-1926-10-01.xml").read_bytes()
         if "nasa.gov" in url:

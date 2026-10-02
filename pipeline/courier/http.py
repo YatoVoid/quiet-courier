@@ -1,4 +1,5 @@
 import hashlib
+import http.client
 import json
 import time
 import urllib.error
@@ -45,7 +46,7 @@ class Http:
                 if e.code in RETRYABLE:
                     continue
                 raise FetchError(f"{url}: HTTP {e.code}") from e
-            except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            except (urllib.error.URLError, http.client.HTTPException, TimeoutError, ConnectionError) as e:
                 last = e
                 continue
             # loc.gov sometimes answers a JSON request with a Cloudflare HTML challenge.

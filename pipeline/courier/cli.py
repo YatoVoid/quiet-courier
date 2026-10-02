@@ -44,10 +44,17 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--lon", type=float)
     d = sub.add_parser("deliver", help="build and email due editions; run every 15 minutes")
     d.add_argument("--config", type=Path, default=DEFAULT_PATH)
+    a = sub.add_parser("archive-index", help="list the 1926 issues for future edition dates, from loc.gov")
+    a.add_argument("--from", dest="start", type=dt.date.fromisoformat, required=True, help="first edition date")
+    a.add_argument("--to", dest="end", type=dt.date.fromisoformat, required=True, help="last edition date")
+    a.add_argument("--config", type=Path, default=DEFAULT_PATH)
     args = parser.parse_args(argv)
 
     if args.cmd == "deliver":
         return run_deliver(args)
+
+    if args.cmd == "archive-index":
+        return run_archive_index(args)
 
     if args.cmd == "build":
         return run_build(args)
@@ -78,6 +85,18 @@ def run_deliver(args) -> int:
           f"build errors {len(report.build_errors)}, copies to The Conversation {report.partner_copies}, "
           f"monthly reports {report.partner_reports}")
     return 1 if report.needs_alert else 0
+
+
+def run_archive_index(args) -> int:
+    from .http import Http
+    from .sources import chronicling
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
+    days = [chronicling.hundred_years_before(args.start + dt.timedelta(n))
+            for n in range((args.end - args.start).days + 1)]
+    added = chronicling.update_index(Http(load_config(args.config).user_agent), days)
+    print(f"added {added} days to {chronicling.INDEX}")
+    return 0
 
 
 def run_build(args) -> int:

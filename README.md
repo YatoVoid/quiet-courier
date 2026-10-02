@@ -99,6 +99,12 @@ An edition is keyed by `general`, a GeoNames id (`gn-<id>`), or a city id from `
 
 Output goes to `out/<date>/<city>/`: `edition.json`, the two PDFs and the EPUB. Every edition, every article in it with its license and attribution, and whether each source succeeded are recorded in `data/courier.db` (SQLite; the schema in `pipeline/courier/schema.sql` is plain SQL so it can move to Supabase). Feeds are cached in `out/cache/<date>/`, so rebuilding the same day does not refetch.
 
+The list of 1926 issues for each edition date is read from `pipeline/courier/data/archive-index.json.gz` (see [docs/SOURCES.md](docs/SOURCES.md) for why). It covers edition dates through 2027. To extend it, from a network loc.gov doesn't block (about 30 minutes a year, it waits between requests):
+
+```sh
+.venv/bin/python -m courier archive-index --from 2028-01-01 --to 2028-12-31
+```
+
 ## Delivery
 
 `courier deliver` runs every 15 minutes from a systemd timer on the server (see [docs/DEPLOY.md](docs/DEPLOY.md)). It reads readers from the site's Postgres database.

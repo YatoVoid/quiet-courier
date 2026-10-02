@@ -1,17 +1,27 @@
 import datetime as dt
 import functools
+import gzip
+import json
+import logging
 import random
 import re
+import time
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
 
 from .. import clean
+from ..http import FetchError
 from . import LICENSES, Context, article_id
+
+log = logging.getLogger(__name__)
 
 SEARCH = ("https://www.loc.gov/collections/chronicling-america/?dates={d}/{d}"
           "&fa=online-format:image|language:english&fo=json&c=100&sp={page}")
+TILE = "https://tile.loc.gov/storage-services/"
+IIIF_PAGE = re.compile(r"/iiif/(service:[^/]+)/")
 WORDS = Path(__file__).resolve().parent.parent / "data" / "words.txt"
+INDEX = Path(__file__).resolve().parent.parent / "data" / "archive-index.json.gz"
 GRIM = ("funeral", "died", "death", "dead", "killed", "slain", "murder", "hanged", "lynch", "suicide",
         "bandit", "robbery", "shot", "corpse", "body of", "wreck", "drowned", "burned to")
 ALLOWED = re.compile(r"^[\w.,;:'\"’‘“”!?()$&%\-—–/]+$")
@@ -97,6 +107,7 @@ def _is_heading(line: str) -> bool:
     return len(letters) >= 3 and sum(c.isupper() for c in letters) / len(letters) > 0.8
 
 
+BYLINE = re.compile(r"^by\s", re.I)
 CREDIT_LINE = re.compile(r"^\S{1,4}\s+(United|Associated|Universal)\s+Pr|Times Special$", re.I)
 DATELINE = re.compile(r"^[A-Z][A-Za-z.]*(?:\s[A-Z][A-Za-z.]*)*,\s+(?:[A-Z][a-z]*\.?,?\s+)?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)")
 MONTH_ONE = re.compile(r"\b((?:Jan|Feb|Mar|Apr|May|June?|July?|Aug|Sept?|Oct|Nov|Dec)[a-z]*\.?,?\s+)[Il!](?=[.,:;]?(?:\s|[—\-(]))")
@@ -134,7 +145,8 @@ def stories(alto: bytes) -> list[Story]:
             raw = " ".join(words)
             started = bool(paragraphs or current)
             if not started and not deck and not pending and _is_heading(raw):
-                headline.append(raw)
+                if not BYLINE.match(raw):
+                    headline.append(raw)
                 continue
             if not started and CREDIT_LINE.search(raw):
                 deck_open = False
@@ -195,17 +207,63 @@ def acceptable(s: Story, avoid: tuple[str, ...]) -> bool:
     return sum(p.count("[illegible]") for p in s.paragraphs) <= max(2, s.words // 60)
 
 
-def _issues(ctx: Context, day: dt.date) -> list[dict]:
+def _search(http, day: dt.date) -> list[dict]:
     found = {}
     for page in (1, 2, 3):
-        data = ctx.http.json(SEARCH.format(d=day.isoformat(), page=page))
+        data = http.json(SEARCH.format(d=day.isoformat(), page=page))
         for r in data.get("results", []):
             rid = r.get("id", "")
-            if f"/{day.isoformat()}/" in rid and rid not in found:
-                found[rid] = r
+            m = IIIF_PAGE.search((r.get("image_url") or [""])[0])
+            if f"/{day.isoformat()}/" in rid and m and rid not in found:
+                found[rid] = {"id": rid.replace("http://", "https://"), "title": r.get("title", ""),
+                              "alto": m.group(1).replace(":", "/")}
         if not data.get("pagination", {}).get("next"):
             break
     return list(found.values())
+
+
+@functools.cache
+def _index() -> dict[str, list[dict]]:
+    if not INDEX.exists():
+        return {}
+    return json.loads(gzip.decompress(INDEX.read_bytes()))
+
+
+def _issues(ctx: Context, day: dt.date) -> list[dict]:
+    # www.loc.gov answers some server IPs with a Cloudflare challenge, while the OCR files on
+    # tile.loc.gov stay reachable, so the issue list is shipped with the code when it can be.
+    indexed = _index().get(day.isoformat())
+    if indexed is not None:
+        return indexed
+    log.warning("no archive index for %s, searching loc.gov", day)
+    return _search(ctx.http, day)
+
+
+def update_index(http, days: list[dt.date], pause: float = 3.5) -> int:
+    index = dict(_index())
+    added = failures = 0
+    for day in days:
+        if day.isoformat() in index:
+            continue
+        try:
+            issues = _search(http, day)
+            failures = 0
+        except FetchError as e:
+            log.warning("%s: %s", day, e)
+            failures += 1
+            if failures >= 5:
+                log.warning("stopping after %d failures in a row", failures)
+                break
+            issues = []
+        log.info("%s: %d issues", day, len(issues))
+        time.sleep(pause)
+        if not issues:
+            continue
+        index[day.isoformat()] = issues
+        added += 1
+        INDEX.write_bytes(gzip.compress(json.dumps(index, sort_keys=True, separators=(",", ":")).encode(), mtime=0))
+    _index.cache_clear()
+    return added
 
 
 def fetch(ctx: Context, want: int = 4) -> list[dict]:
@@ -214,15 +272,12 @@ def fetch(ctx: Context, want: int = 4) -> list[dict]:
     random.Random(f"{ctx.date}:{ctx.city.id if ctx.city else ''}").shuffle(issues)
     out = []
     for issue in issues[:MAX_PAPERS]:
-        url = issue["id"].replace("http://", "https://")
+        url = issue["id"]
         try:
-            item = ctx.http.json(url + "?fo=json")
-            files = item["resources"][0]["files"][0]
-            alto_url = next(f["url"] for f in files if f.get("mimetype") == "text/xml")
-            alto = ctx.http.get(alto_url)
+            alto = ctx.http.get(TILE + issue["alto"] + ".xml")
         except Exception:
             continue
-        full_title = clean.text(item["item"].get("title", ""))
+        full_title = clean.text(issue["title"])
         paper = title_case(full_title.split(" (")[0].split(",")[0]) or "Unknown newspaper"
         place = re.search(r"\(([^)]+)\)", full_title)
         picks = [s for s in stories(alto) if acceptable(s, ctx.config.avoid)]
