@@ -19,18 +19,26 @@ export type ProfileState = { errors?: Record<string, string>; values?: Record<st
 function readProfile(form: FormData) {
   return {
     name: String(form.get("name") ?? ""),
-    cityId: String(form.get("cityId") ?? ""),
+    weather: String(form.get("weather") ?? ""),
+    placeId: String(form.get("placeId") ?? ""),
+    placeQuery: String(form.get("placeQuery") ?? ""),
+    timeZone: String(form.get("timeZone") ?? ""),
     format: String(form.get("format") ?? ""),
     deliveryEmail: String(form.get("deliveryEmail") ?? ""),
     acceptTerms: form.get("acceptTerms") === "on",
   };
 }
 
+function echo(input: ReturnType<typeof readProfile>): Record<string, string> {
+  const { acceptTerms, placeQuery, ...rest } = input;
+  return { ...rest, placeLabel: placeQuery, acceptTerms: acceptTerms ? "on" : "" };
+}
+
 export async function onboardAction(_prev: ProfileState, form: FormData): Promise<ProfileState> {
   const user = await requireUser();
   const input = readProfile(form);
   const result = await saveProfile(user, input, await clientIp(), { requireTerms: !isOnboarded(user) });
-  if (!result.ok) return { errors: result.errors, values: { ...input, acceptTerms: input.acceptTerms ? "on" : "" } };
+  if (!result.ok) return { errors: result.errors, values: echo(input) };
   redirect(result.verificationSent ? "/guide?check=delivery" : "/guide?welcome=1");
 }
 
@@ -38,7 +46,7 @@ export async function updateProfileAction(_prev: ProfileState, form: FormData): 
   const user = await requireUser();
   const input = readProfile(form);
   const result = await saveProfile(user, input, await clientIp(), { requireTerms: false });
-  if (!result.ok) return { errors: result.errors, values: input as unknown as Record<string, string> };
+  if (!result.ok) return { errors: result.errors, values: echo(input) };
   revalidatePath("/account");
   if (result.verificationSent) return { saved: `Saved. We sent a confirmation link to ${input.deliveryEmail.trim().toLowerCase()}. Nothing will be delivered there until it's opened.` };
   if (result.verificationThrottled) return { saved: "Saved. We couldn't send another confirmation link today. Try again tomorrow from this page." };

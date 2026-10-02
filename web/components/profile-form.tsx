@@ -1,27 +1,42 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState, useSyncExternalStore } from "react";
 import type { ProfileState } from "@/app/actions/account";
 import { FORMATS } from "@/lib/formats";
+import { PlacePicker } from "./place-picker";
 
-type Values = { name: string; cityId: string; format: string; deliveryEmail: string };
+type Values = {
+  name: string;
+  weather: string;
+  placeId: string;
+  placeLabel: string;
+  timeZone: string;
+  format: string;
+  deliveryEmail: string;
+};
+
+const noSubscribe = () => () => {};
+const browserTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export function ProfileForm({
   action,
   initial,
-  cities,
+  timeZones,
   withTerms,
   submitLabel,
 }: {
   action: (prev: ProfileState, form: FormData) => Promise<ProfileState>;
   initial: Values;
-  cities: { id: string; label: string }[];
+  timeZones: string[];
   withTerms: boolean;
   submitLabel: string;
 }) {
   const [state, formAction, pending] = useActionState(action, {});
   const values: Record<string, string> = { ...initial, ...state.values };
   const errors = state.errors ?? {};
+  const [weather, setWeather] = useState(values.weather || "local");
+  const detectedZone = useSyncExternalStore(noSubscribe, browserTimeZone, () => "");
+  const zone = values.timeZone || (timeZones.includes(detectedZone) ? detectedZone : "");
   const describedBy = (field: string, hint?: string) =>
     [hint, errors[field] ? `${field}-error` : null].filter(Boolean).join(" ") || undefined;
   const error = (field: string) =>
@@ -52,22 +67,52 @@ export function ProfileForm({
         {error("name")}
       </div>
 
-      <div className="field">
-        <label htmlFor="cityId">City</label>
-        <span className="hint" id="city-hint">Sets the weather, sunrise and almanac.</span>
-        <select id="cityId" name="cityId" defaultValue={values.cityId}
-          aria-describedby={describedBy("cityId", "city-hint")} aria-invalid={errors.cityId ? true : undefined}>
-          <option value="" disabled>
-            Choose a city
-          </option>
-          {cities.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.label}
-            </option>
-          ))}
-        </select>
-        {error("cityId")}
-      </div>
+      <fieldset className="field">
+        <legend>Weather</legend>
+        <span className="hint" id="weather-hint">
+          Your city sets only the forecast, sunrise and sunset, and the almanac. The news is the same in every edition.
+        </span>
+        <label className="choice">
+          <input type="radio" name="weather" value="local" checked={weather === "local"} onChange={() => setWeather("local")} />
+          <strong>Include the weather for my city</strong>
+          <span>Today&rsquo;s forecast in the masthead and a forecast page inside. Any city or town in the world.</span>
+        </label>
+        {weather === "local" && (
+          <div className="sub-field">
+            <label htmlFor="placeQuery" className="sub-label">City or town</label>
+            <PlacePicker
+              initialId={values.placeId ? Number(values.placeId) : null}
+              initialLabel={values.placeLabel ?? ""}
+              describedBy={describedBy("placeId", "weather-hint")}
+              invalid={Boolean(errors.placeId)}
+            />
+            {error("placeId")}
+          </div>
+        )}
+        <label className="choice">
+          <input type="radio" name="weather" value="none" checked={weather === "none"} onChange={() => setWeather("none")} />
+          <strong>General edition, no local weather</strong>
+          <span>The masthead shows the moon and the day of the year instead. You still choose a time zone so the paper arrives in your morning.</span>
+        </label>
+        {weather === "none" && (
+          <div className="sub-field">
+            <label htmlFor="timeZone" className="sub-label">Time zone</label>
+            <select id="timeZone" name="timeZone" key={zone} defaultValue={zone}
+              aria-describedby={describedBy("timeZone")} aria-invalid={errors.timeZone ? true : undefined}>
+              <option value="" disabled>
+                Choose a time zone
+              </option>
+              {timeZones.map((tz) => (
+                <option key={tz} value={tz}>
+                  {tz.replaceAll("_", " ").replaceAll("/", " / ")}
+                </option>
+              ))}
+            </select>
+            {error("timeZone")}
+          </div>
+        )}
+        {error("weather")}
+      </fieldset>
 
       <fieldset className="field" aria-describedby={describedBy("format")}>
         <legend>Your reader</legend>

@@ -6,7 +6,8 @@ import { TestEditionButton } from "@/components/test-edition-button";
 import { DeleteAccount } from "@/components/delete-account";
 import { pauseAction, resendDeliveryVerificationAction, resumeAction, updateProfileAction } from "@/app/actions/account";
 import { signOutAction, signOutEverywhereAction } from "@/app/actions/auth";
-import { cities, cityName } from "@/lib/server/cities";
+import { describeWeatherChoice } from "@/lib/server/places";
+import { profileInitial, TIME_ZONES } from "@/lib/server/profile-initial";
 import { requireOnboardedUser } from "@/lib/server/session";
 import { formatLabel } from "@/lib/formats";
 import { PRICE_PER_MONTH, TRIAL_DAYS } from "@/lib/site";
@@ -50,8 +51,8 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         <dd className="address">{user.deliveryEmail}</dd>
         <dt>Address</dt>
         <dd>{verified ? "Confirmed" : "Waiting for you to open the confirmation link we emailed to it"}</dd>
-        <dt>City</dt>
-        <dd>{cityName(user.cityId)}</dd>
+        <dt>Weather</dt>
+        <dd>{await describeWeatherChoice(user)}</dd>
         <dt>Reader</dt>
         <dd>{formatLabel(user.format)}</dd>
       </dl>
@@ -72,7 +73,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
       <h3>Test edition</h3>
       <p>
-        Sends the latest edition for your city to {user.deliveryEmail}. First add our address to your approved senders, as
+        Sends a recent edition to {user.deliveryEmail}. First add our address to your approved senders, as
         the <Link href="/guide">setup guide</Link> shows.
       </p>
       <TestEditionButton />
@@ -82,8 +83,8 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         action={updateProfileAction}
         withTerms={false}
         submitLabel="Save changes"
-        cities={cities().map((c) => ({ id: c.id, label: `${c.name}, ${c.region}` }))}
-        initial={{ name: user.name ?? "", cityId: user.cityId ?? "", format: user.format ?? "", deliveryEmail: user.deliveryEmail ?? "" }}
+        timeZones={TIME_ZONES}
+        initial={await profileInitial(user)}
       />
 
       <h2>Billing</h2>

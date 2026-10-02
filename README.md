@@ -89,7 +89,12 @@ python -m venv .venv
 export COURIER_CONTACT_EMAIL=you@example.com   # sent to the Weather Service and Library of Congress, which ask for a contact
 .venv/bin/python -m courier build              # every city in courier.toml
 .venv/bin/python -m courier build --city denver --date 2026-10-01
+.venv/bin/python -m courier build --general --tz Asia/Tokyo           # no local weather
+.venv/bin/python -m courier build --place gn-2996944 --name Lyon --region France \
+    --country FR --lat 45.74846 --lon 4.84671 --tz Europe/Paris          # any place, by GeoNames id
 ```
+
+An edition is keyed by `general`, a GeoNames id (`gn-<id>`), or a city id from `courier.toml`. Files go to `out/<date>/<key>/<key>_small.pdf`, `<key>_large.pdf` and `<key>.epub`. The website stores each reader's choice in those same terms.
 
 Output goes to `out/<date>/<city>/`: `edition.json`, the two PDFs and the EPUB. Every edition, every article in it with its license and attribution, and whether each source succeeded are recorded in `data/courier.db` (SQLite; the schema in `pipeline/courier/schema.sql` is plain SQL so it can move to Supabase). Feeds are cached in `out/cache/<date>/`, so rebuilding the same day does not refetch.
 
@@ -108,7 +113,13 @@ npm test                    # about 5 seconds, runs against an in-memory Postgre
 
 Without `RESEND_API_KEY`, development prints every email (sign-in links included) to the server log instead of sending it. In production a missing key is an error.
 
-The city list comes from `pipeline/courier.toml` (`COURIER_CONFIG`), so the site only offers cities the pipeline builds. Test editions are read from `EDITIONS_DIR`: the newest `<date>/<city>/` build, then the samples in `out/`.
+Readers pick any city or town in the world from the GeoNames list, or a general edition with no local weather and a time zone. Load the list once, and again whenever you want fresher data (about a minute, 11 MB download):
+
+```sh
+npm run db:places
+```
+
+The city only changes the forecast and the almanac. Test editions are read from `EDITIONS_DIR`: the reader's own newest build, then the newest general edition, then the samples in `out/`.
 
 ### Accounts and security
 
@@ -137,7 +148,8 @@ The site runs on the same server as the other self-hosted sites, behind nginx, a
 | Clean | HTML is reduced to paragraphs and subheads. Players, share bars, contact blocks and navigation are removed. Anything removed from a story is listed in its credit line ("Images and audio omitted. Text unedited."). |
 | Score OCR | 1926 pages come as scanned text. Each story is scored against an English word list; only clean ones run, and unreadable words print as [illegible]. |
 | Select | A lead, two short front-page stories, one World, two Science, an optional Weather feature and up to four archive items, fitted to 4,800 words (about 20 minutes at 240 words a minute). Stories used in the last 60 days, near-duplicate headlines, and stories mentioning words in the `avoid` list are skipped. |
-| Fall back | A source that fails is logged and skipped. The lead falls back from The Conversation to Global Voices to NASA. With no forecast, the masthead shows sunrise and sunset. The build only fails if there is nothing at all to print. |
+| Weather | US places use the National Weather Service. Everywhere else uses MET Norway, grouped into day and night periods in local time, in °C (°F in the US). A general edition has no weather and no local almanac. |
+| Fall back | A source that fails is logged and skipped. US weather falls back to MET Norway. The lead falls back from The Conversation to Global Voices to NASA. With no forecast, the masthead shows sunrise and sunset. The build only fails if there is nothing at all to print. |
 
 Turn a source off in `courier.toml` (`conversation = false`) and the paper is built without it.
 

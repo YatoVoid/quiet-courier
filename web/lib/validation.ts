@@ -29,16 +29,23 @@ export function isDeviceInbox(email: string) {
   return DEVICE_INBOX_DOMAINS.includes(domain);
 }
 
-export function profileSchema(cityIds: string[]) {
-  return z.object({
-    name: nameSchema,
-    cityId: z.string().refine((id) => cityIds.includes(id), { error: "Choose a city from the list." }),
-    format: z.enum(FORMAT_IDS, { error: "Choose the size of your reader." }),
-    deliveryEmail: emailSchema,
-  });
+const TIME_ZONES = new Set(["UTC", ...Intl.supportedValuesOf("timeZone")]);
+
+export function isTimeZone(tz: string) {
+  return TIME_ZONES.has(tz);
 }
 
-export type Profile = z.infer<ReturnType<typeof profileSchema>>;
+export const profileSchema = z.object({
+  name: nameSchema,
+  weather: z.enum(["local", "none"], { error: "Choose whether to include local weather." }),
+  placeId: z.string().regex(/^\d{1,10}$/).transform(Number).optional().catch(undefined),
+  placeQuery: z.string().max(120).optional(),
+  timeZone: z.string().max(64).optional(),
+  format: z.enum(FORMAT_IDS, { error: "Choose the size of your reader." }),
+  deliveryEmail: emailSchema,
+});
+
+export type Profile = z.infer<typeof profileSchema>;
 
 export function fieldErrors(error: z.ZodError) {
   const out: Record<string, string> = {};

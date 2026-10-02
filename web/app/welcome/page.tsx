@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { PageShell } from "@/components/page-shell";
 import { ProfileForm } from "@/components/profile-form";
 import { onboardAction } from "@/app/actions/account";
-import { cities } from "@/lib/server/cities";
+import { profileInitial, TIME_ZONES } from "@/lib/server/profile-initial";
 import { isOnboarded, requireUser } from "@/lib/server/session";
 
 export const metadata: Metadata = { title: "Set up your paper" };
@@ -19,8 +19,8 @@ export default async function WelcomePage() {
         action={onboardAction}
         withTerms
         submitLabel="Save and continue"
-        cities={cities().map((c) => ({ id: c.id, label: `${c.name}, ${c.region}` }))}
-        initial={{ name: user.name ?? "", cityId: user.cityId ?? "", format: user.format ?? "", deliveryEmail: user.deliveryEmail ?? "" }}
+        timeZones={TIME_ZONES}
+        initial={await profileInitial(user)}
       />
     </PageShell>
   );

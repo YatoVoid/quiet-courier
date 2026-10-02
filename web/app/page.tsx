@@ -3,7 +3,6 @@ import Link from "next/link";
 import { FrontMasthead } from "@/components/masthead";
 import { Footer } from "@/components/footer";
 import { currentUser, isOnboarded } from "@/lib/server/session";
-import { cities } from "@/lib/server/cities";
 import { PRICE_PER_MONTH, TRIAL_DAYS } from "@/lib/site";
 import front from "@/public/paper/kansas-city-large-front.png";
 import science from "@/public/paper/kansas-city-large-science.png";
@@ -27,9 +26,9 @@ const CONTENTS = [
     source: "NASA and NASA Earth Observatory",
   },
   {
-    title: "Your weather",
-    body: "Today and tonight for your city in the ears of the masthead, plus the full forecast inside.",
-    source: "National Weather Service",
+    title: "Your weather, if you want it",
+    body: "Today and tonight for any city in the world in the corners of the masthead, plus the full forecast inside. Or leave it out.",
+    source: "National Weather Service and MET Norway",
   },
   {
     title: "A hundred years ago today",
@@ -57,8 +56,8 @@ const QUESTIONS = [
     a: "Because a feed doesn’t. Each edition is fitted to fifteen or twenty minutes of reading. When you reach the puzzle, you’ve read the news for the day.",
   },
   {
-    q: "Which cities have an edition?",
-    a: "",
+    q: "Does my city change the news?",
+    a: "No. The news is the same in every edition. Your city only sets the weather forecast, sunrise and sunset, and the almanac. Any city or town in the world works, or you can leave local weather out.",
   },
   {
     q: "Can I stop it for a while?",
@@ -66,7 +65,7 @@ const QUESTIONS = [
   },
   {
     q: "What do you keep about me?",
-    a: "Your email, the name printed on your paper, your city, your reader size and the address your paper goes to. No tracking scripts. The privacy policy has the details.",
+    a: "Your email, the name printed on your paper, your city or time zone, your reader size and the address your paper goes to. No tracking scripts. The privacy policy has the details.",
   },
 ];
 
@@ -83,10 +82,6 @@ function todayInCentral() {
 export default async function Home({ searchParams }: { searchParams: Promise<{ deleted?: string }> }) {
   const { deleted } = await searchParams;
   const user = await currentUser();
-  const cityList = cities()
-    .map((c) => c.name)
-    .join(", ")
-    .replace(/, ([^,]*)$/, " and $1");
   const next = user ? (isOnboarded(user) ? "/account" : "/welcome") : "/signin";
   const nextLabel = user ? (isOnboarded(user) ? "Go to your account" : "Finish setting up") : "Start your free trial";
 
@@ -113,7 +108,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
               </p>
               <p>
                 Every edition is put together from writing that is free to republish: research explained by the people who
-                did it, reporting from around the world, NASA&rsquo;s own news, your local forecast, and a newspaper printed
+                did it, reporting from around the world, NASA&rsquo;s own news, a forecast for your city, and a newspaper printed
                 on this date a hundred years ago. Each piece runs whole, with its author and license printed beside it.
               </p>
               <p>
@@ -175,8 +170,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
               <p>No password. We send a link that signs you in.</p>
             </li>
             <li>
-              <h3>Pick your city and reader</h3>
-              <p>The city sets your weather and almanac. The reader sets the page size.</p>
+              <h3>Choose your reader and weather</h3>
+              <p>The reader sets the page size. A city adds its forecast and almanac; the news stays the same.</p>
             </li>
             <li>
               <h3>Approve our address with Amazon</h3>
@@ -214,10 +209,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
             {QUESTIONS.map((item) => (
               <div className="question" key={item.q}>
                 <h3>{item.q}</h3>
-                <p>
-                  {item.a ||
-                    `${cityList}, for now. The weather, almanac and sunrise are local; the rest of the paper is the same everywhere. More cities will follow.`}
-                </p>
+                <p>{item.a}</p>
               </div>
             ))}
           </div>

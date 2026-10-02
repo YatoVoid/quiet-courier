@@ -31,8 +31,9 @@ The site runs on a shared Ubuntu server that already hosts other sites behind ng
 6. `web/.env` from `web/.env.example`, mode 600, owned by `courier`. Set `RESEND_API_KEY` and `APP_URL=https://quietcourier.com`.
 7. Install, migrate, build:
    ```sh
-   sudo -u courier bash -c 'cd /srv/quiet-courier/app/web && npm ci --no-audit --no-fund && node db/migrate.mjs && npm run build'
+   sudo -u courier bash -c 'cd /srv/quiet-courier/app/web && npm ci --no-audit --no-fund && node db/migrate.mjs && node db/import-places.mjs && npm run build'
    ```
+   The place list only needs reloading occasionally. Rerunning `node db/import-places.mjs` updates rows in place and never deletes any, since readers point at them.
 8. systemd: copy `deploy/quiet-courier-web.service` to `/etc/systemd/system/`, then `daemon-reload`, `enable --now quiet-courier-web`.
 9. nginx: copy `deploy/nginx-courier-limits.conf` to `/etc/nginx/conf.d/` and the site file to `sites-available`. Get the certificate first with `certbot certonly --nginx -d quietcourier.com -d www.quietcourier.com`, then link the site, `nginx -t`, and `systemctl reload nginx`. Reload, never restart.
 10. Backups: `/etc/cron.d/quiet-courier-backup` with `15 3 * * * courier /srv/quiet-courier/app/deploy/backup.sh`. Restore one into a scratch database once to prove it works.

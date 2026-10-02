@@ -3,17 +3,26 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users, type User } from "@/db/schema";
 import { PAPER_NAME, TERMS_VERSION } from "@/lib/site";
-import { fieldErrors, isDeviceInbox, profileSchema } from "@/lib/validation";
+import { fieldErrors, isDeviceInbox, isTimeZone, profileSchema } from "@/lib/validation";
 import type { FormatId } from "@/lib/formats";
 import { audit } from "./audit";
 import { issueEmailToken, redeemEmailToken, VERIFY_DELIVERY_TTL_MS } from "./auth";
-import { cities, cityName } from "./cities";
+import { describeWeatherChoice, editionKey, getPlace, placeLabel, searchPlaces } from "./places";
 import { appUrl, editionSender } from "./config";
 import { findEdition, readEdition } from "./editions";
 import { sendMail } from "./mail";
 import { isLimited, LIMITS, record } from "./rate-limit";
 
-export type ProfileInput = { name: string; cityId: string; format: string; deliveryEmail: string; acceptTerms?: boolean };
+export type ProfileInput = {
+  name: string;
+  weather: string;
+  placeId?: string;
+  placeQuery?: string;
+  timeZone?: string;
+  format: string;
+  deliveryEmail: string;
+  acceptTerms?: boolean;
+};
 
 export type SaveResult =
   | { ok: true; verificationSent: boolean; verificationThrottled: boolean }
@@ -23,10 +32,39 @@ export function deliveryNeedsVerification(accountEmail: string, deliveryEmail: s
   return deliveryEmail !== accountEmail && !isDeviceInbox(deliveryEmail);
 }
 
+// Without JavaScript the hidden id keeps the old city while the text box holds a new one,
+// so the id only counts when the text still names that place. Otherwise the best match wins.
+async function resolvePlace(placeId: number | undefined, placeQuery: string | undefined) {
+  const query = placeQuery?.trim() ?? "";
+  const picked = placeId ? await getPlace(placeId) : null;
+  if (picked && (!query || query === placeLabel(picked))) return picked;
+  if (!query) return null;
+  const [first] = await searchPlaces(query);
+  return first ? getPlace(first.id) : null;
+}
+
 export async function saveProfile(user: User, input: ProfileInput, ip: string, opts: { requireTerms: boolean }): Promise<SaveResult> {
-  const parsed = profileSchema(cities().map((c) => c.id)).safeParse(input);
+  const parsed = profileSchema.safeParse(input);
   const errors = parsed.success ? {} : fieldErrors(parsed.error);
   if (opts.requireTerms && !input.acceptTerms) errors.acceptTerms = "Tick the box to accept the terms and privacy policy.";
+
+  let placeId: number | null = null;
+  let timeZone: string | null = null;
+  if (parsed.success) {
+    if (parsed.data.weather === "local") {
+      const place = await resolvePlace(parsed.data.placeId, parsed.data.placeQuery);
+      if (place) {
+        placeId = place.id;
+        timeZone = place.timeZone;
+      } else {
+        errors.placeId = "Start typing your city and choose it from the list.";
+      }
+    } else if (parsed.data.timeZone && isTimeZone(parsed.data.timeZone)) {
+      timeZone = parsed.data.timeZone;
+    } else {
+      errors.timeZone = "Choose your time zone so the paper arrives in your morning.";
+    }
+  }
   if (!parsed.success || Object.keys(errors).length) return { ok: false, errors };
 
   const profile = parsed.data;
@@ -38,7 +76,9 @@ export async function saveProfile(user: User, input: ProfileInput, ip: string, o
     .update(users)
     .set({
       name: profile.name,
-      cityId: profile.cityId,
+      localWeather: profile.weather === "local",
+      placeId,
+      timeZone,
       format: profile.format,
       deliveryEmail: profile.deliveryEmail,
       ...(deliveryChanged ? { deliveryEmailVerifiedAt: needsVerification ? null : now } : {}),
@@ -111,25 +151,28 @@ export async function deleteAccount(user: User, ip: string) {
 export type TestEditionResult = "sent" | "throttled" | "not_ready" | "unverified" | "missing" | "failed";
 
 export async function sendTestEdition(user: User, ip: string): Promise<TestEditionResult> {
-  if (!user.deliveryEmail || !user.cityId || !user.format) return "not_ready";
+  if (!user.deliveryEmail || !user.timeZone || !user.format) return "not_ready";
   if (!user.deliveryEmailVerifiedAt) return "unverified";
   const key = `test_edition:user:${user.id}`;
   if (await isLimited(key, LIMITS.testEditionPerUser)) return "throttled";
 
-  const found = await findEdition(user.cityId, user.format as FormatId);
+  const found = await findEdition(editionKey(user), user.format as FormatId);
   if (!found) {
-    console.error("no edition file for", user.cityId, user.format);
+    console.error("no edition file to send for", editionKey(user), user.format);
     return "missing";
   }
   await record(key);
   try {
     const content = await readEdition(found);
     const ext = user.format === "epub" ? "epub" : "pdf";
+    const which = found.own
+      ? `This is a test copy of ${PAPER_NAME} for ${await describeWeatherChoice(user)}.`
+      : `This is a sample copy of ${PAPER_NAME}. Your daily edition will carry ${user.localWeather ? "your own weather and almanac" : "no local weather"}.`;
     await sendMail({
       to: user.deliveryEmail,
       subject: `${PAPER_NAME}, test edition`,
       text: [
-        `This is a test edition of ${PAPER_NAME} for ${cityName(user.cityId)}.`,
+        which,
         "",
         `If it reached your reader, delivery works. If it didn't, check that ${editionSender()} is on your approved senders list.`,
       ].join("\n"),

@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { eq } from "drizzle-orm";
-import { testDb, truncateAll, type TestDb } from "@/test/db";
+import { seedPlaces, testDb, truncateAll, type TestDb } from "@/test/db";
 import { auditEvents, sessions, users, type User } from "@/db/schema";
 import { TERMS_VERSION } from "@/lib/site";
 
@@ -23,16 +23,21 @@ let db: TestDb;
 let user: User;
 const fresh = async () => (await db.select().from(users).where(eq(users.id, user.id)))[0];
 const linkToken = (text: string) => text.match(/#([A-Za-z0-9_-]+)/)![1];
-const valid = { name: "Ada Reader", cityId: "chicago", format: "small", deliveryEmail: "ada_42@kindle.com" };
+const CHICAGO = "4887398";
+const valid = { name: "Ada Reader", weather: "local", placeId: CHICAGO, format: "small", deliveryEmail: "ada_42@kindle.com" };
 
 beforeAll(async () => {
   db = await testDb();
   h.db = db;
+  await seedPlaces(db);
   const dir = mkdtempSync(path.join(tmpdir(), "editions-"));
-  mkdirSync(path.join(dir, "2026-09-30", "chicago"), { recursive: true });
-  mkdirSync(path.join(dir, "2026-10-01", "chicago"), { recursive: true });
-  writeFileSync(path.join(dir, "2026-09-30", "chicago", "chicago_small.pdf"), "old");
-  writeFileSync(path.join(dir, "2026-10-01", "chicago", "chicago_small.pdf"), "new");
+  const chicago = `gn-${CHICAGO}`;
+  mkdirSync(path.join(dir, "2026-09-30", chicago), { recursive: true });
+  mkdirSync(path.join(dir, "2026-10-01", chicago), { recursive: true });
+  mkdirSync(path.join(dir, "2026-10-01", "general"), { recursive: true });
+  writeFileSync(path.join(dir, "2026-09-30", chicago, `${chicago}_small.pdf`), "old");
+  writeFileSync(path.join(dir, "2026-10-01", chicago, `${chicago}_small.pdf`), "new");
+  writeFileSync(path.join(dir, "2026-10-01", "general", "general_large.pdf"), "general");
   writeFileSync(path.join(dir, "denver.epub"), "sample");
   process.env.EDITIONS_DIR = dir;
 });
@@ -56,10 +61,41 @@ describe("saveProfile", () => {
     expect(saved.name).toBe("Ada Reader");
   });
 
-  it("rejects a city the pipeline doesn't print and an unknown format", async () => {
-    const res = await saveProfile(user, { ...valid, cityId: "atlantis", format: "scroll" }, "1.1.1.1", { requireTerms: false });
+  it("stores the place and takes its time zone", async () => {
+    await saveProfile(user, valid, "1.1.1.1", { requireTerms: false });
+    const saved = await fresh();
+    expect(saved).toMatchObject({ localWeather: true, placeId: 4887398, timeZone: "America/Chicago" });
+  });
+
+  it("rejects an unknown place and an unknown format", async () => {
+    const res = await saveProfile(user, { ...valid, placeId: "999", format: "scroll" }, "1.1.1.1", { requireTerms: false });
     expect(res.ok).toBe(false);
-    if (!res.ok) expect(Object.keys(res.errors).sort()).toEqual(["cityId", "format"]);
+    if (!res.ok) expect(Object.keys(res.errors).sort()).toEqual(["format"]);
+    const noPlace = await saveProfile(user, { ...valid, placeId: "999" }, "1.1.1.1", { requireTerms: false });
+    expect(noPlace).toEqual({ ok: false, errors: { placeId: expect.any(String) } });
+  });
+
+  it("uses the best match when the city arrives as typed text", async () => {
+    await saveProfile(user, { ...valid, placeId: "", placeQuery: "paris, tx" }, "1.1.1.1", { requireTerms: false });
+    expect((await fresh()).placeId).toBe(4717560);
+  });
+
+  it("follows newly typed text over a stale picked id", async () => {
+    await saveProfile(user, { ...valid, placeQuery: "Chicago, Illinois, USA" }, "1.1.1.1", { requireTerms: false });
+    expect((await fresh()).placeId).toBe(4887398);
+    await saveProfile(await fresh(), { ...valid, placeQuery: "baku" }, "1.1.1.1", { requireTerms: false });
+    expect((await fresh()).placeId).toBe(587084);
+  });
+
+  it("saves a general edition with a time zone and no place", async () => {
+    await saveProfile(user, valid, "1.1.1.1", { requireTerms: false });
+    await saveProfile(await fresh(), { ...valid, weather: "none", timeZone: "Asia/Tokyo" }, "1.1.1.1", { requireTerms: false });
+    expect(await fresh()).toMatchObject({ localWeather: false, placeId: null, timeZone: "Asia/Tokyo" });
+  });
+
+  it("needs a real time zone for a general edition", async () => {
+    const res = await saveProfile(user, { ...valid, weather: "none", timeZone: "Mars/Olympus" }, "1.1.1.1", { requireTerms: false });
+    expect(res).toEqual({ ok: false, errors: { timeZone: expect.any(String) } });
   });
 
   it("strips markup and control characters from the name", async () => {
@@ -107,16 +143,15 @@ describe("sendTestEdition", () => {
     expect(h.outbox[0].attachments?.[0].filename).toBe("The Quiet Courier 2026-10-01.pdf");
   });
 
-  it("falls back to the sample edition", async () => {
-    await saveProfile(await fresh(), { ...valid, cityId: "denver", format: "epub" }, "1.1.1.1", { requireTerms: false });
+  it("falls back to the general edition, then to a sample", async () => {
+    await saveProfile(await fresh(), { ...valid, placeId: "2988507", format: "large" }, "1.1.1.1", { requireTerms: false });
     expect(await sendTestEdition(await fresh(), "1.1.1.1")).toBe("sent");
-    expect(h.outbox[0].attachments?.[0].content.toString()).toBe("sample");
-  });
+    expect(h.outbox[0].attachments?.[0].content.toString()).toBe("general");
+    expect(h.outbox[0].text).toContain("sample copy");
 
-  it("reports a missing file instead of sending an empty email", async () => {
-    await saveProfile(await fresh(), { ...valid, cityId: "kansas-city" }, "1.1.1.1", { requireTerms: false });
-    expect(await sendTestEdition(await fresh(), "1.1.1.1")).toBe("missing");
-    expect(h.outbox).toHaveLength(0);
+    await saveProfile(await fresh(), { ...valid, format: "epub" }, "1.1.1.1", { requireTerms: false });
+    expect(await sendTestEdition(await fresh(), "1.1.1.1")).toBe("sent");
+    expect(h.outbox[1].attachments?.[0].content.toString()).toBe("sample");
   });
 
   it("allows three a day", async () => {

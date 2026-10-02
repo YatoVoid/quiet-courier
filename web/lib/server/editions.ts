@@ -11,8 +11,8 @@ export function editionsDir() {
   return process.env.EDITIONS_DIR ?? path.resolve(/*turbopackIgnore: true*/ process.cwd(), "../out");
 }
 
-export function editionFilename(cityId: string, format: FormatId) {
-  return format === "epub" ? `${cityId}.epub` : `${cityId}_${format}.pdf`;
+export function editionFilename(key: string, format: FormatId) {
+  return format === "epub" ? `${key}.epub` : `${key}_${format}.pdf`;
 }
 
 async function isFile(p: string) {
@@ -23,23 +23,34 @@ async function isFile(p: string) {
   }
 }
 
-// Newest dated build first (out/<date>/<city>/), then the sample editions in out/.
-// cityId and format come from allowlists, never straight from a request.
-export async function findEdition(cityId: string, format: FormatId) {
+const KEY = /^(general|gn-\d+|[a-z-]+)$/;
+
+// The reader's own edition if one has been built, then the newest general edition, then any
+// sample in out/. A test copy only has to prove delivery works, so another edition will do.
+// Keys come from the database or a fixed list, and are checked again before touching the disk.
+export async function findEdition(key: string | null, format: FormatId) {
   const root = editionsDir();
-  const name = editionFilename(cityId, format);
   let dates: string[] = [];
   try {
     dates = (await readdir(root)).filter((d) => DATE_DIR.test(d)).sort().reverse();
   } catch {
     return null;
   }
-  for (const date of dates) {
-    const candidate = path.join(root, date, cityId, name);
-    if (await isFile(candidate)) return { path: candidate, name, date };
+  for (const candidateKey of [key, "general"]) {
+    if (!candidateKey || !KEY.test(candidateKey)) continue;
+    const name = editionFilename(candidateKey, format);
+    for (const date of dates) {
+      const candidate = path.join(/*turbopackIgnore: true*/ root, date, candidateKey, name);
+      if (await isFile(candidate)) return { path: candidate, name, date, own: candidateKey === key };
+    }
   }
-  const sample = path.join(root, name);
-  return (await isFile(sample)) ? { path: sample, name, date: null } : null;
+  const suffix = format === "epub" ? ".epub" : `_${format}.pdf`;
+  const samples = (await readdir(root)).filter((f) => f.endsWith(suffix)).sort();
+  for (const name of samples) {
+    const candidate = path.join(/*turbopackIgnore: true*/ root, name);
+    if (await isFile(candidate)) return { path: candidate, name, date: null, own: false };
+  }
+  return null;
 }
 
 export async function readEdition(found: { path: string }) {

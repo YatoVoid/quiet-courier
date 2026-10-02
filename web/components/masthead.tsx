@@ -21,7 +21,7 @@ export function FrontMasthead({ date, signedIn }: { date: string; signedIn: bool
       <div className="masthead-top">
         <div className="ear">
           <p className="ear-head">Delivery</p>
-          <p>To your Kindle by email, before seven each morning, Central time.</p>
+          <p>To your Kindle by email, early each morning wherever you are.</p>
         </div>
         <div className="title-block">
           <h1 className="nameplate">{PAPER_NAME}</h1>

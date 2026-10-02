@@ -18,6 +18,21 @@ CREATE TABLE "email_tokens" (
 	CONSTRAINT "email_tokens_purpose" CHECK ("email_tokens"."purpose" in ('sign_in', 'verify_delivery'))
 );
 --> statement-breakpoint
+CREATE TABLE "places" (
+	"id" integer PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"ascii_name" text NOT NULL,
+	"admin1" text,
+	"admin1_ascii" text,
+	"admin1_code" text,
+	"country_code" text NOT NULL,
+	"country" text NOT NULL,
+	"latitude" double precision NOT NULL,
+	"longitude" double precision NOT NULL,
+	"time_zone" text NOT NULL,
+	"population" integer DEFAULT 0 NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "rate_events" (
 	"id" bigserial PRIMARY KEY NOT NULL,
 	"key" text NOT NULL,
@@ -35,7 +50,9 @@ CREATE TABLE "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"email" text NOT NULL,
 	"name" text,
-	"city_id" text,
+	"local_weather" boolean DEFAULT true NOT NULL,
+	"place_id" integer,
+	"time_zone" text,
 	"format" text,
 	"delivery_email" text,
 	"delivery_email_verified_at" timestamp with time zone,
@@ -52,8 +69,11 @@ CREATE TABLE "users" (
 --> statement-breakpoint
 ALTER TABLE "email_tokens" ADD CONSTRAINT "email_tokens_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "users" ADD CONSTRAINT "users_place_id_places_id_fk" FOREIGN KEY ("place_id") REFERENCES "public"."places"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "audit_events_time" ON "audit_events" USING btree ("created_at");--> statement-breakpoint
 CREATE INDEX "audit_events_user" ON "audit_events" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "email_tokens_expires" ON "email_tokens" USING btree ("expires_at");--> statement-breakpoint
+CREATE INDEX "places_ascii_prefix" ON "places" USING btree (lower("ascii_name") text_pattern_ops);--> statement-breakpoint
+CREATE INDEX "places_name_prefix" ON "places" USING btree (lower("name") text_pattern_ops);--> statement-breakpoint
 CREATE INDEX "rate_events_key_time" ON "rate_events" USING btree ("key","created_at");--> statement-breakpoint
 CREATE INDEX "sessions_user" ON "sessions" USING btree ("user_id");

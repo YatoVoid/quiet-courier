@@ -1,5 +1,28 @@
 import { sql } from "drizzle-orm";
-import { check, index, jsonb, pgTable, text, timestamp, uuid, bigserial } from "drizzle-orm/pg-core";
+import { bigserial, boolean, check, doublePrecision, index, integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+
+// Every city and town with 1,000 or more people, from GeoNames (CC BY 4.0). Loaded by db/import-places.mjs.
+export const places = pgTable(
+  "places",
+  {
+    id: integer("id").primaryKey(),
+    name: text("name").notNull(),
+    asciiName: text("ascii_name").notNull(),
+    admin1: text("admin1"),
+    admin1Ascii: text("admin1_ascii"),
+    admin1Code: text("admin1_code"),
+    countryCode: text("country_code").notNull(),
+    country: text("country").notNull(),
+    latitude: doublePrecision("latitude").notNull(),
+    longitude: doublePrecision("longitude").notNull(),
+    timeZone: text("time_zone").notNull(),
+    population: integer("population").notNull().default(0),
+  },
+  (t) => [
+    index("places_ascii_prefix").using("btree", sql`lower(${t.asciiName}) text_pattern_ops`),
+    index("places_name_prefix").using("btree", sql`lower(${t.name}) text_pattern_ops`),
+  ],
+);
 
 export const users = pgTable(
   "users",
@@ -7,7 +30,9 @@ export const users = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     email: text("email").notNull().unique(),
     name: text("name"),
-    cityId: text("city_id"),
+    localWeather: boolean("local_weather").notNull().default(true),
+    placeId: integer("place_id").references(() => places.id),
+    timeZone: text("time_zone"),
     format: text("format", { enum: ["small", "large", "epub"] }),
     deliveryEmail: text("delivery_email"),
     deliveryEmailVerifiedAt: timestamp("delivery_email_verified_at", { withTimezone: true }),
@@ -77,3 +102,4 @@ export const auditEvents = pgTable(
 );
 
 export type User = typeof users.$inferSelect;
+export type Place = typeof places.$inferSelect;

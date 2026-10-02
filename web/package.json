@@ -13,7 +13,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "node db/migrate.mjs"
+    "db:migrate": "node db/migrate.mjs",
+    "db:places": "node db/import-places.mjs"
   },
   "dependencies": {
     "dotenv": "^18.0.5",
@@ -23,7 +24,6 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "server-only": "^0.0.1",
-    "smol-toml": "^1.9.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {

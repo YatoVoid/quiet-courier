@@ -8,6 +8,9 @@ export function Footer() {
       <p>
         Letters to the editor: <a href={`mailto:${email}`}>{email}</a>
       </p>
+      <p>
+        Place names from <a href="https://www.geonames.org/">GeoNames</a>, CC BY 4.0.
+      </p>
       <nav aria-label="Legal">
         <Link href="/privacy">Privacy</Link>
         <Link href="/terms">Terms</Link>

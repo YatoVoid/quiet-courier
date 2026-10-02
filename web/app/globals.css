@@ -729,3 +729,58 @@ fieldset {
 .spaced {
   margin-top: 1.25rem;
 }
+
+.combo {
+  position: relative;
+  max-width: 28rem;
+}
+
+.combo-list {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin: -1.5px 0 0;
+  padding: 0;
+  list-style: none;
+  background: var(--field);
+  border: 1.5px solid var(--rule);
+  max-height: 18rem;
+  overflow-y: auto;
+}
+
+.combo-option {
+  padding: 0.45rem 0.65rem;
+  cursor: pointer;
+  border-top: 1px solid var(--rule);
+}
+
+.combo-option:first-child {
+  border-top: 0;
+}
+
+.combo-option.is-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.sub-field {
+  margin: 0.6rem 0 1rem 2.4rem;
+  max-width: 31rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sub-label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}

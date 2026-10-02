@@ -31,8 +31,8 @@ export async function requireUser() {
   return user;
 }
 
-export function isOnboarded(user: { termsAcceptedAt: Date | null; cityId: string | null }) {
-  return user.termsAcceptedAt != null && user.cityId != null;
+export function isOnboarded(user: { termsAcceptedAt: Date | null; timeZone: string | null }) {
+  return user.termsAcceptedAt != null && user.timeZone != null;
 }
 
 export async function requireOnboardedUser() {

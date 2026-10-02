@@ -20,7 +20,10 @@ export default function PrivacyPage() {
         <h2>What we store</h2>
         <ul>
           <li>Your account email address, used to sign you in and to write to you about your subscription.</li>
-          <li>The name printed on your paper, your city, and the size of your reader.</li>
+          <li>
+            The name printed on your paper, the size of your reader, and either the city you chose for the weather or your
+            time zone.
+          </li>
           <li>The address your paper is delivered to, such as your Send to Kindle address, and whether it was confirmed.</li>
           <li>When you accepted these terms and which version you accepted.</li>
           <li>
@@ -39,6 +42,10 @@ export default function PrivacyPage() {
             Resend, our email provider, handles every message we send, so it sees the address and the content of each one.
           </li>
           <li>Amazon, or your reader&rsquo;s maker, receives each edition at your delivery address.</li>
+          <li>
+            To print your forecast we send your city&rsquo;s coordinates, never your name or email, to the U.S. National
+            Weather Service or the Norwegian Meteorological Institute.
+          </li>
           <li>When billing starts, Stripe will handle payments. We will never see or store your card number.</li>
         </ul>
         <p>The site and its database run on our own server in the United States. We don&rsquo;t sell or rent your information.</p>
