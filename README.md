@@ -164,6 +164,21 @@ The city only changes the forecast and the almanac. Test editions are read from 
 
 Deleting an account removes the row and its sessions and tokens. Nightly backups are kept 30 days.
 
+### Billing
+
+Off until `BILLING_ENABLED=1` is set in both `web/.env` and `pipeline.env`. Until then nothing is charged and the site says so.
+
+| | |
+|---|---|
+| Free trial | 14 days, no card. It starts with the first paper delivered, so days spent waiting for launch don't count. When it ends the paper stops unless the reader subscribed. Nothing is ever charged automatically after a trial. |
+| Reminder | Three days before the trial ends, one email says the paper is about to stop and links to `/subscribe`. |
+| Subscribing | `/subscribe` shows the price, the first charge date and the renewal terms, with an unticked checkbox, then hands off to Stripe Checkout. Subscribing during the trial keeps the free days: the first charge is on the day they end. The price comes from `STRIPE_PRICE_ID` on the server. |
+| Confirmation | After checkout, an email repeats the price, renewal and how to cancel, as the auto-renewal laws require. |
+| Managing | "Manage billing" on the account page opens Stripe's customer portal for card changes and cancelling. |
+| Webhooks | `/api/stripe/webhook` checks Stripe's signature, records each event id so a redelivered event is applied once, and always reads the subscription back from Stripe so events arriving out of order can't leave stale state. |
+| Who gets a paper | With billing on: readers whose trial hasn't started or hasn't ended, and readers whose subscription is `trialing`, `active` or `past_due` (Stripe is still retrying the card). |
+| Deleting an account | Cancels the subscription at Stripe first. If Stripe can't be reached, nothing is deleted. |
+
 ### Deploying
 
 The site runs on the same server as the other self-hosted sites, behind nginx, as its own `courier` user on 127.0.0.1:3200. See [docs/DEPLOY.md](docs/DEPLOY.md).

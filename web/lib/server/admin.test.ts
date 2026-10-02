@@ -63,6 +63,21 @@ describe("readerCounts", () => {
   });
 });
 
+describe("readerCounts with billing on", () => {
+  it("leaves out readers whose trial ended without a subscription", async () => {
+    process.env.BILLING_ENABLED = "1";
+    const past = new Date(Date.now() - 86_400_000);
+    await db.insert(users).values([
+      { ...ready, email: "a@example.com", deliveryEmail: "a@kindle.com", trialEndsAt: past },
+      { ...ready, email: "b@example.com", deliveryEmail: "b@kindle.com", trialEndsAt: past, subscriptionStatus: "active" },
+      { ...ready, email: "c@example.com", deliveryEmail: "c@kindle.com" },
+    ]);
+    expect((await readerCounts()).receiving).toBe(2);
+    process.env.BILLING_ENABLED = "0";
+    expect((await readerCounts()).receiving).toBe(3);
+  });
+});
+
 describe("activity", () => {
   it("counts the last 30 days of account events and finished deliveries", async () => {
     const now = new Date("2026-10-20T12:00:00Z");

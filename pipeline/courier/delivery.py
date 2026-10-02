@@ -50,6 +50,11 @@ class Settings:
     partner_copy_to: list[str] = field(default_factory=list)
     partner_report_to: list[str] = field(default_factory=list)
     alert_to: list[str] = field(default_factory=list)
+    billing: bool = False
+    trial_days: int = 14
+    reminder_days: int = 3
+    app_url: str = "https://quietcourier.com"
+    price: str = "$4"
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -64,6 +69,9 @@ class Settings:
             partner_copy_to=_addresses(e.get("PARTNER_COPY_TO")),
             partner_report_to=_addresses(e.get("PARTNER_REPORT_TO")),
             alert_to=_addresses(e.get("ALERT_EMAIL")),
+            billing=e.get("BILLING_ENABLED") == "1",
+            trial_days=int(e.get("TRIAL_DAYS", "14")),
+            app_url=e.get("APP_URL", "https://quietcourier.com").rstrip("/"),
         )
 
 
@@ -91,16 +99,22 @@ class Report:
         return bool(self.gave_up or self.build_errors or self.quota_hit)
 
 
+# web/lib/server/admin.ts mirrors these conditions for its counts.
+RECEIVING = """u.delivery_status = 'active'
+  AND u.delivery_email IS NOT NULL AND u.delivery_email_verified_at IS NOT NULL
+  AND u.terms_accepted_at IS NOT NULL AND u.time_zone IS NOT NULL AND u.format IS NOT NULL
+  AND (NOT u.local_weather OR u.place_id IS NOT NULL)"""
+# With billing on, a reader gets the paper until their trial ends, then only while Stripe says the
+# subscription is current. past_due keeps the paper coming while Stripe retries a declined card.
+ENTITLED = """(u.trial_ends_at IS NULL OR u.trial_ends_at > %(now)s
+  OR u.subscription_status IN ('trialing', 'active', 'past_due'))"""
+
 SUBSCRIBERS = """
 SELECT u.id::text AS id, u.delivery_email, u.format, u.time_zone, u.local_weather,
        p.id AS place_id, p.name AS place_name, p.admin1, p.country, p.country_code,
        p.latitude, p.longitude, p.time_zone AS place_tz
 FROM users u LEFT JOIN places p ON p.id = u.place_id
-WHERE u.delivery_status = 'active'
-  AND u.delivery_email IS NOT NULL AND u.delivery_email_verified_at IS NOT NULL
-  AND u.terms_accepted_at IS NOT NULL AND u.time_zone IS NOT NULL AND u.format IS NOT NULL
-  AND (NOT u.local_weather OR p.id IS NOT NULL)
-"""
+WHERE """
 
 
 class Db:
@@ -114,9 +128,10 @@ class Db:
     def close(self) -> None:
         self.conn.close()
 
-    def subscribers(self) -> list[Subscriber]:
+    def subscribers(self, now: dt.datetime, billing: bool) -> list[Subscriber]:
         out = []
-        for r in self.conn.execute(SUBSCRIBERS):
+        where = RECEIVING + (f" AND {ENTITLED}" if billing else "")
+        for r in self.conn.execute(SUBSCRIBERS + where, {"now": now}):
             if r["local_weather"]:
                 region = r["country"] if r["country_code"] != "US" else (r["admin1"] or "United States")
                 city = City(f"gn-{r['place_id']}", Location(r["place_name"], region, r["latitude"], r["longitude"],
@@ -152,13 +167,29 @@ class Db:
                WHERE user_id = %s AND edition_date = %s""",
             ("sent" if ok else "failed", provider_id, error, ok, now, now, user_id, date))
 
+    def start_trial(self, user_id: str, ends: dt.datetime) -> None:
+        self.conn.execute("UPDATE users SET trial_ends_at = %s WHERE id = %s AND trial_ends_at IS NULL", (ends, user_id))
+
+    def trials_ending(self, now: dt.datetime, within: dt.timedelta) -> list[dict]:
+        return self.conn.execute(
+            f"""SELECT u.id::text AS id, u.email, u.time_zone, u.trial_ends_at FROM users u
+                WHERE {RECEIVING} AND u.trial_reminder_sent_at IS NULL
+                  AND u.trial_ends_at > %(now)s AND u.trial_ends_at <= %(until)s
+                  AND (u.subscription_status IS NULL
+                       OR u.subscription_status NOT IN ('trialing', 'active', 'past_due'))""",
+            {"now": now, "until": now + within}).fetchall()
+
+    def mark_trial_reminded(self, user_id: str, now: dt.datetime) -> None:
+        self.conn.execute("UPDATE users SET trial_reminder_sent_at = %s WHERE id = %s", (now, user_id))
+
     def emails_since(self, since: dt.datetime) -> int:
         row = self.conn.execute(
             """SELECT (SELECT count(*) FROM deliveries WHERE sent_at >= %(s)s)
                     + (SELECT count(*) FROM audit_events WHERE created_at >= %(s)s AND event IN
                        ('sign_in_requested', 'test_edition_sent', 'delivery_verify_sent'))
                     + (SELECT count(*) FROM partner_copies WHERE sent_at >= %(s)s)
-                    + (SELECT count(*) FROM partner_reports WHERE sent_at >= %(s)s) AS n""", {"s": since}).fetchone()
+                    + (SELECT count(*) FROM partner_reports WHERE sent_at >= %(s)s)
+                    + (SELECT count(*) FROM users WHERE trial_reminder_sent_at >= %(s)s) AS n""", {"s": since}).fetchone()
         return int(row["n"])
 
     def delivered_on(self, date: dt.date) -> bool:
@@ -180,13 +211,14 @@ class Db:
             "INSERT INTO partner_reports (month, articles, subscribers) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING",
             (month, articles, subscribers))
 
-    def month_circulation(self, first: dt.date, last: dt.date) -> tuple[int, int]:
+    def month_circulation(self, first: dt.date, last: dt.date, now: dt.datetime,
+                          billing: bool) -> tuple[int, int]:
+        where = RECEIVING + (f" AND {ENTITLED}" if billing else "")
         row = self.conn.execute(
-            """SELECT (SELECT count(DISTINCT user_id) FROM deliveries
-                       WHERE status = 'sent' AND edition_date BETWEEN %s AND %s) AS delivered,
-                      (SELECT count(*) FROM users WHERE delivery_status = 'active'
-                       AND delivery_email_verified_at IS NOT NULL AND terms_accepted_at IS NOT NULL) AS active""",
-            (first, last)).fetchone()
+            f"""SELECT (SELECT count(DISTINCT user_id) FROM deliveries
+                        WHERE status = 'sent' AND edition_date BETWEEN %(first)s AND %(last)s) AS delivered,
+                       (SELECT count(*) FROM users u WHERE {where}) AS active""",
+            {"first": first, "last": last, "now": now}).fetchone()
         return int(row["delivered"]), int(row["active"])
 
 
@@ -232,7 +264,7 @@ class Job:
         return min(day, month) - 10
 
     def run(self, now: dt.datetime) -> Report:
-        subs = self.db.subscribers()
+        subs = self.db.subscribers(now, self.settings.billing)
         to_build: dict[tuple[str, dt.date], tuple[City, set[str]]] = {}
         to_send: list[tuple[Subscriber, dt.date]] = []
         for sub in subs:
@@ -268,6 +300,7 @@ class Job:
                 break
             self._send(sub, date, now)
 
+        self._trial_reminders(now)
         self._partner_copies(now)
         self._monthly_report(now)
         self._prune(now)
@@ -295,7 +328,33 @@ class Job:
                 self.report.gave_up.append(f"{date} reader {sub.id}: {e}")
             return
         self.db.finish(sub.id, date, True, provider_id, None, now)
+        if self.settings.billing:
+            self.db.start_trial(sub.id, now + dt.timedelta(days=self.settings.trial_days))
         self.report.sent += 1
+
+    # No card is taken for the trial, so nothing is charged when it ends; the reminder says the
+    # paper is about to stop and how to keep it.
+    def _trial_reminders(self, now: dt.datetime) -> None:
+        if not self.settings.billing:
+            return
+        for r in self.db.trials_ending(now, dt.timedelta(days=self.settings.reminder_days)):
+            if self._quota_left(now) <= 0:
+                self.report.quota_hit = True
+                return
+            ends = r["trial_ends_at"].astimezone(ZoneInfo(r["time_zone"] or "UTC"))
+            day = f"{ends:%A, %B} {ends.day}"
+            text = (f"Your free days with {self.config.paper_name} end on {day}.\n\n"
+                    f"To keep the paper coming, subscribe for {self.settings.price} a month at "
+                    f"{self.settings.app_url}/subscribe. The first charge waits until your free days are over.\n\n"
+                    "If you'd rather not, do nothing. The paper simply stops and you won't be charged, "
+                    "because we never took a card.\n")
+            try:
+                self.mailer.send(Message(to=[r["email"]], subject=f"Your free trial ends {day}", text=text,
+                                         idempotency_key=f"trial-reminder/{r['id']}"))
+            except MailError as e:
+                self.report.build_errors.append(f"trial reminder for {r['id']}: {e}")
+                continue
+            self.db.mark_trial_reminded(r["id"], now)
 
     # Promised to The Conversation: a copy of each edition that runs their articles. Every
     # edition of a date has the same stories, so one copy per date covers them all.
@@ -339,7 +398,7 @@ class Job:
         month = first.strftime("%Y-%m")
         if self.db.partner_report_sent(month):
             return
-        delivered, active = self.db.month_circulation(first, last)
+        delivered, active = self.db.month_circulation(first, last, now, self.settings.billing)
         if delivered == 0:
             return
         rows = self.store.conversation_usage(first, last)

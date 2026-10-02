@@ -192,3 +192,70 @@ def test_does_nothing_until_delivery_is_switched_on(pg, tmp_path):
     _, url = pg
     settings = Settings(database_url=url, out_root=tmp_path, store_path=tmp_path / "c.db", enabled=False)
     assert run_once(load_config(), settings) is None
+
+
+def set_billing(conn, uid, trial_ends=None, status=None):
+    conn.execute("UPDATE users SET trial_ends_at = %s, subscription_status = %s WHERE id = %s", (trial_ends, status, uid))
+
+
+def trial_end(conn, uid):
+    return conn.execute("SELECT trial_ends_at FROM users WHERE id = %s", (uid,)).fetchone()["trial_ends_at"]
+
+
+def test_without_billing_an_ended_trial_changes_nothing(conn, job_factory):
+    uid = add_reader(conn)
+    set_billing(conn, uid, trial_ends=MORNING_CHICAGO - dt.timedelta(days=1))
+    assert job_factory().run(MORNING_CHICAGO).sent == 1
+    assert trial_end(conn, uid) == MORNING_CHICAGO - dt.timedelta(days=1)
+
+
+def test_the_first_paper_starts_the_trial_and_later_ones_keep_it(conn, job_factory):
+    uid = add_reader(conn)
+    assert job_factory(billing=True).run(MORNING_CHICAGO).sent == 1
+    assert trial_end(conn, uid) == MORNING_CHICAGO + dt.timedelta(days=14)
+    assert job_factory(billing=True).run(MORNING_CHICAGO + dt.timedelta(days=1)).sent == 1
+    assert trial_end(conn, uid) == MORNING_CHICAGO + dt.timedelta(days=14)
+
+
+@pytest.mark.parametrize("status,gets_paper", [
+    (None, False), ("canceled", False), ("unpaid", False), ("incomplete", False),
+    ("active", True), ("trialing", True), ("past_due", True),
+])
+def test_after_the_trial_only_a_current_subscription_gets_the_paper(conn, job_factory, status, gets_paper):
+    uid = add_reader(conn)
+    set_billing(conn, uid, trial_ends=MORNING_CHICAGO - dt.timedelta(minutes=1), status=status)
+    assert job_factory(billing=True).run(MORNING_CHICAGO).sent == (1 if gets_paper else 0)
+
+
+def test_circulation_counts_only_entitled_readers_when_billing_is_on(conn):
+    paid, lapsed = add_reader(conn), add_reader(conn, "b@kindle.com")
+    set_billing(conn, paid, trial_ends=MORNING_CHICAGO - dt.timedelta(days=1), status="active")
+    set_billing(conn, lapsed, trial_ends=MORNING_CHICAGO - dt.timedelta(days=1))
+    db = Db(conn)
+    assert db.month_circulation(DATE, DATE, MORNING_CHICAGO, billing=False)[1] == 2
+    assert db.month_circulation(DATE, DATE, MORNING_CHICAGO, billing=True)[1] == 1
+
+
+def test_reminds_once_before_the_trial_ends_and_never_a_subscriber(conn, job_factory):
+    ending = add_reader(conn, "ending@kindle.com")
+    subscribed = add_reader(conn, "subscribed@kindle.com")
+    later = add_reader(conn, "later@kindle.com")
+    set_billing(conn, ending, trial_ends=MORNING_CHICAGO + dt.timedelta(days=2))
+    set_billing(conn, subscribed, trial_ends=MORNING_CHICAGO + dt.timedelta(days=2), status="trialing")
+    set_billing(conn, later, trial_ends=MORNING_CHICAGO + dt.timedelta(days=10))
+    emails = {r["id"]: r["email"] for r in conn.execute("SELECT id::text AS id, email FROM users").fetchall()}
+
+    job_factory(billing=True).run(MORNING_CHICAGO)
+    job_factory(billing=True).run(MORNING_CHICAGO + dt.timedelta(hours=1))
+    reminders = [m for m in job_factory.mailer.sent if m.subject.startswith("Your free trial ends")]
+    assert [m.to for m in reminders] == [[emails[ending]]]
+    assert reminders[0].subject == "Your free trial ends Saturday, October 3"
+    assert "https://quietcourier.com/subscribe" in reminders[0].text
+    assert "won't be charged" in reminders[0].text
+
+
+def test_no_reminders_without_billing(conn, job_factory):
+    uid = add_reader(conn)
+    set_billing(conn, uid, trial_ends=MORNING_CHICAGO + dt.timedelta(days=2))
+    job_factory().run(MORNING_CHICAGO)
+    assert not [m for m in job_factory.mailer.sent if m.subject.startswith("Your free trial ends")]

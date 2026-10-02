@@ -68,6 +68,19 @@ sudo bash /srv/quiet-courier/app/deploy/deploy.sh
 
 It refuses to run if tracked files were edited on the server. It backs up the database, pulls, installs, migrates, builds and restarts, and rolls back to the previous commit if the site doesn't answer within 30 seconds. Migrations that drop or truncate data are refused unless `ALLOW_DESTRUCTIVE_MIGRATION=<tag>` names that migration.
 
+## Billing
+
+Test everything in a Stripe sandbox or test mode first, then repeat with live keys.
+
+1. In Stripe, create a Product "The Quiet Courier" with one monthly Price of $4. Put the price id (`price_...`) in `STRIPE_PRICE_ID`.
+2. Create a restricted key (`rk_...`) with write access to Customers, Checkout Sessions, Subscriptions and Customer portal, and read access to Prices. Put it in `STRIPE_SECRET_KEY`. Never commit it.
+3. Add a webhook endpoint `https://quietcourier.com/api/stripe/webhook` for `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `customer.subscription.paused`, `customer.subscription.resumed`, `invoice.paid` and `invoice.payment_failed`. Put its signing secret in `STRIPE_WEBHOOK_SECRET`.
+4. Customer portal settings: allow cancelling (at the end of the billing period) and updating the payment method. Turn off plan switching and quantity changes.
+5. Billing settings: Smart Retries on; when all retries fail, cancel the subscription. Turn on emails for failed payments and expiring cards, and receipts for successful payments.
+6. Set `BILLING_ENABLED=1` in `web/.env` and `pipeline.env`, then `systemctl restart quiet-courier-web`.
+
+Sales tax is not collected yet. Before turning on Stripe Tax, register where tax is owed; Stripe Tax collects nothing without a registration.
+
 ## Email
 
 Resend has to verify the sending domain before anything is delivered. Add the DNS records Resend lists for `quietcourier.com` (SPF, DKIM, and a DMARC record) at the registrar. Readers approve the `MAIL_FROM` address in their Amazon settings, so changing it later means every reader has to approve the new one.

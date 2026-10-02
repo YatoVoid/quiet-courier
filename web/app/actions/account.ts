@@ -81,7 +81,12 @@ export async function deleteAccountAction(_prev: DeleteState, form: FormData): P
   if (String(form.get("confirmEmail") ?? "").trim().toLowerCase() !== user.email) {
     return { error: "Type your account email exactly to confirm." };
   }
-  await deleteAccount(user, await clientIp());
+  try {
+    await deleteAccount(user, await clientIp());
+  } catch (err) {
+    console.error("account deletion failed", user.id, err);
+    return { error: "We couldn't cancel your subscription with our payment provider, so nothing was deleted. Try again in a few minutes." };
+  }
   await endSession();
   redirect("/?deleted=1");
 }

@@ -9,6 +9,7 @@ export const LIMITS = {
   redeemPerIp: { max: 30, windowMs: 15 * 60 * 1000 },
   testEditionPerUser: { max: 3, windowMs: 24 * 60 * 60 * 1000 },
   verifyDeliveryPerUser: { max: 5, windowMs: 24 * 60 * 60 * 1000 },
+  checkoutPerUser: { max: 10, windowMs: 60 * 60 * 1000 },
 } as const;
 
 export type Limit = { max: number; windowMs: number };

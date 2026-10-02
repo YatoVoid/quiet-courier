@@ -15,6 +15,13 @@
       "when": 1790904442206,
       "tag": "0001_deliveries",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790984609140,
+      "tag": "0002_billing",
+      "breakpoints": true
     }
   ]
 }

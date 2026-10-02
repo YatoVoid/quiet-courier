@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FrontMasthead } from "@/components/masthead";
 import { Footer } from "@/components/footer";
 import { currentUser, isOnboarded } from "@/lib/server/session";
+import { billingEnabled } from "@/lib/server/billing";
 import { PRICE_PER_MONTH, TRIAL_DAYS } from "@/lib/site";
 import { deliveryLive } from "@/lib/server/deliveries";
 import front from "@/public/paper/kansas-city-large-front.png";
@@ -197,9 +198,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
             </p>
             <p>
               <em>
-                {deliveryLive()
-                  ? "Billing has not started yet, so the paper is free for now. You won't be charged unless you choose a plan."
-                  : "Daily delivery and billing have not started yet. Sign up now and we'll email you before the first edition goes out. You won't be charged unless you choose a plan."}
+                {billingEnabled()
+                  ? "No card needed to start. The free days begin with your first paper, and nothing is charged unless you subscribe."
+                  : deliveryLive()
+                    ? "Billing has not started yet, so the paper is free for now. You won't be charged unless you choose a plan."
+                    : "Daily delivery and billing have not started yet. Sign up now and we'll email you before the first edition goes out. You won't be charged unless you choose a plan."}
               </em>
             </p>
           </div>

@@ -24,6 +24,18 @@ export const places = pgTable(
   ],
 );
 
+// Stripe's subscription statuses, stored as Stripe reports them.
+export const SUBSCRIPTION_STATUSES = [
+  "incomplete",
+  "incomplete_expired",
+  "trialing",
+  "active",
+  "past_due",
+  "canceled",
+  "unpaid",
+  "paused",
+] as const;
+
 export const users = pgTable(
   "users",
   {
@@ -39,6 +51,17 @@ export const users = pgTable(
     deliveryStatus: text("delivery_status", { enum: ["active", "paused"] }).notNull().default("active"),
     termsVersion: text("terms_version"),
     termsAcceptedAt: timestamp("terms_accepted_at", { withTimezone: true }),
+    // The free trial starts with the first paper delivered after billing opens, so days spent
+    // waiting for launch don't count. Null means the trial hasn't started.
+    trialEndsAt: timestamp("trial_ends_at", { withTimezone: true }),
+    trialReminderSentAt: timestamp("trial_reminder_sent_at", { withTimezone: true }),
+    stripeCustomerId: text("stripe_customer_id").unique(),
+    stripeSubscriptionId: text("stripe_subscription_id").unique(),
+    subscriptionStatus: text("subscription_status", { enum: SUBSCRIPTION_STATUSES }),
+    currentPeriodEnd: timestamp("current_period_end", { withTimezone: true }),
+    cancelAtPeriodEnd: boolean("cancel_at_period_end").notNull().default(false),
+    billingConsentVersion: text("billing_consent_version"),
+    billingConsentAt: timestamp("billing_consent_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
@@ -46,6 +69,10 @@ export const users = pgTable(
     check("users_email_lower", sql`${t.email} = lower(${t.email})`),
     check("users_format", sql`${t.format} in ('small', 'large', 'epub')`),
     check("users_delivery_status", sql`${t.deliveryStatus} in ('active', 'paused')`),
+    check(
+      "users_subscription_status",
+      sql.raw(`subscription_status in (${SUBSCRIPTION_STATUSES.map((s) => `'${s}'`).join(", ")})`),
+    ),
   ],
 );
 
@@ -139,6 +166,13 @@ export const partnerReports = pgTable("partner_reports", {
   articles: integer("articles").notNull(),
   subscribers: integer("subscribers").notNull(),
   sentAt: timestamp("sent_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+// Each Stripe webhook event id is recorded once, so a redelivered event is never applied twice.
+export const stripeEvents = pgTable("stripe_events", {
+  id: text("id").primaryKey(),
+  type: text("type").notNull(),
+  receivedAt: timestamp("received_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export type User = typeof users.$inferSelect;

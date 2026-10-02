@@ -6,6 +6,7 @@ import { desc, eq, gte, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { auditEvents, deliveries, partnerCopies, partnerReports, users } from "@/db/schema";
 import { FORMAT_IDS as FORMATS } from "@/lib/formats";
+import { billingEnabled } from "./billing";
 import { editionFilename, editionsDir } from "./editions";
 import { currentUser } from "./session";
 
@@ -30,13 +31,18 @@ export async function requireAdmin() {
 const count = (where: ReturnType<typeof sql>) => sql<number>`count(*) filter (where ${where})`.mapWith(Number);
 
 // Mirrors SUBSCRIBERS in pipeline/courier/delivery.py, which decides who is actually sent a paper.
-const receiving = sql`${users.deliveryStatus} = 'active' and ${users.deliveryEmail} is not null
+const receivingBase = sql`${users.deliveryStatus} = 'active' and ${users.deliveryEmail} is not null
   and ${users.deliveryEmailVerifiedAt} is not null and ${users.termsAcceptedAt} is not null
   and ${users.timeZone} is not null and ${users.format} is not null
   and (not ${users.localWeather} or ${users.placeId} is not null)`;
+// Mirrors ENTITLED in delivery.py; only applies once billing is on.
+const entitled = (now: Date) =>
+  sql`(${users.trialEndsAt} is null or ${users.trialEndsAt} > ${now}
+    or ${users.subscriptionStatus} in ('trialing', 'active', 'past_due'))`;
 const onboarded = sql`${users.termsAcceptedAt} is not null and ${users.timeZone} is not null`;
 
-export async function readerCounts() {
+export async function readerCounts(now = new Date()) {
+  const receiving = billingEnabled() ? sql`${receivingBase} and ${entitled(now)}` : receivingBase;
   const [row] = await db
     .select({
       accounts: sql<number>`count(*)`.mapWith(Number),

@@ -20,7 +20,10 @@ export type AuditEvent =
   | "test_edition_failed"
   | "account_deleted"
   | "admin_viewed"
-  | "admin_edition_downloaded";
+  | "admin_edition_downloaded"
+  | "billing_checkout_started"
+  | "billing_portal_opened"
+  | "billing_status_changed";
 
 export async function audit(event: AuditEvent, opts: { userId?: string | null; ip?: string | null; detail?: Record<string, unknown> } = {}) {
   try {

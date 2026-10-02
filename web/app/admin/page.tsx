@@ -11,6 +11,8 @@ import {
   requireAdmin,
 } from "@/lib/server/admin";
 import { audit } from "@/lib/server/audit";
+import { billingEnabled, subscriberCounts } from "@/lib/server/billing";
+import { PRICE_USD } from "@/lib/site";
 import { deliveryLive } from "@/lib/server/deliveries";
 import { clientIp } from "@/lib/server/session";
 
@@ -42,7 +44,7 @@ export default async function AdminPage() {
   const admin = await requireAdmin();
   await audit("admin_viewed", { userId: admin.id, ip: await clientIp() });
 
-  const [readers, month, byDay, failures, partner, signups, editions] = await Promise.all([
+  const [readers, month, byDay, failures, partner, signups, editions, billing] = await Promise.all([
     readerCounts(),
     activity(30),
     deliveriesByDay(7),
@@ -50,7 +52,9 @@ export default async function AdminPage() {
     partnerHistory(),
     recentSignups(),
     recentEditions(),
+    subscriberCounts(),
   ]);
+  const billingOn = billingEnabled();
   const live = deliveryLive();
 
   return (
@@ -78,6 +82,28 @@ export default async function AdminPage() {
         Of those getting the paper: {readers.small} small PDF, {readers.large} large PDF, {readers.epub} EPUB;{" "}
         {readers.general} on the general edition.
       </p>
+
+      <h2>Subscriptions</h2>
+      {billingOn ? (
+        <>
+          <Tally
+            figures={[
+              ["Paying", billing.paying],
+              ["Subscribed, in free days", billing.subscribedInTrial],
+              ["Free trial", billing.inFreeTrial],
+              ["Trial ended, not subscribed", billing.trialEnded],
+              ["Payment failing", billing.pastDue],
+              ["Cancelling", billing.cancelling],
+            ]}
+          />
+          <p className="small-note">
+            About ${PRICE_USD * billing.paying} a month before Stripe&rsquo;s
+            fees. Stripe&rsquo;s dashboard has the exact figures.
+          </p>
+        </>
+      ) : (
+        <p>Billing is off. Nothing is charged until BILLING_ENABLED=1 is set on the server.</p>
+      )}
 
       <h3>Newest accounts</h3>
       {signups.length ? (

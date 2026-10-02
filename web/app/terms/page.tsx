@@ -71,13 +71,39 @@ export default function TermsPage() {
         </p>
 
         <h2>Subscription and billing</h2>
-        <p>
-          Billing hasn&rsquo;t started, and you won&rsquo;t be charged anything under this version of the terms. When it starts,
-          the plan will be a {TRIAL_DAYS}-day free trial followed by {PRICE_PER_MONTH} a month, renewing each month until you
-          cancel. Before we charge you, we will show the price and renewal terms, ask you to agree to them separately, and email
-          you before the trial ends. You&rsquo;ll be able to cancel online from your account page at any time, and cancelling
-          stops the next renewal.
-        </p>
+        <ul>
+          <li>
+            <strong>Free trial.</strong> Your first {TRIAL_DAYS} days are free and need no card. They start with the first
+            paper we deliver to you. When they end, the paper stops unless you have subscribed. We never charge you without
+            your agreement.
+          </li>
+          <li>
+            <strong>Subscription.</strong> {PRICE_PER_MONTH} a month in U.S. dollars, plus any sales tax we are required to
+            collect, shown before you pay. Before you subscribe we show the price, the date of the first charge and how
+            renewal works, and you agree to them with a separate checkbox. If you subscribe during your free days, the first
+            charge waits until they end.
+          </li>
+          <li>
+            <strong>Automatic renewal.</strong> Your subscription renews automatically every month, and your card is charged{" "}
+            {PRICE_PER_MONTH} on the same day each month, until you cancel. We email you a confirmation of these terms when you
+            subscribe.
+          </li>
+          <li>
+            <strong>Cancelling.</strong> Cancel any time, online, from your <Link href="/account">account page</Link> under
+            &ldquo;Manage billing&rdquo;. Cancelling stops the next renewal; the paper keeps coming until the end of the month
+            you&rsquo;ve paid for. We don&rsquo;t give partial refunds for the rest of a month, except where the law requires
+            it. Deleting your account cancels the subscription immediately.
+          </li>
+          <li>
+            <strong>Failed payments.</strong> If a payment fails, our payment provider tries the card again over the following
+            days. If it still fails, the subscription ends and the paper stops.
+          </li>
+          <li>
+            <strong>Price changes.</strong> We&rsquo;ll email you at least 30 days before any price change takes effect, and
+            you can cancel before it does.
+          </li>
+          <li>Payments are handled by Stripe. We never see or store your card number.</li>
+        </ul>
 
         <h2>Ending your account</h2>
         <p>

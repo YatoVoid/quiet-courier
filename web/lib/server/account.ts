@@ -6,6 +6,7 @@ import { PAPER_NAME, TERMS_VERSION } from "@/lib/site";
 import { fieldErrors, isDeviceInbox, isTimeZone, profileSchema } from "@/lib/validation";
 import type { FormatId } from "@/lib/formats";
 import { audit } from "./audit";
+import { cancelForDeletion } from "./billing";
 import { issueEmailToken, redeemEmailToken, VERIFY_DELIVERY_TTL_MS } from "./auth";
 import { describeWeatherChoice, editionKey, getPlace, placeLabel, searchPlaces } from "./places";
 import { appUrl, editionSender } from "./config";
@@ -144,6 +145,7 @@ export async function setDeliveryStatus(user: User, status: "active" | "paused",
 }
 
 export async function deleteAccount(user: User, ip: string) {
+  await cancelForDeletion(user);
   await db.delete(users).where(eq(users.id, user.id));
   await audit("account_deleted", { userId: user.id, ip });
 }
