@@ -1,0 +1,22 @@
+[Unit]
+Description=The Quiet Courier website
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=courier
+Group=courier
+WorkingDirectory=/srv/quiet-courier/app/web
+EnvironmentFile=/srv/quiet-courier/app/web/.env
+Environment=NODE_ENV=production
+ExecStart=/srv/quiet-courier/app/web/node_modules/.bin/next start -H 127.0.0.1 -p 3200
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/quiet-courier/app/web/.next
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

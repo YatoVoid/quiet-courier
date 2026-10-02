@@ -40,7 +40,8 @@ More pages are in [docs/showcase](docs/showcase):
 |---|---|
 | 1. Newspaper design | Done |
 | 2. Content pipeline | Done: `courier build` makes today's edition from live sources |
-| 3–7. Website, delivery, billing, launch, monetization | Not started |
+| 3. Website and registration | Built, not deployed: landing page, email sign-in, setup, Kindle guide, account page, draft legal pages |
+| 4–7. Delivery, billing, launch, monetization | Not started |
 
 The sample editions above are rendered from content saved in `pipeline/samples/`. Editions built with `courier build` use whatever the sources published that day.
 
@@ -57,7 +58,11 @@ pipeline/            Python: fetch, clean, select, lay out, render
   tests/             Offline: every source is tested against saved copies of its feed
   courier.toml       Paper name, reading length, cities, which sources are on
 docs/                Source licensing notes, showcase images
-web/                 Next.js site (Phase 3, not started)
+web/                 Next.js site: sign-up, accounts, setup guide
+  app/               Pages and server actions
+  lib/server/        Sign-in, sessions, rate limits, mail, account changes
+  db/                Drizzle schema and SQL migrations
+deploy/              systemd unit, nginx site, deploy and backup scripts
 .github/workflows/   Daily build and send (Phase 4, not started)
 ```
 
@@ -87,6 +92,41 @@ export COURIER_CONTACT_EMAIL=you@example.com   # sent to the Weather Service and
 ```
 
 Output goes to `out/<date>/<city>/`: `edition.json`, the two PDFs and the EPUB. Every edition, every article in it with its license and attribution, and whether each source succeeded are recorded in `data/courier.db` (SQLite; the schema in `pipeline/courier/schema.sql` is plain SQL so it can move to Supabase). Feeds are cached in `out/cache/<date>/`, so rebuilding the same day does not refetch.
+
+## Website
+
+Needs Node 20.9+ and PostgreSQL.
+
+```sh
+cd web
+npm ci
+cp .env.example .env        # set DATABASE_URL; leave RESEND_API_KEY empty in development
+npm run db:migrate
+npm run dev                 # http://localhost:3000
+npm test                    # about 5 seconds, runs against an in-memory Postgres (PGlite)
+```
+
+Without `RESEND_API_KEY`, development prints every email (sign-in links included) to the server log instead of sending it. In production a missing key is an error.
+
+The city list comes from `pipeline/courier.toml` (`COURIER_CONFIG`), so the site only offers cities the pipeline builds. Test editions are read from `EDITIONS_DIR`: the newest `<date>/<city>/` build, then the samples in `out/`.
+
+### Accounts and security
+
+| | |
+|---|---|
+| Sign-in | One email form for new and returning readers, with the same response either way, so it never reveals whether an address has an account. The link carries a 256-bit token in the URL fragment, so it stays out of server logs and mail scanners can't use it up by prefetching. It is stored as a SHA-256 hash, works once, and expires in 15 minutes. |
+| Sessions | Random token in an `HttpOnly`, `SameSite=Lax` cookie (`__Host-` prefixed and `Secure` in production), stored hashed, 60-day lifetime. "Sign out on every device" deletes them all. |
+| Rate limits | Sign-in emails: 5 an hour per address, 20 an hour per IP. Link redemption: 30 per 15 minutes per IP. Test editions: 3 a day. Delivery confirmations: 5 a day. Stored in Postgres, so they survive restarts. |
+| Delivery address | `@kindle.com`, `@free.kindle.com` and `@pbsync.com` only accept mail from approved senders, so they are trusted as entered. Any other address must open a confirmation link before anything is sent there. |
+| Terms | Accepted with an unticked checkbox during setup. The version and time are stored. |
+| Audit log | Sign-ins, failures, throttling and account changes, with IP, kept 90 days. No email addresses or names. |
+| Headers | CSP with a per-request script nonce, `frame-ancestors 'none'`, `nosniff`, a strict referrer policy. HSTS comes from nginx. Server action bodies are capped at 32 KB. |
+
+Deleting an account removes the row and its sessions and tokens. Nightly backups are kept 30 days.
+
+### Deploying
+
+The site runs on the same server as the other self-hosted sites, behind nginx, as its own `courier` user on 127.0.0.1:3200. See [docs/DEPLOY.md](docs/DEPLOY.md).
 
 ## How an edition is put together
 
