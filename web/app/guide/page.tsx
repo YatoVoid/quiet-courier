@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
 import { TestEditionButton } from "@/components/test-edition-button";
 import { editionSender } from "@/lib/server/config";
 import { currentUser, isOnboarded } from "@/lib/server/session";
+import approveSender from "@/public/guide/approve-sender.png";
+import documentSettings from "@/public/guide/personal-document-settings.png";
 
 export const metadata: Metadata = { title: "Setup guide" };
-
-function Screenshot({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="screenshot-slot" role="img" aria-label={`Screenshot to come: ${children}`}>
-      <span>Screenshot to come: {children}</span>
-    </div>
-  );
-}
 
 export default async function GuidePage({ searchParams }: { searchParams: Promise<{ welcome?: string; check?: string }> }) {
   const user = await currentUser();
@@ -59,7 +54,6 @@ export default async function GuidePage({ searchParams }: { searchParams: Promis
             Under <em>Send-to-Kindle E-Mail Settings</em>, each of your Kindles is listed with an address ending in @kindle.com. Copy the one for the Kindle you read on.
           </li>
         </ol>
-        <Screenshot>Amazon&rsquo;s Personal Document Settings with the Send to Kindle addresses</Screenshot>
         <p>
           On the Kindle itself, the same address is under <em>Settings</em>, <em>All Settings</em>, <em>Your Account</em>, <em>Send-to-Kindle Email</em>.
         </p>
@@ -74,11 +68,26 @@ export default async function GuidePage({ searchParams }: { searchParams: Promis
           </li>
           <li>Save. Amazon drops mail from any address that isn&rsquo;t on this list, without telling either of us.</li>
         </ol>
-        <Screenshot>the approved e-mail list with the Courier&rsquo;s address added</Screenshot>
+        <figure className="guide-shot">
+          <Image
+            src={approveSender}
+            alt="Amazon's Personal Document Settings page. Arrow 1 points to Add a new e-mail address under the approved list, arrow 2 to the box where edition@quietcourier.com is typed, and arrow 3 to the Add Address button."
+            sizes="(max-width: 900px) 100vw, 52rem"
+          />
+          <figcaption>Add a new e-mail address, type edition@quietcourier.com, then Add Address.</figcaption>
+        </figure>
         <p>
           While you&rsquo;re there, leave <em>Personal Document Archiving</em> on. Amazon then keeps each edition in your
           library, and you can read it on another Kindle or in the Kindle app.
         </p>
+        <figure className="guide-shot">
+          <Image
+            src={documentSettings}
+            alt="The Personal Document Settings section, showing Archiving is Enabled and the Approved Personal Document E-mail List with one address."
+            sizes="(max-width: 900px) 100vw, 52rem"
+          />
+          <figcaption>When you&rsquo;re done: archiving enabled, and the address on the approved list.</figcaption>
+        </figure>
 
         <h2>3. Tell us where to send it</h2>
         {ready ? (

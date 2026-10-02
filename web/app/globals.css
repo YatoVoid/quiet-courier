@@ -697,17 +697,14 @@ fieldset {
   font-size: var(--step--1);
 }
 
-.screenshot-slot {
-  border: 1.5px dashed var(--rule);
-  aspect-ratio: 16 / 9;
-  max-width: 30rem;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  padding: 1rem;
-  font-size: var(--step--1);
-  font-style: italic;
-  margin: 0.75rem 0 1rem;
+.guide-shot {
+  margin: 1rem 0 1.5rem;
+  max-width: none;
+}
+
+.guide-shot img {
+  border: 1.5px solid var(--rule);
+  background: #fff;
 }
 
 .address {
