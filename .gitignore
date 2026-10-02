@@ -7,7 +7,7 @@ build/
 out/
 .env
 .env.*
-data/
+/data/
 !.env.example
 node_modules/
 .next/
