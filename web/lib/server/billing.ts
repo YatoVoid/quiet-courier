@@ -231,6 +231,9 @@ export function verifyStripeEvent(body: string, signature: string | null) {
   }
 }
 
+// postgres.js can't serialize a bare Date inside a raw sql fragment (PGlite can, so tests miss it).
+export const at = (d: Date) => sql`${d.toISOString()}::timestamptz`;
+
 export async function subscriberCounts(now = new Date()) {
   const [row] = await db
     .select({
@@ -238,8 +241,8 @@ export async function subscriberCounts(now = new Date()) {
       subscribedInTrial: sql<number>`count(*) filter (where ${users.subscriptionStatus} = 'trialing')`.mapWith(Number),
       pastDue: sql<number>`count(*) filter (where ${users.subscriptionStatus} = 'past_due')`.mapWith(Number),
       cancelling: sql<number>`count(*) filter (where ${users.cancelAtPeriodEnd} and ${users.subscriptionStatus} in ('active', 'trialing'))`.mapWith(Number),
-      inFreeTrial: sql<number>`count(*) filter (where ${users.trialEndsAt} > ${now} and (${users.subscriptionStatus} is null or ${users.subscriptionStatus} not in ('trialing', 'active', 'past_due')))`.mapWith(Number),
-      trialEnded: sql<number>`count(*) filter (where ${users.trialEndsAt} <= ${now} and (${users.subscriptionStatus} is null or ${users.subscriptionStatus} not in ('trialing', 'active', 'past_due')))`.mapWith(Number),
+      inFreeTrial: sql<number>`count(*) filter (where ${users.trialEndsAt} > ${at(now)} and (${users.subscriptionStatus} is null or ${users.subscriptionStatus} not in ('trialing', 'active', 'past_due')))`.mapWith(Number),
+      trialEnded: sql<number>`count(*) filter (where ${users.trialEndsAt} <= ${at(now)} and (${users.subscriptionStatus} is null or ${users.subscriptionStatus} not in ('trialing', 'active', 'past_due')))`.mapWith(Number),
     })
     .from(users);
   return row;

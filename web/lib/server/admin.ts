@@ -6,7 +6,7 @@ import { desc, eq, gte, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { auditEvents, deliveries, partnerCopies, partnerReports, users } from "@/db/schema";
 import { FORMAT_IDS as FORMATS } from "@/lib/formats";
-import { billingEnabled } from "./billing";
+import { at, billingEnabled } from "./billing";
 import { editionFilename, editionsDir } from "./editions";
 import { currentUser } from "./session";
 
@@ -37,7 +37,7 @@ const receivingBase = sql`${users.deliveryStatus} = 'active' and ${users.deliver
   and (not ${users.localWeather} or ${users.placeId} is not null)`;
 // Mirrors ENTITLED in delivery.py; only applies once billing is on.
 const entitled = (now: Date) =>
-  sql`(${users.trialEndsAt} is null or ${users.trialEndsAt} > ${now}
+  sql`(${users.trialEndsAt} is null or ${users.trialEndsAt} > ${at(now)}
     or ${users.subscriptionStatus} in ('trialing', 'active', 'past_due'))`;
 const onboarded = sql`${users.termsAcceptedAt} is not null and ${users.timeZone} is not null`;
 
