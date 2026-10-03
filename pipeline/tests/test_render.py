@@ -1,13 +1,17 @@
+import io
 import re
 import xml.dom.minidom
 import zipfile
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
+from PIL import Image
 from weasyprint import HTML
 
 from courier.devices import DEVICES
 from courier.models import load_edition
+from courier.cover import draw_cover
 from courier.epub import build_epub
 from courier.layout import long_date
 from courier.pdf import build_pdf
@@ -80,3 +84,13 @@ def test_epub_structure(edition, tmp_path):
         text = z.read("OEBPS/front.xhtml").decode()
         assert edition.lead.body[-1].text.split()[-1].rstrip(".") in text
         assert "That’s all for today." in z.read("OEBPS/final.xhtml").decode()
+        opf = z.read("OEBPS/content.opf").decode()
+        assert 'properties="cover-image"' in opf and '<meta name="cover" content="cover-image"/>' in opf
+        with Image.open(io.BytesIO(z.read("OEBPS/images/cover.jpg"))) as cover:
+            assert cover.size == (1600, 2560) and cover.mode == "L"
+
+
+def test_cover_survives_a_very_long_headline(edition):
+    long = replace(edition.lead, title="An extraordinarily long headline " * 12)
+    e = replace(edition, articles={**edition.articles, edition.lead_id: long})
+    assert draw_cover(e).size == (1600, 2560)
