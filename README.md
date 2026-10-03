@@ -120,6 +120,7 @@ The list of 1926 issues for each edition date is read from `pipeline/courier/dat
 | Missing parts | If The World in Brief, a city's weather or the 1926 archives can't be had, the edition goes out without that part and no gap is shown. The owner gets one email per part per day, with the reason. |
 | Limits | Sending stops for the run when the Resend plan's daily or monthly limit is close, keeping room for sign-in links. |
 | The Conversation | After the first reader receives a date's edition, one copy goes to The Conversation listing their articles. On the 1st of each month, a report lists every article used, the dates it ran, and the circulation. Both are recorded so they go once. |
+| Weekly upkeep | `courier maintain` runs on Sundays. It adds up to 30 new public-domain poems from Wikisource collections listed in `pipeline/courier/poem_refill.py` (each page is read once; poems that are too long, too short, not English, published 1931 or later, or too thin for a word search are turned down). Poems don't repeat within a year. It then emails the owner only if something is low: the 1926 archive index ends within 90 days, fewer than 30 poems are unused, or disk is under 5 GB. |
 | Off switch | Nothing is sent unless `DELIVERY_ENABLED=1`. |
 | Clean-up | Editions older than 14 days are deleted. |
 

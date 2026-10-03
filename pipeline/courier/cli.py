@@ -49,7 +49,7 @@ def main(argv: list[str] | None = None) -> int:
     a.add_argument("--from", dest="start", type=dt.date.fromisoformat, required=True, help="first edition date")
     a.add_argument("--to", dest="end", type=dt.date.fromisoformat, required=True, help="last edition date")
     a.add_argument("--config", type=Path, default=DEFAULT_PATH)
-    m = sub.add_parser("maintain", help="weekly upkeep: add new poems from Wikisource")
+    m = sub.add_parser("maintain", help="weekly upkeep: add new poems, then email the owner if anything is running low")
     m.add_argument("--poems", type=int, default=30, help="most poems to add this run")
     m.add_argument("--config", type=Path, default=DEFAULT_PATH)
     args = parser.parse_args(argv)
@@ -95,21 +95,29 @@ def run_deliver(args) -> int:
 
 
 def run_maintain(args) -> int:
-    from . import poem_refill
+    from . import poem_refill, watchdog
+    from .delivery import _addresses
     from .http import Http
+    from .mail import Mailer
     from .store import Store
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s %(message)s")
     config = load_config(args.config)
-    store = Store(Path(os.environ.get("COURIER_DB", PIPELINE_DIR.parent / "data" / "courier.db")))
+    db_path = Path(os.environ.get("COURIER_DB", PIPELINE_DIR.parent / "data" / "courier.db"))
+    store = Store(db_path)
     try:
         r = poem_refill.refill(Http(config.user_agent), store, config.avoid, limit=args.poems)
+        warnings = [f"The poem refill couldn't read {e}" for e in r.errors]
+        warnings += watchdog.check(store, dt.date.today(), db_path.parent)
         total = len(store.added_poems())
     finally:
         store.close()
     print(f"poems added {len(r.added)}, turned down {r.rejected}, pool now {total} plus the bundled ones")
-    for e in r.errors:
-        print(f"error: {e}")
+    for w in warnings:
+        print(f"warning: {w}")
+    emailed = watchdog.report(warnings, Mailer.from_env(), _addresses(os.environ.get("ALERT_EMAIL")))
+    if warnings and not emailed:
+        print("warning email not sent (no ALERT_EMAIL, or the mail provider refused it)")
     return 1 if r.errors and not r.added else 0
 
 
