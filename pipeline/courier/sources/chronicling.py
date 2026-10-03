@@ -3,6 +3,7 @@ import functools
 import gzip
 import json
 import logging
+import os
 import random
 import re
 import time
@@ -22,6 +23,12 @@ TILE = "https://tile.loc.gov/storage-services/"
 IIIF_PAGE = re.compile(r"/iiif/(service:[^/]+)/")
 WORDS = Path(__file__).resolve().parent.parent / "data" / "words.txt"
 INDEX = Path(__file__).resolve().parent.parent / "data" / "archive-index.json.gz"
+# A newer copy built by the repo's "Archive index" GitHub workflow, fetched by `courier maintain`
+# and kept beside the pipeline's database, so the server never needs loc.gov's search.
+INDEX_URL = "https://raw.githubusercontent.com/YatoVoid/quiet-courier/main/pipeline/courier/data/archive-index.json.gz"
+DOWNLOADED = Path(os.environ.get("COURIER_DB", Path(__file__).resolve().parents[3] / "data" / "courier.db")).parent \
+    / "archive-index.json.gz"
+MAX_INDEX_BYTES = 20 * 1024**2
 GRIM = ("funeral", "died", "death", "dead", "killed", "slain", "murder", "hanged", "lynch", "suicide",
         "bandit", "robbery", "shot", "corpse", "body of", "wreck", "drowned", "burned to")
 ALLOWED = re.compile(r"^[\w.,;:'\"’‘“”!?()$&%\-—–/]+$")
@@ -222,11 +229,58 @@ def _search(http, day: dt.date) -> list[dict]:
     return list(found.values())
 
 
+def _load(path: Path) -> dict[str, list[dict]]:
+    if not path.exists():
+        return {}
+    return json.loads(gzip.decompress(path.read_bytes()))
+
+
 @functools.cache
 def _index() -> dict[str, list[dict]]:
-    if not INDEX.exists():
-        return {}
-    return json.loads(gzip.decompress(INDEX.read_bytes()))
+    return _load(INDEX) | _load(DOWNLOADED)
+
+
+def _valid_index(data) -> bool:
+    if not isinstance(data, dict):
+        return False
+    for day, issues in data.items():
+        if not (isinstance(day, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", day) and isinstance(issues, list)):
+            return False
+        if not all(isinstance(i, dict) and isinstance(i.get("id"), str) for i in issues):
+            return False
+    return True
+
+
+def refresh_index(http) -> dt.date | None:
+    """Downloads the index the GitHub workflow keeps up to date. Returns the new last 1920s day,
+    or None when the published copy adds nothing."""
+    body = http.get(INDEX_URL)
+    if len(body) > MAX_INDEX_BYTES:
+        raise ValueError(f"published archive index is {len(body)} bytes, over the limit")
+    data = json.loads(gzip.decompress(body))
+    if not _valid_index(data):
+        raise ValueError("published archive index is not in the expected shape")
+    current = _index()
+    if data and current and max(data) <= max(current):
+        return None
+    DOWNLOADED.parent.mkdir(parents=True, exist_ok=True)
+    tmp = DOWNLOADED.with_suffix(".tmp")
+    tmp.write_bytes(body)
+    tmp.replace(DOWNLOADED)
+    _index.cache_clear()
+    return dt.date.fromisoformat(max(data)) if data else None
+
+
+def next_index_range(today: dt.date, ahead_days: int = 400, step_days: int = 45) -> tuple[dt.date, dt.date] | None:
+    """Edition dates the next workflow run should add: from the day after the index ends,
+    a step at a time, until it reaches `ahead_days` past today."""
+    days = _index()
+    start = today
+    if days:
+        last = dt.date.fromisoformat(max(days))
+        start = max(today, last.replace(year=last.year + 100) + dt.timedelta(days=1))
+    end = min(start + dt.timedelta(days=step_days - 1), today + dt.timedelta(days=ahead_days))
+    return (start, end) if start <= end else None
 
 
 def _issues(ctx: Context, day: dt.date) -> list[dict]:

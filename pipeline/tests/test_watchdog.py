@@ -43,7 +43,7 @@ def test_warns_about_the_archive_index_poems_and_disk(tmp_path, monkeypatch):
     monkeypatch.setattr(watchdog.shutil, "disk_usage", lambda p: Usage(100, 99, 2 * 1024**3))
     warnings = watchdog.check(_store(tmp_path, poems=5), TODAY, tmp_path)
     assert len(warnings) == 3
-    assert "60 days away" in warnings[0] and "courier archive-index" in warnings[0]
+    assert "60 days away" in warnings[0] and "archive-index.yml" in warnings[0]
     assert warnings[1].startswith("Only 14 poems")
     assert "2.0 GB" in warnings[2]
 

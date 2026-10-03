@@ -22,6 +22,7 @@ def edition():
 def archive_index(tmp_path, monkeypatch):
     path = tmp_path / "archive-index.json.gz"
     monkeypatch.setattr(chronicling, "INDEX", path)
+    monkeypatch.setattr(chronicling, "DOWNLOADED", tmp_path / "downloaded-archive-index.json.gz")
     chronicling._index.cache_clear()
     yield path
     chronicling._index.cache_clear()

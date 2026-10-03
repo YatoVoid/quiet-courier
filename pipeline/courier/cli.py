@@ -46,10 +46,12 @@ def main(argv: list[str] | None = None) -> int:
     d = sub.add_parser("deliver", help="build and email due editions; run every 15 minutes")
     d.add_argument("--config", type=Path, default=DEFAULT_PATH)
     a = sub.add_parser("archive-index", help="list the 1926 issues for future edition dates, from loc.gov")
-    a.add_argument("--from", dest="start", type=dt.date.fromisoformat, required=True, help="first edition date")
-    a.add_argument("--to", dest="end", type=dt.date.fromisoformat, required=True, help="last edition date")
+    a.add_argument("--from", dest="start", type=dt.date.fromisoformat, help="first edition date")
+    a.add_argument("--to", dest="end", type=dt.date.fromisoformat, help="last edition date")
+    a.add_argument("--auto", action="store_true",
+                   help="extend from where the index ends, about six weeks at a time, to 13 months ahead")
     a.add_argument("--config", type=Path, default=DEFAULT_PATH)
-    m = sub.add_parser("maintain", help="weekly upkeep: add new poems, then email the owner if anything is running low")
+    m = sub.add_parser("maintain", help="weekly upkeep: add new poems, fetch the latest archive index, email the owner if anything is low")
     m.add_argument("--poems", type=int, default=30, help="most poems to add this run")
     m.add_argument("--config", type=Path, default=DEFAULT_PATH)
     args = parser.parse_args(argv)
@@ -97,6 +99,7 @@ def run_deliver(args) -> int:
 def run_maintain(args) -> int:
     from . import poem_refill, watchdog
     from .delivery import _addresses
+    from .sources import chronicling
     from .http import Http
     from .mail import Mailer
     from .store import Store
@@ -106,8 +109,15 @@ def run_maintain(args) -> int:
     db_path = Path(os.environ.get("COURIER_DB", PIPELINE_DIR.parent / "data" / "courier.db"))
     store = Store(db_path)
     try:
-        r = poem_refill.refill(Http(config.user_agent), store, config.avoid, limit=args.poems)
+        http = Http(config.user_agent)
+        r = poem_refill.refill(http, store, config.avoid, limit=args.poems)
         warnings = [f"The poem refill couldn't read {e}" for e in r.errors]
+        try:
+            newer = chronicling.refresh_index(http)
+            print(f"archive index updated, now through {newer.replace(year=newer.year + 100)}" if newer
+                  else "archive index already current")
+        except Exception as e:
+            warnings.append(f"Couldn't download the archive index from GitHub: {e}")
         warnings += watchdog.check(store, dt.date.today(), db_path.parent)
         total = len(store.added_poems())
     finally:
@@ -126,6 +136,16 @@ def run_archive_index(args) -> int:
     from .sources import chronicling
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
+    if args.auto:
+        span = chronicling.next_index_range(dt.date.today())
+        if span is None:
+            print("the index already reaches 13 months ahead; nothing to add")
+            return 0
+        args.start, args.end = span
+    if not (args.start and args.end):
+        print("give --from and --to, or --auto", file=sys.stderr)
+        return 2
+    print(f"indexing edition dates {args.start} to {args.end}")
     days = [chronicling.hundred_years_before(args.start + dt.timedelta(n))
             for n in range((args.end - args.start).days + 1)]
     added = chronicling.update_index(Http(load_config(args.config).user_agent), days)

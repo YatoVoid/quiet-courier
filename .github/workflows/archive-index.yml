@@ -1,23 +1,29 @@
 name: Archive index
 
-# loc.gov blocks the production server, so the index of 1920s issues is built here.
+# loc.gov blocks the production server, so the index of 1920s issues is built here and
+# committed. The server downloads it weekly (`courier maintain`).
 on:
+  schedule:
+    - cron: "17 3 2 * *"
   workflow_dispatch:
     inputs:
       from:
-        description: First edition date
-        default: "2028-01-01"
+        description: First edition date (leave empty to extend automatically)
+        required: false
       to:
         description: Last edition date
-        default: "2028-01-03"
+        required: false
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: archive-index
 
 jobs:
   index:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -29,5 +35,19 @@ jobs:
         working-directory: pipeline
         env:
           COURIER_CONTACT_EMAIL: hello@quietcourier.com
-        run: python -m courier archive-index --from "${{ inputs.from }}" --to "${{ inputs.to }}"
-      - run: git status --short
+          FROM: ${{ inputs.from }}
+          TO: ${{ inputs.to }}
+        run: |
+          if [ -n "$FROM" ] && [ -n "$TO" ]; then
+            python -m courier archive-index --from "$FROM" --to "$TO"
+          else
+            python -m courier archive-index --auto
+          fi
+      - name: Commit the extended index
+        run: |
+          git diff --quiet -- pipeline/courier/data/archive-index.json.gz && { echo "no change"; exit 0; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pipeline/courier/data/archive-index.json.gz
+          git commit -m "Extend the archive index"
+          git push

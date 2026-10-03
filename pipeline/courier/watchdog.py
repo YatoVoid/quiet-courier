@@ -37,7 +37,8 @@ def check(store: Store, today: dt.date, data_dir: Path) -> list[str]:
     elif (ends - today).days < ARCHIVE_WARN_DAYS:
         warnings.append(f"The 1926 archive index ends on {ends:%B} {ends.day}, {ends.year} "
                         f"({(ends - today).days} days away). After that, From the Archives stops. "
-                        "Extend it with: courier archive-index --from <next day> --to <a year later>")
+                        "The monthly \"Archive index\" GitHub workflow should have extended it; check its runs at "
+                        "https://github.com/YatoVoid/quiet-courier/actions/workflows/archive-index.yml")
     left = unused_poems(store, today)
     if left < POEMS_WARN:
         warnings.append(f"Only {left} poems haven't run in the last year. The weekly refill adds more from "
