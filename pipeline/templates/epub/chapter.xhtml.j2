@@ -45,9 +45,9 @@
 {% if section.id == "weather" and e.weather %}
 <article class="story">
   <h3>The Forecast for {{ e.weather.city }}</h3>
-  <table class="forecast">
+  <div class="centered-block"><table class="forecast">
     {% for p in e.weather.periods %}<tr><th>{{ p.name }}</th><td>{{ p.temperature }}°</td><td>{{ p.short | sentence }}</td></tr>{% endfor %}
-  </table>
+  </table></div>
   <p class="first">{{ today.detail }}</p>
   <p class="source">{{ e.weather.attribution }}</p>
 </article>
@@ -65,7 +65,9 @@
   <article class="poem">
     <h3>{{ e.poem.title }}</h3>
     <p class="byline">{{ e.poem.author }}, {{ e.poem.year }}</p>
-    {% for stanza in e.poem.stanzas %}<p class="stanza">{% for line in stanza %}{{ line }}{% if not loop.last %}<br/>{% endif %}{% endfor %}</p>{% endfor %}
+    <div class="centered-block"><div class="poem-lines">
+    {% for stanza in e.poem.stanzas %}<div class="stanza">{% for line in stanza %}<p class="line">{{ line }}</p>{% endfor %}</div>{% endfor %}
+    </div></div>
     <p class="source">{{ e.poem.attribution }} Text from {{ e.poem.source_name }}.</p>
   </article>
 {% else %}
@@ -86,9 +88,9 @@
 <h2 class="section-head">Puzzles</h2>
 <h3>Word Search</h3>
 <p class="center"><i>Words from today’s poem, “{{ e.poem.title }},” hidden in any of eight directions.</i></p>
-<table class="wordsearch">
+<div class="centered-block"><table class="wordsearch">
   {% for row in ws.grid %}<tr>{% for ch in row %}<td>{{ ch }}</td>{% endfor %}</tr>{% endfor %}
-</table>
+</table></div>
 <p class="center wordlist">{{ ws.words | join(" · ") }}</p>
 <p class="center"><i>Answers in tomorrow’s edition.</i></p>
 <h3>The Almanac</h3>
