@@ -1,0 +1,33 @@
+name: Archive index
+
+# loc.gov blocks the production server, so the index of 1920s issues is built here.
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: First edition date
+        default: "2028-01-01"
+      to:
+        description: Last edition date
+        default: "2028-01-03"
+
+permissions:
+  contents: read
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get install -y --no-install-recommends libpango-1.0-0 libpangoft2-1.0-0
+      - run: pip install -e pipeline
+      - name: Fetch the issue lists
+        working-directory: pipeline
+        env:
+          COURIER_CONTACT_EMAIL: hello@quietcourier.com
+        run: python -m courier archive-index --from "${{ inputs.from }}" --to "${{ inputs.to }}"
+      - run: git status --short
