@@ -7,6 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
+from . import clean
 from .config import GENERAL, City, Config
 from .devices import DEVICES
 from .epub import build_epub
@@ -119,7 +120,12 @@ def prepare_core(config: Config, date: dt.date, out_root: Path, store: Store, ht
         with ThreadPoolExecutor(max_workers=4) as pool:
             futures = {name: pool.submit(_timed, name, lambda f=fn: f(ctx), []) for name, fn in jobs.items()}
             for name, fut in futures.items():
-                pools[name], run = fut.result()
+                items, run = fut.result()
+                if name != "chronicling_america":
+                    for a in [a for a in items if not clean.is_english(a)]:
+                        log.info("skipped non-English item from %s: %s", name, a["source_url"])
+                        items.remove(a)
+                pools[name] = items
                 runs.append(run)
 
         poem = poems.fetch(ctx, store.recent_poems(date, 30))

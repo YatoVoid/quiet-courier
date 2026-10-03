@@ -124,3 +124,23 @@ def mentions(article: dict, words: tuple[str, ...], opening_only: bool = True) -
     body = article["body"][:2] if opening_only else article["body"]
     hay = " ".join([article["title"], article.get("deck") or "", *(b["text"] for b in body)]).lower()
     return any(re.search(rf"\b{re.escape(w.lower())}", hay) for w in words)
+
+
+# Function words only: names and loanwords appear in every language, these don't.
+# Words that are also common English (a, as, die, do, en, on, un) are left out.
+ENGLISH_WORDS = frozenset(
+    "the and of to is that for with are was this be from at have has its their will which were been but not "
+    "they it by an".split())
+OTHER_WORDS = frozenset(
+    "el la los las del que y para por una es se al sus como más también pero sobre fue "
+    "le les et est une du dans pour qui sur pas avec sont ce cette "
+    "der das und ist nicht mit dem ein eine auch sich von zu "
+    "não uma em com os ao pelo pela são".split())
+
+
+def is_english(article: dict, sample: int = 200) -> bool:
+    text = " ".join([article["title"], article.get("deck") or "", *(b["text"] for b in article["body"])])
+    words = re.findall(r"[^\W\d_]+", text.lower())[:sample]
+    english = sum(w in ENGLISH_WORDS for w in words)
+    other = sum(w in OTHER_WORDS for w in words)
+    return english + other < 5 or english > other
