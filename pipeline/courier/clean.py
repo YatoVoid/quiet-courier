@@ -7,6 +7,7 @@ CHROME_HEADINGS = {
     "you may also be interested in:", "discover more topics from nasa", "keep exploring",
     "related", "learn more and get involved", "media contacts", "media contact",
 }
+READING_TIME = re.compile(r"^\d+\s*min(?:ute)?s?\s+read$", re.I)
 INLINE_CAPTION = re.compile(r"^[^.]{0,80}\. Photo(?:graph)? (?:by|via) [^.]+\. (?:Used with permission|Screenshot)[^.]*\.\s*")
 
 
@@ -23,7 +24,7 @@ def blocks(markup: str) -> list[dict]:
     for m in re.finditer(r"<(p|h2|h3|h4)([^>]*)>(.*?)</\1>", markup, flags=re.S | re.I):
         tag, attrs, inner = m.groups()
         t = text(inner)
-        if not t or "caption" in attrs:
+        if not t or "caption" in attrs or READING_TIME.match(t):
             continue
         if tag.lower() != "p":
             kind = "h"
