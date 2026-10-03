@@ -37,6 +37,13 @@
   {% if s.jumps %}<p class="jump">Continued on Page {% if front_only %}9{% else %}<a href="#cont-{{ s.article.id }}"></a>{% endif %}</p>{% else %}{{ source(s.article) }}{% endif %}
 {% endmacro %}
 
+{% macro brief_items(items) %}
+  {% for i in items %}<p class="brief-item">{% if i.topic %}<span class="brief-topic">{{ i.topic }}.</span> {% endif %}{{ i.text }}{% if i.outlets %} <span class="brief-outlet">({{ i.outlets | join(", ") }})</span>{% endif %}</p>{% endfor %}
+  <p class="source">{{ e.brief.attribution }} License: {{ e.brief.license.name }}. {{ e.brief.changes }}</p>
+{% endmacro %}
+
+{% macro brief_title() %}The World in Brief{% endmacro %}
+
 {% macro figure(a) %}
   {% if a.images %}
   <figure class="plate">
@@ -115,8 +122,15 @@
 <h2 class="section-head"{% if id %} id="{{ id }}"{% endif %}><span>{{ title }}</span>{% if subtitle %}<small>{{ subtitle }}</small>{% endif %}</h2>
 {% endmacro %}
 
+{% if e.brief %}
+<section class="sec brief">
+  {{ section_head(brief_title(), e.brief.day | weekday_date) }}
+  <div class="cols">{{ brief_items(e.brief.items[:d.brief_items]) }}</div>
+</section>
+{% endif %}
+
 {% if jumped %}
-<section class="sec">
+<section class="sec{% if e.brief %} after-brief{% endif %}">
   {{ section_head("Continued from Page One") }}
   <div class="cols">
   {% for s in jumped %}
@@ -201,6 +215,7 @@
     {% endfor %}
     {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. {{ e.weather.license_name }}. {{ e.weather.source_url }}</li>{% endif %}
     <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. {{ e.poem.source_url }}</li>
+    {% if e.brief %}<li><b>{{ brief_title() }}</b>. Wikipedia contributors, Current events portal. {{ e.brief.license.name }} ({{ e.brief.license.url }}). {{ e.brief.changes }} {{ e.brief.source_url }}</li>{% endif %}
   </ol>
 </section>
 

@@ -32,6 +32,7 @@ def test_builds_and_stores_an_edition(tmp_path, store):
     edition = load_edition(r.json_path)
     assert edition.paper_name == "The Quiet Courier"
     assert edition.weather and edition.lead
+    assert edition.brief and len(edition.brief.items) == 10 and edition.brief.source_url.endswith("oldid=1378213351")
     assert r.words <= config.max_words
     assert all(run.ok for run in r.runs)
 
@@ -52,13 +53,13 @@ def test_downloaded_images_are_local_files(tmp_path, store):
 
 
 def test_survives_source_outages(tmp_path, store):
-    http = FakeHttp(fail={"conversation", "nws", "metno", "chronicling_america"})
+    http = FakeHttp(fail={"conversation", "nws", "metno", "chronicling_america", "current_events"})
     r = build(*at("kansas-city"), DATE, tmp_path, store, http=http, render=False)
     edition = load_edition(r.json_path)
     assert edition.lead.source_name == "Global Voices"
-    assert edition.weather is None
+    assert edition.weather is None and edition.brief is None
     failed = {run.source for run in r.runs if not run.ok}
-    assert failed == {"conversation", "weather", "chronicling_america"}
+    assert failed == {"conversation", "weather", "chronicling_america", "current_events"}
 
 
 def test_us_weather_falls_back_to_met_norway(tmp_path, store):

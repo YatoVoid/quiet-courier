@@ -47,3 +47,5 @@ table.wordsearch td { width: 1.5em; height: 1.5em; text-align: center; padding: 
 .wordlist { font-variant: small-caps; margin-top: 0.4em; }
 .the-end { margin-top: 2em; text-align: center; }
 .end-words { font-family: "Nameplate", serif; font-size: 2em; text-align: center; text-indent: 0; }
+.brief-item { text-indent: 0; text-align: left; margin: 0 0 0.6em; padding-bottom: 0.5em; border-bottom: 1px solid #000; }
+.brief-topic { font-variant: small-caps; font-weight: bold; }

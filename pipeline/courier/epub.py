@@ -28,6 +28,8 @@ def _chapters(edition: Edition, images: dict) -> list[tuple[str, str, str]]:
     )
     out = [("front.xhtml", "Front Page", tpl.render(**base, kind="front", title="Front Page",
                                                     secondaries=edition.secondaries(all_front)))]
+    if edition.brief:
+        out.append(("brief.xhtml", "The World in Brief", tpl.render(**base, kind="brief", title="The World in Brief")))
     for sec in edition.sections:
         if sec.id == "puzzles":
             continue

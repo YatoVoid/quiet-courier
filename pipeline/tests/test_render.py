@@ -94,3 +94,24 @@ def test_cover_survives_a_very_long_headline(edition):
     long = replace(edition.lead, title="An extraordinarily long headline " * 12)
     e = replace(edition, articles={**edition.articles, edition.lead_id: long})
     assert draw_cover(e).size == (1600, 2560)
+
+
+def _with_brief(edition):
+    from courier.models import Brief, BriefItem, License
+    lic = License("cc-by-sa-4.0", "CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0/", True, True)
+    items = tuple(BriefItem("Politics and elections", "Topic", f"Item number {n} in the brief, long enough to read.", ("AP",))
+                  for n in range(12))
+    return replace(edition, brief=Brief(edition.date, items, "https://en.wikipedia.org/w/index.php?title=X&oldid=1", lic,
+                                        "From Wikipedia's Current events portal.", "Selected items; links removed."))
+
+
+def test_brief_prints_with_its_license_and_a_device_sized_selection(edition, tmp_path):
+    e = _with_brief(edition)
+    build_pdf(e, DEVICES["small"], tmp_path / "s.pdf", tmp_path)
+    html = (tmp_path / "edition_small.html").read_text()
+    assert "The World in Brief" in html and html.count('class="brief-item"') == DEVICES["small"].brief_items
+    assert "CC BY-SA 4.0" in html and "oldid=1" in html
+    with zipfile.ZipFile(build_epub(e, tmp_path / "e.epub", tmp_path)) as z:
+        brief = z.read("OEBPS/brief.xhtml").decode()
+        xml.dom.minidom.parseString(brief)
+        assert brief.count('class="brief-item"') == 12 and "Selected items" in brief

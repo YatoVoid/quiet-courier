@@ -15,7 +15,7 @@ from .http import Http
 from .models import load_edition
 from .pdf import build_pdf
 from .select import select
-from .sources import Context, chronicling, conversation, globalvoices, metno, nasa, nws, poems
+from .sources import Context, chronicling, conversation, current_events, globalvoices, metno, nasa, nws, poems
 from .store import SourceRun, Store
 
 log = logging.getLogger("courier")
@@ -154,9 +154,21 @@ def prepare_core(config: Config, date: dt.date, out_root: Path, store: Store, ht
         return core
 
 
+# Cities whose morning falls on the same Wikipedia day share one copy of the brief.
+def _brief(config: Config, out_root: Path, date: dt.date, http: Http, now: dt.datetime) -> tuple[dict | None, SourceRun]:
+    path = out_root / date.isoformat() / "core" / f"brief-{current_events.brief_day(now).isoformat()}.json"
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8")), SourceRun("current_events", True, 1, 0)
+    brief, run = _timed("current_events", lambda: current_events.fetch(http, now, config.avoid), None)
+    if brief:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(brief, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return brief, run
+
+
 def build(config: Config, city: City, date: dt.date, out_root: Path, store: Store,
           http: Http | None = None, render: bool = True, devices: list[str] | None = None,
-          epub: bool = True) -> BuildResult:
+          epub: bool = True, now: dt.datetime | None = None) -> BuildResult:
     city_id = city.id
     http = http or Http(config.user_agent, cache_dir=out_root / "cache" / date.isoformat())
     core = prepare_core(config, date, out_root, store, http)
@@ -165,6 +177,11 @@ def build(config: Config, city: City, date: dt.date, out_root: Path, store: Stor
     weather = None
     if city.location is not None and (config.enabled("nws") or config.enabled("metno")):
         weather, run = _timed("weather", lambda: _weather(Context(http, config, date, city)), None)
+        runs.append(run)
+
+    brief = None
+    if config.enabled("current_events"):
+        brief, run = _brief(config, out_root, date, http, now or dt.datetime.now(dt.UTC))
         runs.append(run)
 
     days = (date - config.launch_date).days
@@ -182,6 +199,7 @@ def build(config: Config, city: City, date: dt.date, out_root: Path, store: Stor
         "articles": core["articles"],
         "weather": weather,
         "poem": core["poem"],
+        "brief": brief,
     }
     out_dir = out_root / date.isoformat() / city_id
     out_dir.mkdir(parents=True, exist_ok=True)

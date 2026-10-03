@@ -40,6 +40,12 @@
 {{ story(e.lead, show_title=false) }}
 {% for a in secondaries %}{{ story(a) }}{% endfor %}
 
+{% elif kind == "brief" %}
+<h2 class="section-head">The World in Brief<small>{{ e.brief.day | weekday_date }}</small></h2>
+{% for i in e.brief.items %}<p class="brief-item">{% if i.topic %}<span class="brief-topic">{{ i.topic }}.</span> {% endif %}{{ i.text }}{% if i.outlets %} <i>({{ i.outlets | join(", ") }})</i>{% endif %}</p>
+{% endfor %}
+<p class="source">{{ e.brief.attribution }} License: {{ e.brief.license.name }}. {{ e.brief.changes }}</p>
+
 {% elif kind == "section" %}
 <h2 class="section-head">{{ section.name }}{% if section.subtitle %}<small>{{ section.subtitle }}</small>{% endif %}</h2>
 {% if section.id == "weather" and e.weather %}
@@ -82,6 +88,7 @@
   {% endfor %}
   {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. {{ e.weather.license_name }}. <a href="{{ e.weather.source_url }}">{{ e.weather.source_url }}</a></li>{% endif %}
   <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. <a href="{{ e.poem.source_url }}">{{ e.poem.source_url }}</a></li>
+  {% if e.brief %}<li><b>The World in Brief</b>. Wikipedia contributors, Current events portal. {{ e.brief.license.name }} (<a href="{{ e.brief.license.url }}">{{ e.brief.license.url }}</a>). {{ e.brief.changes }} <a href="{{ e.brief.source_url }}">{{ e.brief.source_url }}</a></li>{% endif %}
 </ol>
 
 {% elif kind == "final" %}

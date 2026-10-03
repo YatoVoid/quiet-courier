@@ -18,6 +18,7 @@ nasa = true
 nws = true
 metno = true
 chronicling_america = true
+current_events = true
 
 [editorial]
 # Stories whose title or opening paragraph contains any of these are skipped.

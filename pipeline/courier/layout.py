@@ -119,6 +119,7 @@ def jinja_env() -> Environment:
         lstrip_blocks=True,
     )
     env.filters["roman"] = roman
+    env.filters["weekday_date"] = long_date
     env.filters["dropcap"] = dropcap
     env.filters["sentence"] = lambda t: t[:1].upper() + t[1:].lower()
     env.filters["clock"] = lambda t: t.strftime("%-I:%M %p").replace("AM", "a.m.").replace("PM", "p.m.") if t else "none"

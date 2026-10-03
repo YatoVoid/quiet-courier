@@ -38,6 +38,12 @@ class FakeHttp:
             return "chronicling_america", (FIXTURES / "loc-search.json").read_bytes()
         if url.endswith(".xml") and "tile.loc.gov" in url:
             return "chronicling_america", (FIXTURES / "alto-indianapolis-times-1926-10-01.xml").read_bytes()
+        if "en.wikipedia.org/w/api.php" in url:
+            if "action=query" in url:
+                return "current_events", json.dumps(
+                    {"query": {"pages": [{"revisions": [{"revid": 1378213351, "timestamp": "2026-10-03T05:00:00Z"}]}]}}).encode()
+            page = (FIXTURES / "wikipedia-current-events-2026-10-02.html").read_text(encoding="utf-8")
+            return "current_events", json.dumps({"parse": {"text": page}}).encode()
         if "nasa.gov" in url:
             return "images", tiny_jpeg()
         raise FetchError(f"no fixture for {url}")

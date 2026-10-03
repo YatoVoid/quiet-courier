@@ -18,6 +18,7 @@ class Device:
     lead_headline_pt: float
     puzzle_cell_pt: float
     front_secondaries: int
+    brief_items: int
     puzzle_size: int
     puzzle_words: int
 
@@ -29,7 +30,7 @@ SMALL = Device(
     id="small", label="6-7 inch readers (Kindle, Kobo Clara, Boox Poke)",
     page_width_in=4.0, page_height_in=5.333, margin_in=0.16, columns=2,
     body_pt=8.6, leading=1.22, nameplate_pt=27, lead_headline_pt=11.5, puzzle_cell_pt=8.6,
-    front_secondaries=0, puzzle_size=10, puzzle_words=10,
+    front_secondaries=0, brief_items=7, puzzle_size=10, puzzle_words=10,
 )
 
 # Kindle Scribe (1860x2480 at 300 ppi) is 6.2 x 8.27 in; Boox Note Air is the same shape.
@@ -37,7 +38,7 @@ LARGE = Device(
     id="large", label="10 inch and larger (Kindle Scribe, Boox Note, reMarkable)",
     page_width_in=6.2, page_height_in=8.267, margin_in=0.28, columns=3,
     body_pt=9.2, leading=1.24, nameplate_pt=46, lead_headline_pt=19, puzzle_cell_pt=12,
-    front_secondaries=2, puzzle_size=13, puzzle_words=14,
+    front_secondaries=2, brief_items=10, puzzle_size=13, puzzle_words=14,
 )
 
 DEVICES = {d.id: d for d in (SMALL, LARGE)}

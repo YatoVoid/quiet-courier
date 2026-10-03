@@ -119,6 +119,24 @@ class Poem:
 
 
 @dataclass(frozen=True)
+class BriefItem:
+    heading: str
+    topic: str | None
+    text: str
+    outlets: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class Brief:
+    day: dt.date
+    items: tuple[BriefItem, ...]
+    source_url: str
+    license: License
+    attribution: str
+    changes: str
+
+
+@dataclass(frozen=True)
 class Location:
     name: str
     region: str
@@ -149,6 +167,7 @@ class Edition:
     secondary_ids: list[str]
     weather: Weather | None
     poem: Poem
+    brief: Brief | None = None
 
     @property
     def lead(self) -> Article:
@@ -181,6 +200,7 @@ def load_edition(path: Path) -> Edition:
             raise ContentError(f"front page references unknown article {aid}")
     w = d.get("weather")
     p = d["poem"]
+    b = d.get("brief")
     loc = d.get("location")
     return Edition(
         paper_name=d["paper_name"], motto=d["motto"], volume=d["volume"], number=d["edition_number"],
@@ -198,4 +218,9 @@ def load_edition(path: Path) -> Edition:
             p["title"], p["author"], p["year"], tuple(tuple(s) for s in p["stanzas"]),
             p["source_name"], p["source_url"], License.from_dict(p["license"]), p["attribution"],
         ),
+        brief=Brief(
+            dt.date.fromisoformat(b["day"]),
+            tuple(BriefItem(i["heading"], i.get("topic"), i["text"], tuple(i.get("outlets", ()))) for i in b["items"]),
+            b["source_url"], License.from_dict(b["license"]), b["attribution"], b["changes"],
+        ) if b and b.get("items") else None,
     )
