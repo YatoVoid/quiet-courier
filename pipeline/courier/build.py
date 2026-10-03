@@ -4,7 +4,7 @@ import json
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import clean
@@ -47,6 +47,7 @@ class BuildResult:
     words: int
     reading_min: int
     runs: list[SourceRun]
+    missing: list[str] = field(default_factory=list)
 
 
 def _timed(name: str, fn, default):
@@ -166,6 +167,22 @@ def _brief(config: Config, out_root: Path, date: dt.date, http: Http, now: dt.da
     return brief, run
 
 
+# Parts a reader would expect but that the paper went out without. Each one is simply left out
+# of the edition; the delivery job emails the owner so the cause can be looked at.
+def _missing(config: Config, city: City, edition: dict, runs: list[SourceRun], now: dt.datetime) -> list[str]:
+    errors = {r.source: r.error for r in runs if not r.ok}
+    out = []
+    if config.enabled("current_events") and not edition["brief"]:
+        day = current_events.brief_day(now)
+        out.append("The World in Brief: " + (errors.get("current_events")
+                                              or f"no usable items on Wikipedia's page for {day:%B} {day.day}"))
+    if city.location is not None and not edition["weather"]:
+        out.append(f"Weather for {city.location.name}: " + (errors.get("weather") or "no forecast returned"))
+    if config.enabled("chronicling_america") and not any(a["section"] == "archives" for a in edition["articles"]):
+        out.append("From the Archives: " + (errors.get("chronicling_america") or "no readable 1926 stories found"))
+    return out
+
+
 def build(config: Config, city: City, date: dt.date, out_root: Path, store: Store,
           http: Http | None = None, render: bool = True, devices: list[str] | None = None,
           epub: bool = True, now: dt.datetime | None = None) -> BuildResult:
@@ -179,9 +196,10 @@ def build(config: Config, city: City, date: dt.date, out_root: Path, store: Stor
         weather, run = _timed("weather", lambda: _weather(Context(http, config, date, city)), None)
         runs.append(run)
 
+    now = now or dt.datetime.now(dt.UTC)
     brief = None
     if config.enabled("current_events"):
-        brief, run = _brief(config, out_root, date, http, now or dt.datetime.now(dt.UTC))
+        brief, run = _brief(config, out_root, date, http, now)
         runs.append(run)
 
     days = (date - config.launch_date).days
@@ -216,7 +234,8 @@ def build(config: Config, city: City, date: dt.date, out_root: Path, store: Stor
         if epub:
             files.append(build_epub(loaded, out_dir / f"{city_id}.epub", work))
 
+    missing = _missing(config, city, edition, runs, now)
     words = core["words"]
     reading_min = round(words / config.words_per_minute)
     edition_id = store.save(edition, city_id, words, reading_min, runs)
-    return BuildResult(edition_id, json_path, files, words, reading_min, runs)
+    return BuildResult(edition_id, json_path, files, words, reading_min, runs, missing)

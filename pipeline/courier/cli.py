@@ -83,8 +83,8 @@ def run_deliver(args) -> int:
         return 0
     print(f"sent {report.sent}, failed {len(report.failed)}, gave up {len(report.gave_up)}, "
           f"build errors {len(report.build_errors)}, copies to The Conversation {report.partner_copies}, "
-          f"monthly reports {report.partner_reports}")
-    return 1 if report.needs_alert else 0
+          f"monthly reports {report.partner_reports}, missing parts {len(report.missing)}")
+    return 1 if report.failed_run else 0
 
 
 def run_archive_index(args) -> int:

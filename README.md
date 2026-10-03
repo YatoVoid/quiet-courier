@@ -117,6 +117,7 @@ The list of 1926 issues for each edition date is read from `pipeline/courier/dat
 | What is built | One article selection per date, shared by every edition. Then one edition per place that has readers, in only the formats they use. |
 | Once only | One row per reader per date in `deliveries`. A row marked sent is never sent again, and each email carries an idempotency key, so a crash between sending and recording can't send twice. |
 | Retries | A failed send is retried once an hour until 10 a.m., five tries in all. Then the owner gets an alert email. |
+| Missing parts | If The World in Brief, a city's weather or the 1926 archives can't be had, the edition goes out without that part and no gap is shown. The owner gets one email per part per day, with the reason. |
 | Limits | Sending stops for the run when the Resend plan's daily or monthly limit is close, keeping room for sign-in links. |
 | The Conversation | After the first reader receives a date's edition, one copy goes to The Conversation listing their articles. On the 1st of each month, a report lists every article used, the dates it ran, and the circulation. Both are recorded so they go once. |
 | Off switch | Nothing is sent unless `DELIVERY_ENABLED=1`. |

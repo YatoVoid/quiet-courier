@@ -1,4 +1,5 @@
 import datetime as dt
+import json
 import uuid
 
 import pytest
@@ -69,10 +70,10 @@ def job_factory(conn, tmp_path):
     store = Store(tmp_path / "courier.db")
     mailer = FakeMailer()
 
-    def make(**overrides):
+    def make(fail=frozenset(), **overrides):
         settings = Settings(database_url="", out_root=tmp_path / "out", store_path=tmp_path / "courier.db",
                             enabled=True, **overrides)
-        return Job(load_config(), settings, Db(conn), mailer, store, http=FakeHttp())
+        return Job(load_config(), settings, Db(conn), mailer, store, http=FakeHttp(fail=fail))
 
     make.mailer = mailer
     make.store = store
@@ -259,3 +260,30 @@ def test_no_reminders_without_billing(conn, job_factory):
     set_billing(conn, uid, trial_ends=MORNING_CHICAGO + dt.timedelta(days=2))
     job_factory().run(MORNING_CHICAGO)
     assert not [m for m in job_factory.mailer.sent if m.subject.startswith("Your free trial ends")]
+
+
+def test_a_missing_brief_is_left_out_and_reported_once(conn, job_factory):
+    chicago = add_reader(conn, "chi@kindle.com")
+    general = add_reader(conn, "general@kindle.com", local=False)
+    report = job_factory(fail={"current_events"}, alert_to=["owner@example.com"]).run(MORNING_CHICAGO)
+    assert delivery(conn, chicago)["status"] == "sent", "the paper still goes out"
+    assert delivery(conn, general)["status"] == "sent"
+    edition = json.loads((job_factory.out / DATE.isoformat() / "gn-4887398" / "edition.json").read_text())
+    assert edition["brief"] is None
+    assert len([m for m in report.missing if "The World in Brief" in m]) == 1, "two editions built, one report"
+    assert "simulated outage" in report.missing[0]
+    assert report.needs_alert and not report.failed_run
+
+    job = job_factory(alert_to=["owner@example.com"])
+    job.report = report
+    job.alert()
+    [alert] = job_factory.mailer.to("owner@example.com")
+    assert alert.subject == "The Quiet Courier: part of today's paper was missing"
+    assert "Left out of today's paper" in alert.text and "The World in Brief" in alert.text
+
+
+
+def test_a_complete_paper_reports_nothing_missing(conn, job_factory):
+    add_reader(conn, "full@kindle.com")
+    report = job_factory(alert_to=["owner@example.com"]).run(MORNING_CHICAGO)
+    assert report.sent == 1 and report.missing == [] and not report.needs_alert

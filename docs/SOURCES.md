@@ -61,11 +61,11 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
 ### Wikisource (poems, essays)
 - The underlying works are public domain if published before 1931. Use the original text, not a later edition's notes or translation, which may still be under copyright.
 
-### Wikipedia, Current events portal (checked 2026-10-03, not built yet)
+### Wikipedia, Current events portal (checked 2026-10-03)
 - License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Commercial use allowed. Older text may also be under the GFDL; the CC license is the one we rely on.
 - Terms page: https://en.wikipedia.org/wiki/Wikipedia:Reusing_Wikipedia_content
 - What it is: one page per day, `Portal:Current_events/<YYYY>_<Month>_<D>`, with short human-written summaries grouped under headings (armed conflicts, politics, business, science, sports and so on). Each item ends with the outlet it is based on, such as Reuters or The Guardian.
-- Planned use: a "Yesterday in brief" box on page one with a selection of the previous day's items. Nothing is rewritten by us or by AI.
+- Used for "The World in Brief", the page after page one (its own chapter in the EPUB): up to ten items from the last finished day, 7 on the 6-7 inch layout. Nothing is rewritten by us or by AI. If the page can't be fetched or has no usable items, the edition goes out without it and the owner is emailed.
 - Rules that affect us:
   - Attribution in print: the page's URL (ideally a permanent link to the exact revision used) and a note that the text is CC BY-SA 4.0. Printed under the box and in Sources and Licenses.
   - Choosing some items and leaving others out, or trimming the outlet names, is an adaptation. The box must say what changed ("selected items") and the box itself is then CC BY-SA 4.0. ShareAlike covers that box only. Putting it in an edition beside other articles doesn't change their licenses.

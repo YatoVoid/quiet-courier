@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 import psycopg
 from psycopg.rows import dict_row
 
-from .build import BuildError, build
+from .build import BuildError, BuildResult, build
 from .config import GENERAL, City, Config
 from .mail import Mailer, MailError, Message
 from .models import Location
@@ -93,10 +93,15 @@ class Report:
     quota_hit: bool = False
     partner_copies: list[str] = field(default_factory=list)
     partner_reports: list[str] = field(default_factory=list)
+    missing: list[str] = field(default_factory=list)
+
+    @property
+    def failed_run(self) -> bool:
+        return bool(self.gave_up or self.build_errors or self.quota_hit)
 
     @property
     def needs_alert(self) -> bool:
-        return bool(self.gave_up or self.build_errors or self.quota_hit)
+        return self.failed_run or bool(self.missing)
 
 
 # web/lib/server/admin.ts mirrors these conditions for its counts.
@@ -228,12 +233,12 @@ def edition_file(out_root: Path, date: dt.date, key: str, fmt: str) -> Path:
 
 
 def ensure_edition(config: Config, settings: Settings, store: Store, city: City, date: dt.date,
-                   formats: set[str], http=None) -> None:
+                   formats: set[str], http=None, now: dt.datetime | None = None) -> BuildResult | None:
     missing = {f for f in formats if not edition_file(settings.out_root, date, city.id, f).exists()}
     if not missing:
-        return
-    build(config, city, date, settings.out_root, store, http=http,
-          devices=[f for f in ("small", "large") if f in missing], epub="epub" in missing)
+        return None
+    return build(config, city, date, settings.out_root, store, http=http,
+                 devices=[f for f in ("small", "large") if f in missing], epub="epub" in missing, now=now)
 
 
 def _conversation_articles(settings: Settings, date: dt.date) -> list[dict]:
@@ -286,8 +291,10 @@ class Job:
         built_ok: set[tuple[str, dt.date]] = set()
         for (key, date), (city, fmts) in to_build.items():
             try:
-                ensure_edition(self.config, self.settings, self.store, city, date, fmts, self.http)
+                result = ensure_edition(self.config, self.settings, self.store, city, date, fmts, self.http, now)
                 built_ok.add((key, date))
+                if result:
+                    self._note_missing(date, result.missing)
             except (BuildError, OSError, ValueError) as e:
                 log.error("build failed for %s %s: %s", key, date, e)
                 self.report.build_errors.append(f"{date} {key}: {e}")
@@ -436,11 +443,28 @@ class Job:
                 shutil.rmtree(root / "work" / d.name, ignore_errors=True)
                 shutil.rmtree(root / "cache" / d.name, ignore_errors=True)
 
+    # Each missing part is reported once per edition date, however many cities are built.
+    def _note_missing(self, date: dt.date, parts: list[str]) -> None:
+        if not parts:
+            return
+        seen_path = self.settings.out_root / date.isoformat() / "missing-reported.json"
+        seen = set(json.loads(seen_path.read_text())) if seen_path.exists() else set()
+        for part in parts:
+            name = part.split(":", 1)[0]
+            if name not in seen:
+                seen.add(name)
+                self.report.missing.append(f"{date}: {part}")
+        seen_path.parent.mkdir(parents=True, exist_ok=True)
+        seen_path.write_text(json.dumps(sorted(seen)))
+
     def alert(self) -> None:
         r = self.report
         if not (r.needs_alert and self.settings.alert_to):
             return
         lines = ["The delivery job needs a look.", ""]
+        if r.missing:
+            lines += ["Left out of today's paper (readers got the rest as usual):",
+                      *[f"- {x}" for x in r.missing], ""]
         if r.quota_hit:
             lines += ["The email quota is nearly used up, so sending stopped for this run.", ""]
         if r.gave_up:
@@ -449,7 +473,9 @@ class Job:
             lines += ["Build or partner mail errors:", *[f"- {x}" for x in r.build_errors], ""]
         lines.append(f"Sent this run: {r.sent}. Check with: journalctl -u quiet-courier-deliver")
         try:
-            self.mailer.send(Message(to=self.settings.alert_to, subject="The Quiet Courier: delivery problem",
+            subject = ("The Quiet Courier: delivery problem" if r.failed_run
+                       else "The Quiet Courier: part of today's paper was missing")
+            self.mailer.send(Message(to=self.settings.alert_to, subject=subject,
                                      text="\n".join(lines) + "\n"))
         except MailError as e:
             log.error("alert email failed: %s", e)
