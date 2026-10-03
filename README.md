@@ -179,6 +179,31 @@ Off until `BILLING_ENABLED=1` is set in both `web/.env` and `pipeline.env`. Unti
 | Who gets a paper | With billing on: readers whose trial hasn't started or hasn't ended, and readers whose subscription is `trialing`, `active` or `past_due` (Stripe is still retrying the card). |
 | Deleting an account | Cancels the subscription at Stripe first. If Stripe can't be reached, nothing is deleted. |
 
+### Referral links (planned, not built)
+
+Lets an outside account (a newspaper's Instagram, a blog, a forum) send readers with its own link, and pays it a fixed amount for each reader who goes on to pay. Built the day a referrer agrees; nothing below exists in the code yet.
+
+| | |
+|---|---|
+| Link | `https://quietcourier.com/r/<code>`, e.g. `/r/cougar`. Codes are lowercase `[a-z0-9-]{2,32}`. A known, active code sets a first-party cookie `qc_ref` (`HttpOnly`, `Secure`, `SameSite=Lax`, 30 days) and redirects to the home page. Unknown or expired codes redirect without a cookie. The route is rate limited like sign-in. |
+| Attribution | First touch wins and is never overwritten. The sign-in form reads `qc_ref` and stores the code on the email token, so it survives the sign-in link being opened on another device or in a mail app's browser. `completeSignIn` copies it to the new user. Existing accounts are never attributed. |
+| Paying reader | The first `invoice.paid` with an amount above zero for a referred user writes one row to `referral_conversions`. A later refund of that invoice (`charge.refunded`, added to the webhook's events) marks it void. Trial sign-ups who never pay cost nothing. |
+| Payout | Fixed per paying reader, stored on the referrer (`payout_cents`), set below the price so card fees are covered. Paid by hand; each payment is recorded in `referral_payouts`. |
+| Clicks | Counted per code per day in one row (`referral_clicks`). No IP, user agent or reader identity is stored for a click. |
+| `/admin` | A "Referrals" table, one row per code: clicks, sign-ups, finished setup, in trial, paying, voided, payout earned, paid out, still owed. Plus a per-code monthly statement (CSV) to send the referrer, with dates and counts only, no names or emails. |
+| Disclosure | The referrer's post must be marked as paid ("Sponsored" or Instagram's "Paid partnership"), as the FTC requires. Agreed in writing before the link goes live. |
+| Privacy | The privacy policy gets one line on the `qc_ref` cookie: what it holds, that it's first-party and expires in 30 days. No third-party trackers. |
+
+Tables:
+
+- `referrers`: `code` (primary key), `name`, `payout_cents`, `starts_at`, `ends_at`, `contact`, `created_at`.
+- `users`: new nullable `referred_by` (references `referrers.code`) and `referred_at`. `email_tokens`: new nullable `referral_code`.
+- `referral_clicks`: `code`, `day`, `count`, primary key (`code`, `day`).
+- `referral_conversions`: `user_id` (unique), `code`, `stripe_invoice_id` (unique), `amount_cents`, `paid_at`, `voided_at`.
+- `referral_payouts`: `id`, `code`, `amount_cents`, `paid_at`, `note`.
+
+Tests: link with a valid, unknown and expired code; attribution across devices through the token; first touch kept; existing account not attributed; only the first paid invoice counts and a redelivered webhook doesn't count twice; refund voids; admin totals and the CSV.
+
 ### Deploying
 
 The site runs on the same server as the other self-hosted sites, behind nginx, as its own `courier` user on 127.0.0.1:3200. See [docs/DEPLOY.md](docs/DEPLOY.md).
