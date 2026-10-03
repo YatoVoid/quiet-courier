@@ -50,6 +50,7 @@ def test_sends_attachment_and_idempotency_key(pdf):
     req = fake.requests[0]
     assert req["headers"]["Idempotency-Key"] == "edition/u/2026-10-01"
     assert req["headers"]["Authorization"] == "Bearer re_test"
+    assert not req["headers"]["User-Agent"].startswith("Python-urllib")
     assert req["body"]["attachments"][0]["filename"] == "The Quiet Courier 2026-10-01.pdf"
 
 

@@ -9,6 +9,8 @@ from pathlib import Path
 
 RESEND_URL = "https://api.resend.com/emails"
 RETRYABLE = {429, 500, 502, 503, 504}
+# Cloudflare in front of Resend rejects urllib's default User-Agent with a 403.
+USER_AGENT = "QuietCourier/0.2 (+https://quietcourier.com)"
 
 
 class MailError(RuntimeError):
@@ -64,7 +66,8 @@ class Mailer:
         if wait > 0:
             time.sleep(wait)
         body = json.dumps(self._payload(m)).encode()
-        headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
+        headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json",
+                   "User-Agent": USER_AGENT}
         if m.idempotency_key:
             headers["Idempotency-Key"] = m.idempotency_key
         last: Exception | None = None
