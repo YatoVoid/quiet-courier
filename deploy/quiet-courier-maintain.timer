@@ -1,0 +1,13 @@
+[Unit]
+Description=Run The Quiet Courier upkeep weekly
+
+# Server time is Asia/Baku (UTC+4), so this is 18:10 UTC, after the US mainland's morning
+# deliveries. Some reader is always in a morning window; the upkeep only adds rows to the
+# pipeline's SQLite store, which waits on the delivery job's writes rather than failing.
+[Timer]
+OnCalendar=Sun 22:10
+Persistent=true
+RandomizedDelaySec=10min
+
+[Install]
+WantedBy=timers.target

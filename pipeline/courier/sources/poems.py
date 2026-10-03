@@ -13,8 +13,8 @@ def library() -> list[dict]:
     return json.loads(LIBRARY.read_text(encoding="utf-8"))
 
 
-def choose(date: dt.date, recently_used: set[str] = frozenset()) -> dict:
-    poems = library()
+def choose(date: dt.date, recently_used: set[str] = frozenset(), added: list[dict] = ()) -> dict:
+    poems = library() + list(added)
     season = SEASONS[date.month]
     fresh = [p for p in poems if p["id"] not in recently_used] or poems
     pool = [p for p in fresh if season in p["seasons"]] or [p for p in fresh if "any" in p["seasons"]] or fresh
@@ -24,9 +24,10 @@ def choose(date: dt.date, recently_used: set[str] = frozenset()) -> dict:
     return {
         "id": p["id"], "title": p["title"], "author": p["author"], "year": p["year"],
         "source_name": p["source_name"], "source_url": p["source_url"], "license": LICENSES["pd-expired"],
-        "attribution": f"First published {p['year']}. Public domain.", "stanzas": p["stanzas"],
+        "attribution": (f"From {p['book']}, {p['year']}. Public domain." if p.get("book")
+                        else f"First published {p['year']}. Public domain."), "stanzas": p["stanzas"],
     }
 
 
-def fetch(ctx: Context, recently_used: set[str] = frozenset()) -> dict:
-    return choose(ctx.date, recently_used)
+def fetch(ctx: Context, recently_used: set[str] = frozenset(), added: list[dict] = ()) -> dict:
+    return choose(ctx.date, recently_used, added)

@@ -12,6 +12,7 @@ The site runs on a shared Ubuntu server that already hosts other sites behind ng
 | Backups | `/srv/quiet-courier/backups`, nightly, kept 30 days |
 | Editions | `/srv/quiet-courier/editions`, built by the delivery job, kept 14 days |
 | Delivery | systemd `quiet-courier-deliver.timer`, every 15 minutes, settings in `/srv/quiet-courier/pipeline.env` |
+| Upkeep | systemd `quiet-courier-maintain.timer`, Sundays 22:10 server time: adds new poems from Wikisource |
 | Pipeline | Python 3.12 venv at `/srv/quiet-courier/venv`, article history in `/srv/quiet-courier/data/courier.db` |
 
 ## First-time setup
@@ -55,7 +56,7 @@ The pipeline needs Python 3.11 or newer and Pango. Ubuntu 22.04 ships Python 3.1
    sudo -u courier mkdir -p /srv/quiet-courier/data /srv/quiet-courier/.cache
    ```
 3. `/srv/quiet-courier/pipeline.env` from `deploy/pipeline.env.example`, mode 600, owned by `courier`. Put The Conversation's addresses in `PARTNER_COPY_TO` and `PARTNER_REPORT_TO` here, never in the repo.
-4. Copy `deploy/quiet-courier-deliver.service` and `.timer` to `/etc/systemd/system/`, `daemon-reload`, then `systemctl enable --now quiet-courier-deliver.timer`.
+4. Copy `deploy/quiet-courier-deliver.service` and `.timer` to `/etc/systemd/system/`, `daemon-reload`, then `systemctl enable --now quiet-courier-deliver.timer`. Do the same for `quiet-courier-maintain.service` and `.timer`.
 5. Test it with `DELIVERY_ENABLED=0` first: `systemctl start quiet-courier-deliver` should log "nothing sent". Then set it to `1` in both `pipeline.env` and `web/.env` and restart the site.
 
 Logs: `journalctl -u quiet-courier-deliver`. Problems are also emailed to `ALERT_EMAIL`.

@@ -103,6 +103,9 @@ def _core_path(out_root: Path, date: dt.date) -> Path:
     return out_root / date.isoformat() / "core" / "core.json"
 
 
+POEM_REPEAT_DAYS = 365
+
+
 # Every edition of a date shares one selection. The weather is the only local part, so a
 # reader in Tokyo and one in Chicago get the same stories, and The Conversation's daily
 # limit holds however many places are built.
@@ -129,7 +132,7 @@ def prepare_core(config: Config, date: dt.date, out_root: Path, store: Store, ht
                 pools[name] = items
                 runs.append(run)
 
-        poem = poems.fetch(ctx, store.recent_poems(date, 30))
+        poem = poems.fetch(ctx, store.recent_poems(date, POEM_REPEAT_DAYS), store.added_poems())
         sel = select(pools, config, store.recent_urls(date, config.history_days))
         if not sel.lead:
             failed = ", ".join(f"{r.source} ({r.error})" for r in runs if not r.ok) or "none"

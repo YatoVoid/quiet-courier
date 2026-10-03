@@ -1,6 +1,7 @@
 import argparse
 import datetime as dt
 import logging
+import os
 import sys
 import time
 from pathlib import Path
@@ -48,7 +49,13 @@ def main(argv: list[str] | None = None) -> int:
     a.add_argument("--from", dest="start", type=dt.date.fromisoformat, required=True, help="first edition date")
     a.add_argument("--to", dest="end", type=dt.date.fromisoformat, required=True, help="last edition date")
     a.add_argument("--config", type=Path, default=DEFAULT_PATH)
+    m = sub.add_parser("maintain", help="weekly upkeep: add new poems from Wikisource")
+    m.add_argument("--poems", type=int, default=30, help="most poems to add this run")
+    m.add_argument("--config", type=Path, default=DEFAULT_PATH)
     args = parser.parse_args(argv)
+
+    if args.cmd == "maintain":
+        return run_maintain(args)
 
     if args.cmd == "deliver":
         return run_deliver(args)
@@ -85,6 +92,25 @@ def run_deliver(args) -> int:
           f"build errors {len(report.build_errors)}, copies to The Conversation {report.partner_copies}, "
           f"monthly reports {report.partner_reports}, missing parts {len(report.missing)}")
     return 1 if report.failed_run else 0
+
+
+def run_maintain(args) -> int:
+    from . import poem_refill
+    from .http import Http
+    from .store import Store
+
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s %(message)s")
+    config = load_config(args.config)
+    store = Store(Path(os.environ.get("COURIER_DB", PIPELINE_DIR.parent / "data" / "courier.db")))
+    try:
+        r = poem_refill.refill(Http(config.user_agent), store, config.avoid, limit=args.poems)
+        total = len(store.added_poems())
+    finally:
+        store.close()
+    print(f"poems added {len(r.added)}, turned down {r.rejected}, pool now {total} plus the bundled ones")
+    for e in r.errors:
+        print(f"error: {e}")
+    return 1 if r.errors and not r.added else 0
 
 
 def run_archive_index(args) -> int:

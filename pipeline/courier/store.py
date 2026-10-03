@@ -20,7 +20,7 @@ class SourceRun:
 class Store:
     def __init__(self, path: Path):
         path.parent.mkdir(parents=True, exist_ok=True)
-        self.db = sqlite3.connect(path)
+        self.db = sqlite3.connect(path, timeout=30)
         self.db.execute("PRAGMA foreign_keys = ON")
         self.db.executescript(SCHEMA.read_text())
 
@@ -40,6 +40,22 @@ class Store:
             "SELECT DISTINCT i.item_id FROM edition_items i JOIN editions e ON e.id = i.edition_id "
             "WHERE i.kind = 'poem' AND e.edition_date >= ? AND e.edition_date < ?", (since, before.isoformat()))) as cur:
             return {r[0] for r in cur}
+
+    def wikisource_seen(self) -> set[str]:
+        with closing(self.db.execute("SELECT title FROM wikisource_pages")) as cur:
+            return {r[0] for r in cur}
+
+    def wikisource_mark(self, title: str, poem: dict | None, reason: str | None) -> None:
+        with self.db:
+            self.db.execute(
+                "INSERT OR REPLACE INTO wikisource_pages VALUES (?, ?, ?, ?)",
+                (title, json.dumps(poem, ensure_ascii=False) if poem else None, reason,
+                 dt.datetime.now(dt.UTC).isoformat(timespec="seconds")))
+
+    def added_poems(self) -> list[dict]:
+        with closing(self.db.execute(
+                "SELECT poem FROM wikisource_pages WHERE poem IS NOT NULL ORDER BY checked_at, title")) as cur:
+            return [json.loads(r[0]) for r in cur]
 
     def conversation_usage(self, first: dt.date, last: dt.date) -> list[dict]:
         with closing(self.db.execute(

@@ -37,3 +37,12 @@ CREATE TABLE IF NOT EXISTS source_runs (
     error         TEXT,
     PRIMARY KEY (edition_id, source)
 );
+
+-- Wikisource pages the poem refill has read. poem is the JSON of a usable poem, or NULL
+-- with the reason it was turned down.
+CREATE TABLE IF NOT EXISTS wikisource_pages (
+    title         TEXT PRIMARY KEY,
+    poem          TEXT,
+    reason        TEXT,
+    checked_at    TEXT NOT NULL
+);
