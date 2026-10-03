@@ -835,3 +835,91 @@ fieldset {
   font-size: var(--step--1);
   overflow-wrap: anywhere;
 }
+
+.guide-kicker {
+  font-family: var(--font-caps), serif;
+  border-bottom: 1px solid var(--rule);
+  display: inline-block;
+  margin: 0 0 0.75rem;
+}
+
+.guide .deck {
+  max-width: none;
+}
+
+.guide-byline {
+  font-family: var(--font-caps), serif;
+  font-size: var(--step--1);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.25rem 0;
+  margin: 0 0 1.5rem;
+}
+
+.guide-cta {
+  margin: 2.5rem auto;
+}
+
+.guide-cta-head {
+  font-family: var(--font-caps), serif;
+  font-size: var(--step-1);
+}
+
+.compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+  line-height: 1.4;
+  border-top: 3px solid var(--rule);
+  border-bottom: 3px solid var(--rule);
+}
+
+.compare th,
+.compare td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.compare thead th {
+  font-family: var(--font-caps), serif;
+  font-weight: 400;
+}
+
+.compare tbody th {
+  font-weight: 700;
+}
+
+.compare tbody tr:last-child th,
+.compare tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  .compare thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  .compare tr {
+    display: block;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .compare tbody tr:last-child {
+    border-bottom: 0;
+  }
+  .compare th,
+  .compare td {
+    display: block;
+    border: 0;
+    padding: 0.1rem 0;
+  }
+  .compare td::before {
+    content: attr(data-label) ": ";
+    font-family: var(--font-caps), serif;
+  }
+}
