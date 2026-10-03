@@ -1,10 +1,12 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { FrontMasthead } from "@/components/masthead";
 import { Footer } from "@/components/footer";
 import { currentUser, isOnboarded } from "@/lib/server/session";
 import { billingEnabled } from "@/lib/server/billing";
-import { PRICE_PER_MONTH, TRIAL_DAYS } from "@/lib/site";
+import { PAPER_NAME, PRICE_PER_MONTH, TRIAL_DAYS } from "@/lib/site";
+import { contactEmail } from "@/lib/server/config";
 import { deliveryLive } from "@/lib/server/deliveries";
 import front from "@/public/paper/kansas-city-large-front.png";
 import science from "@/public/paper/kansas-city-large-science.png";
@@ -81,6 +83,35 @@ function todayInCentral() {
   }).format(new Date());
 }
 
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
+// Tells search engines the paper's name and its common spellings, so "quietcourier" finds it too.
+function structuredData() {
+  const site = (process.env.APP_URL ?? "http://localhost:3000").replace(/\/$/, "");
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${site}/#website`,
+        url: `${site}/`,
+        name: PAPER_NAME,
+        alternateName: ["Quiet Courier", "QuietCourier"],
+        publisher: { "@id": `${site}/#organization` },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${site}/#organization`,
+        name: PAPER_NAME,
+        url: `${site}/`,
+        logo: `${site}/icon.png`,
+        email: contactEmail(),
+        description: "A daily newspaper for Kindle and other e-ink readers.",
+      },
+    ],
+  };
+}
+
 export default async function Home({ searchParams }: { searchParams: Promise<{ deleted?: string }> }) {
   const { deleted } = await searchParams;
   const user = await currentUser();
@@ -89,6 +120,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
 
   return (
     <div className="sheet">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData()).replace(/</g, "\\u003c") }}
+      />
       <FrontMasthead date={todayInCentral()} signedIn={user != null} />
       <main id="main">
         {deleted && (

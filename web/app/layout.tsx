@@ -23,10 +23,22 @@ const fell = localFont({
 });
 const caps = localFont({ src: "./fonts/IMFeENsc28P.ttf", variable: "--font-caps", display: "swap" });
 
+const DESCRIPTION =
+  "A daily newspaper for Kindle and other e-ink readers, emailed each morning and laid out like an early-1900s broadsheet. Real news, science and history, fifteen to twenty minutes of reading, then you're done.";
+
 export const metadata: Metadata = {
-  title: { default: PAPER_NAME, template: `%s | ${PAPER_NAME}` },
-  description: "A daily newspaper for Kindle and other e-ink readers, laid out like an early-1900s broadsheet. Fifteen to twenty minutes of reading, then you're done.",
+  title: { default: `${PAPER_NAME}: a daily newspaper for Kindle and e-ink readers`, template: `%s | ${PAPER_NAME}` },
+  description: DESCRIPTION,
+  applicationName: PAPER_NAME,
   metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
+  openGraph: {
+    type: "website",
+    siteName: PAPER_NAME,
+    title: `${PAPER_NAME}: a daily newspaper for your e-reader`,
+    description: DESCRIPTION,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Three front pages of The Quiet Courier" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
