@@ -185,7 +185,7 @@ Lets an outside account (a newspaper's Instagram, a blog, a forum) send readers 
 
 | | |
 |---|---|
-| Link | `https://quietcourier.com/r/<code>`, e.g. `/r/cougar`. Codes are lowercase `[a-z0-9-]{2,32}`. A known, active code sets a first-party cookie `qc_ref` (`HttpOnly`, `Secure`, `SameSite=Lax`, 30 days) and redirects to the home page. Unknown or expired codes redirect without a cookie. The route is rate limited like sign-in. |
+| Link | `https://quietcourier.com/via/<code>`, e.g. `/via/cougar`. Codes are lowercase `[a-z0-9-]{2,32}`. A known, active code sets a first-party cookie `qc_ref` (`HttpOnly`, `Secure`, `SameSite=Lax`, 30 days) and redirects to the home page. Unknown or expired codes redirect without a cookie. The route is rate limited like sign-in. |
 | Attribution | First touch wins and is never overwritten. The sign-in form reads `qc_ref` and stores the code on the email token, so it survives the sign-in link being opened on another device or in a mail app's browser. `completeSignIn` copies it to the new user. Existing accounts are never attributed. |
 | Paying reader | The first `invoice.paid` with an amount above zero for a referred user writes one row to `referral_conversions`. A later refund of that invoice (`charge.refunded`, added to the webhook's events) marks it void. Trial sign-ups who never pay cost nothing. |
 | Payout | Fixed per paying reader, stored on the referrer (`payout_cents`), set below the price so card fees are covered. Paid by hand; each payment is recorded in `referral_payouts`. |
