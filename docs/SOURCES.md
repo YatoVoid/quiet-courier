@@ -79,7 +79,35 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
   - Wikimedia APIs require a User-Agent with contact details and modest request rates. One request per day is enough.
 - Risks: anyone can edit, so a bad edit could be live when we fetch. Use a revision at least a few hours old and the day that has already ended. Coverage is world-first and thin on some days.
 
+## Waiting on permission (checked 2026-10-04)
+
+### KFF Health News (health policy reporting)
+- License: CC BY-NC-ND 4.0, but their own terms say it "allows all news outlets — including for-profit news organizations that charge for subscriptions and accept advertising — to republish our content free of charge." So a paid paper is covered on paper.
+- Conditions: byline with the reporter and KFF Health News; their tagline at the end ("KFF Health News is a national newsroom that produces in-depth journalism about health issues and is one of the core operating programs at KFF"); keep every hyperlink and link the original; no edits without asking; photos only for non-commercial use (print text only); items marked "All Rights Reserved" can't be used, so each article page has to be checked.
+- Their RSS feed (https://kffhealthnews.org/feed/) carries the full text.
+- Why we still ask first: the PDF can't keep inline links clickable, and stories are picked automatically. Contact: NewsHelp@kff.org.
+- Terms: https://kffhealthnews.org/syndication/
+
+### The 19th (gender, politics and policy)
+- License: CC BY-NC-ND 4.0, plus their own terms: "Do not sell or syndicate our content," stories must keep a tracking pixel (impossible in a PDF or EPUB), and every link must be kept.
+- Not usable without written permission. Contact: partnerships@19thnews.org.
+- Terms: https://19thnews.org/republishing-guidelines/
+
+### Mongabay (environment)
+- License: CC BY-ND 4.0, which allows commercial use, but their guidelines add: "Please do not republish Mongabay stories behind paywalls that require readers to pay or register for an account in order to view." A subscription paper is a paywall, so only with permission.
+- Terms: https://news.mongabay.com/copyright/creative-commons/
+
+## Usable without asking (checked 2026-10-04)
+
+### U.S. agency news releases (NOAA, NIH, FDA, Census)
+- Works of the U.S. government are public domain (17 U.S.C. 105). Images and quoted material from outside the government can still be copyrighted, so print text only.
+- Feeds: https://www.noaa.gov/rss.xml (often full text), https://www.nih.gov/news-releases/feed.xml and the FDA press-release feed (summaries only; the release page has the text), https://www.census.gov/newsroom/press-releases.xml.
+- These are press releases, not journalism. Good for a short notices column, not for the lead.
+
 ## Not usable
+
+### Knowable Magazine (checked 2026-10-04)
+- Text is CC BY-ND 4.0, but their republishing page limits it to editorial use with no commercial or promotional use, and asks publishers to pick stories individually rather than automatically or wholesale. The paper does both. Their site refuses automated fetching, so this comes from their page as quoted in search results; reread https://knowablemagazine.org/republish before reconsidering.
 
 ### States Newsroom (checked 2026-10-03)
 - Not a Creative Commons license. Its own guidelines say "Don't sell the story" and "Content should not be published behind a paywall; please reach out to the editor-in-chief of the newsroom if you have questions about your particular paywall system."
