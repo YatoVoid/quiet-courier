@@ -20,6 +20,11 @@ const CONTENTS = [
     source: "The Conversation",
   },
   {
+    title: "The World in Brief",
+    body: "The day’s main events, a sentence each, so you know what happened without reading about it all morning.",
+    source: "Wikipedia’s Current events portal",
+  },
+  {
     title: "World",
     body: "A report from somewhere you probably weren't reading about, written by people who live there.",
     source: "Global Voices",
@@ -40,6 +45,16 @@ const CONTENTS = [
     source: "Library of Congress",
   },
   {
+    title: "A novel, a chapter a day",
+    body: "A classic in daily instalments of about five minutes, the way novels used to run in newspapers. The Hound of the Baskervilles first, then The Time Machine.",
+    source: "Public domain fiction",
+  },
+  {
+    title: "Puzzles",
+    body: "A sudoku that gets harder through the week, from a gentle Monday to a tough Saturday, and a cryptogram made from a line of verse.",
+    source: "Made fresh for each edition",
+  },
+  {
     title: "The last page",
     body: "A poem, a word search built from its words, and the almanac: sunrise, sunset, and the moon.",
     source: "Public domain verse",
@@ -57,7 +72,7 @@ const QUESTIONS = [
   },
   {
     q: "Why does the paper end?",
-    a: "Because a feed doesn’t. Each edition is fitted to fifteen or twenty minutes of reading. When you reach the puzzle, you’ve read the news for the day.",
+    a: "Because a feed doesn’t. Each edition is fitted to fifteen or twenty minutes of reading. When you reach the puzzles, you’ve read the news for the day.",
   },
   {
     q: "Does my city change the news?",
@@ -140,13 +155,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
             <div className="body-columns">
               <p className="dropcap">
                 Most news now arrives as an endless scroll, built to keep you reading. The Quiet Courier comes once a day, as a
-                file on your reader, and it ends. You read it front to back, do the word search, and you are finished with the
+                file on your reader, and it ends. You read it front to back, do the puzzles, and you are finished with the
                 news until tomorrow.
               </p>
               <p>
                 Every edition is put together from writing that is free to republish: research explained by the people who
-                did it, reporting from around the world, NASA&rsquo;s own news, a forecast for your city, and a newspaper printed
-                on this date a hundred years ago. Each piece runs whole, with its author and license printed beside it.
+                did it, reporting from around the world, NASA&rsquo;s own news, a forecast for your city, a newspaper printed
+                on this date a hundred years ago, and the next chapter of a classic novel. Each piece runs whole, with its author
+                and license printed beside it.
               </p>
               <p>
                 The page is cut to the size of your screen, so a Kindle Paperwhite shows a two-column page and a Kindle Scribe

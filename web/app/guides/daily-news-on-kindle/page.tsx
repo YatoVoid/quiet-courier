@@ -187,8 +187,9 @@ export default function DailyNewsOnKindle() {
           <h2>5. {PAPER_NAME}</h2>
           <p>
             This is ours. Every morning at 5 a.m. in your time zone, a finished newspaper arrives in your Kindle library: a lead
-            story from The Conversation, world reporting from Global Voices, science from NASA, the forecast for any city you
-            choose, stories printed on this date in 1926, and a last page with a poem and a word search. It&rsquo;s laid out in
+            story from The Conversation, the day&rsquo;s events in brief, world reporting from Global Voices, science from NASA,
+            the forecast for any city you choose, stories printed on this date in 1926, a chapter of a classic novel, a poem,
+            and a sudoku, cryptogram and word search. It&rsquo;s laid out in
             columns like an old broadsheet, sized to your Kindle&rsquo;s screen, and takes fifteen to twenty minutes to read.
           </p>
           <p>
