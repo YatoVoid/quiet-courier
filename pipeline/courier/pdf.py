@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -8,6 +9,17 @@ from weasyprint import HTML
 from .devices import Device
 from .layout import FrontPlan, prepare_images, render_html, units, units_for_words
 from .models import Edition
+
+
+# Ubuntu 22.04 ships HarfBuzz 2.7, older than the 4.1 subsetting library WeasyPrint asks for, so it
+# subsets fonts with fontTools and warns once per font on every build. The output is the same;
+# pyproject.toml keeps WeasyPrint below the release that may drop the fallback.
+class _NoHarfBuzzNotice(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        return "HarfBuzz-Subset" not in record.getMessage()
+
+
+logging.getLogger("weasyprint").addFilter(_NoHarfBuzzNotice())
 
 SECONDARY_WORDS = 90
 
