@@ -127,6 +127,29 @@ def test_archive_quality_rejects_garbage():
     assert not chronicling.acceptable(s, ())
 
 
+def _story(head, text):
+    return chronicling.Story([head], [text], 1.0)
+
+
+def test_archive_skips_legal_notices():
+    notice = ("Order to show cause why mortgage should not be foreclosed. Upon reading and filing the "
+              "petition of the plaintiff it is ordered that the defendant appear before this court on the "
+              "first day of November and show cause why the prayer of the petition should not be granted.")
+    assert not chronicling.acceptable(_story("ORDER TO SHOW CAUSE", notice), ())
+    weak = ("The plaintiff asked the court to set aside the mortgage on the farm land near the river, "
+            "and the judge agreed to hear the matter next week after the harvest was in and the roads "
+            "were open again for travel from the county seat to the town.")
+    assert not chronicling.acceptable(_story("FARM CASE HEARD", weak), ())
+
+
+def test_archive_keeps_news_that_mentions_a_court():
+    news = ("The new bridge over the river was opened to traffic yesterday afternoon with a parade of "
+            "automobiles and a band concert. The mayor said the defendant in the old contract suit had "
+            "finished the work a month ahead of time, and the city council will meet tonight to thank "
+            "the builders and plan a dinner for the workmen.")
+    assert chronicling.acceptable(_story("NEW BRIDGE OPENED", news), ())
+
+
 def test_ocr_fixes():
     assert chronicling.fix_ocr("BERLIN, Oct. I.—Europe") == "BERLIN, Oct. 1.—Europe"
     assert chronicling.fix_ocr("London, Oct. 1 —(/P)— Alan") == "London, Oct. 1—(AP)—Alan"

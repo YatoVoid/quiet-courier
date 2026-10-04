@@ -31,6 +31,13 @@ DOWNLOADED = Path(os.environ.get("COURIER_DB", Path(__file__).resolve().parents[
 MAX_INDEX_BYTES = 20 * 1024**2
 GRIM = ("funeral", "died", "death", "dead", "killed", "slain", "murder", "hanged", "lynch", "suicide",
         "bandit", "robbery", "shot", "corpse", "body of", "wreck", "drowned", "burned to")
+# Court and estate notices fill the 1920s front pages and read as boilerplate. One of these
+# phrases marks a notice; plain trial reporting only trips the weaker terms below.
+LEGAL = ("hereby", "show cause", "notice is", "legal notice", "notice to creditors", "sheriff's sale",
+         "sheriff’s sale", "trustee's sale", "trustee’s sale", "public auction", "foreclos", "the said ",
+         "said premises", "aforesaid", "whereas", "to whom it may concern", "in the matter of",
+         "executrix", "administratrix", "probate", "summons", "deed of trust")
+LEGAL_WEAK = ("mortgage", "plaintiff", "defendant", "petition", "premises", "estate of", "chancery", "decree")
 ALLOWED = re.compile(r"^[\w.,;:'\"’‘“”!?()$&%\-—–/]+$")
 MIN_WORDS, MAX_WORDS = 40, 320
 MAX_PAPERS = 6
@@ -210,6 +217,8 @@ def acceptable(s: Story, avoid: tuple[str, ...]) -> bool:
         return False
     hay = (" ".join(s.headline) + " " + " ".join(s.paragraphs)).lower()
     if any(g in hay for g in GRIM) or any(a.lower() in hay for a in avoid):
+        return False
+    if any(t in hay for t in LEGAL) or sum(t in hay for t in LEGAL_WEAK) >= 2:
         return False
     return sum(p.count("[illegible]") for p in s.paragraphs) <= max(2, s.words // 60)
 
