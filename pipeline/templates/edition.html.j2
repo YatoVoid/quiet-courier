@@ -227,7 +227,6 @@
     {% for row in ws.grid %}<tr>{% for ch in row %}<td>{{ ch }}</td>{% endfor %}</tr>{% endfor %}
   </table>
   <ul class="wordlist">{% for w in ws.words %}<li>{{ w }}</li>{% endfor %}</ul>
-  <p class="answers-note">Answers in tomorrow’s edition.</p>
 
   <div class="almanac">
     <h3 class="almanac-title">The Almanac{% if e.location %} <span class="almanac-place">for {{ e.location.name }}, {{ e.location.region }}</span>{% endif %}</h3>

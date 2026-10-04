@@ -99,7 +99,6 @@
   {% for row in ws.grid %}<tr>{% for ch in row %}<td>{{ ch }}</td>{% endfor %}</tr>{% endfor %}
 </table></div>
 <p class="center wordlist">{{ ws.words | join(" · ") }}</p>
-<p class="center"><i>Answers in tomorrow’s edition.</i></p>
 <h3>The Almanac</h3>
 {% if e.location %}<p class="center"><i>{{ e.location.name }}, {{ e.location.region }}</i></p>
 <p class="center">Sunrise {{ alm.sunrise | clock }} · Sunset {{ alm.sunset | clock }}<br/>
