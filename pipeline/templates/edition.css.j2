@@ -313,6 +313,35 @@ p.drop, p.pcont { text-indent: 0; }
 .sources li { margin-bottom: 2pt; text-align: left; }
 .sources b { font-weight: 700; }
 
+.puzzle-page { break-before: page; text-align: center; }
+.puzzle-page .section-head { margin-top: 0; }
+.puzzle-page p { text-indent: 0; text-align: center; hyphens: manual; }
+.puzzle-level { font-family: "Body"; font-style: italic; font-size: 0.72em; }
+.sudoku {
+  margin: {{ "2pt auto 3pt" if d.id == "small" else "4pt auto 6pt" }};
+  border-collapse: collapse;
+  border: 1.6pt solid #000;
+}
+.sudoku td {
+  width: {{ d.puzzle_cell_pt * (1.8 if d.id == "small" else 2.35) }}pt;
+  height: {{ d.puzzle_cell_pt * (1.8 if d.id == "small" else 2.35) }}pt;
+  padding: 0;
+  border: 0.5pt solid #000;
+  text-align: center;
+  vertical-align: middle;
+  font-family: "Body";
+  font-variant-numeric: lining-nums;
+  font-size: {{ d.puzzle_cell_pt * (1.25 if d.id == "small" else 1.4) }}pt;
+  line-height: 1;
+}
+.sudoku td.box-r { border-right: 1.8pt solid #000; }
+.sudoku td.box-b { border-bottom: 1.8pt solid #000; }
+.crypt { margin: 3pt 0 0; line-height: {{ 1.7 if d.id == "small" else 1.95 }}; text-align: center; }
+.crypt-word { display: inline-block; white-space: nowrap; margin: 0 0.4em; }
+.crypt-ch, .crypt-punct { display: inline-block; text-align: center; font-family: "Fell"; font-size: {{ 0.95 if d.id == "small" else 1.05 }}em; }
+.crypt-ch { width: 0.85em; border-bottom: 0.5pt solid #000; margin: 0 0.12em; padding-bottom: 0.5em; line-height: 1; }
+.crypt-punct { padding-bottom: 0.5em; line-height: 1; }
+
 .final { break-before: page; page: last; text-align: center; }
 .final .section-head { margin-top: 0; }
 .final p { text-indent: 0; text-align: center; hyphens: manual; }

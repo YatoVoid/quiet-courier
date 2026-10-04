@@ -49,3 +49,8 @@ table.wordsearch td { width: 1.5em; height: 1.5em; text-align: center; padding: 
 .end-words { font-family: "Nameplate", serif; font-size: 2em; text-align: center; text-indent: 0; }
 .brief-item { text-indent: 0; text-align: left; margin: 0 0 0.6em; padding-bottom: 0.5em; border-bottom: 1px solid #000; }
 .brief-topic { font-variant: small-caps; font-weight: bold; }
+.sudoku { display: inline-table; border-collapse: collapse; border: 2px solid #000; margin: 0.5em auto 1em; }
+.sudoku td { width: 1.7em; height: 1.7em; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; font-size: 1.05em; }
+.sudoku td.box-r { border-right: 2px solid #000; }
+.sudoku td.box-b { border-bottom: 2px solid #000; }
+.crypt { letter-spacing: 0.25em; line-height: 1.8; font-size: 1.1em; text-indent: 0; }

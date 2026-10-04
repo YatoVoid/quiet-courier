@@ -8,7 +8,7 @@ from xml.sax.saxutils import escape
 from . import almanac
 from .cover import write_cover
 from .images import to_newsprint
-from .layout import FONTS_DIR, TEMPLATES_DIR, jinja_env, long_date, word_search
+from .layout import FONTS_DIR, TEMPLATES_DIR, jinja_env, long_date, puzzles, word_search
 from .models import Edition
 from .devices import SMALL
 
@@ -24,7 +24,7 @@ def _chapters(edition: Edition, images: dict) -> list[tuple[str, str, str]]:
         e=edition, images=images, date_long=long_date(edition.date),
         today=edition.weather.periods[0] if edition.weather else None,
         next_period=edition.weather.periods[1] if edition.weather else None,
-        ws=word_search(edition, SMALL), alm=almanac.compute(edition.location, edition.date),
+        ws=word_search(edition, SMALL), alm=almanac.compute(edition.location, edition.date), **puzzles(edition),
     )
     out = [("front.xhtml", "Front Page", tpl.render(**base, kind="front", title="Front Page",
                                                     secondaries=edition.secondaries(all_front)))]
@@ -41,6 +41,7 @@ def _chapters(edition: Edition, images: dict) -> list[tuple[str, str, str]]:
     if edition.serial:
         out.append(("serial.xhtml", "The Serial", tpl.render(**base, kind="serial", title="The Serial")))
     out.append(("sources.xhtml", "Sources and Licenses", tpl.render(**base, kind="sources", title="Sources and Licenses")))
+    out.append(("puzzles.xhtml", "Sudoku and Cryptogram", tpl.render(**base, kind="puzzles", title="Sudoku and Cryptogram")))
     out.append(("final.xhtml", "Puzzles and Almanac", tpl.render(**base, kind="final", title="Puzzles and Almanac")))
     return out
 

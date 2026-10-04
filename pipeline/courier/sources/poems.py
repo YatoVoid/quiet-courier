@@ -1,5 +1,7 @@
 import datetime as dt
 import json
+import random
+import re
 from pathlib import Path
 
 from . import LICENSES, Context
@@ -31,3 +33,32 @@ def choose(date: dt.date, recently_used: set[str] = frozenset(), added: list[dic
 
 def fetch(ctx: Context, recently_used: set[str] = frozenset(), added: list[dict] = ()) -> dict:
     return choose(ctx.date, recently_used, added)
+
+
+SENTENCE = re.compile(r"[^.!?;]+[.!?]")
+QUOTE_LETTERS = (40, 90)
+
+
+def _sentences(stanza: list[str]) -> list[str]:
+    text = re.sub(r"\s+", " ", " ".join(stanza)).strip()
+    out = []
+    for m in SENTENCE.finditer(text):
+        q = m.group(0).strip(" ,—-’'\"“”")
+        letters = sum(ch.isalpha() for ch in q)
+        if QUOTE_LETTERS[0] <= letters <= QUOTE_LETTERS[1] and q.isascii() and q[:1].isupper():
+            out.append(q)
+    return out
+
+
+def quote(date: dt.date, exclude: set[str], added: list[dict] = ()) -> dict | None:
+    """A whole sentence from a public-domain poem for the cryptogram, never from a poem in
+    `exclude` (today's, so the answer isn't printed a few pages earlier)."""
+    pool = [p for p in library() + list(added) if p["id"] not in exclude and p["year"] < 1931]
+    rng = random.Random(f"quote:{date.isoformat()}")
+    rng.shuffle(pool)
+    for p in pool:
+        options = [q for stanza in p["stanzas"] for q in _sentences(stanza)]
+        if options:
+            return {"text": rng.choice(options), "author": p["author"], "title": p["title"],
+                    "source_url": p["source_url"], "license": LICENSES["pd-expired"]}
+    return None

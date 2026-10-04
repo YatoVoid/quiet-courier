@@ -105,6 +105,19 @@
   <p class="source">{{ sr.attribution }}</p>
 </article>
 
+{% elif kind == "puzzles" %}
+<h2 class="section-head">Sudoku and Cryptogram</h2>
+<h3>Sudoku</h3>
+<p class="center"><i>{{ sudoku.level }}. Fill the grid so every row, column and three-by-three box holds the numbers 1 to 9 once.</i></p>
+<div class="centered-block"><table class="sudoku">
+  {% for row in sudoku.grid %}{% set r = loop.index %}<tr>{% for v in row %}<td class="{% if loop.index in (3, 6) %}box-r{% endif %}{% if r in (3, 6) %} box-b{% endif %}">{{ v if v else "" }}</td>{% endfor %}</tr>{% endfor %}
+</table></div>
+{% if crypt %}
+<h3>Cryptogram</h3>
+<p class="center"><i>A line of verse by {{ e.quote.author }}, with every letter swapped for another. {{ crypt.hint[0] }} stands for {{ crypt.hint[1] }}.</i></p>
+<p class="center crypt">{{ crypt.words | join("   ") }}</p>
+{% endif %}
+
 {% elif kind == "sources" %}
 <h2 class="section-head">Sources and Licenses</h2>
 <ol class="sources">
@@ -113,6 +126,7 @@
   {% endfor %}
   {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. {{ e.weather.license_name }}. <a href="{{ e.weather.source_url }}">{{ e.weather.source_url }}</a></li>{% endif %}
   <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. <a href="{{ e.poem.source_url }}">{{ e.poem.source_url }}</a></li>
+  {% if e.quote %}<li><b>Cryptogram</b>. A line from “{{ e.quote.title }},” {{ e.quote.author }}. {{ e.quote.license.name }}. <a href="{{ e.quote.source_url }}">{{ e.quote.source_url }}</a></li>{% endif %}
   {% if e.serial %}<li><b>{{ e.serial.title }}</b>, {{ e.serial.author }} ({{ e.serial.year }}), instalment {{ e.serial.number }}. {{ e.serial.license.name }}.</li>{% endif %}
   {% if e.brief %}<li><b>The World in Brief</b>. Wikipedia contributors, Current events portal. {{ e.brief.license.name }} (<a href="{{ e.brief.license.url }}">{{ e.brief.license.url }}</a>). {{ e.brief.changes }} <a href="{{ e.brief.source_url }}">{{ e.brief.source_url }}</a></li>{% endif %}
 </ol>

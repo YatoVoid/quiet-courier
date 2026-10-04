@@ -20,6 +20,7 @@ class _NoHarfBuzzNotice(logging.Filter):
 
 
 logging.getLogger("weasyprint").addFilter(_NoHarfBuzzNotice())
+log = logging.getLogger(__name__)
 
 SECONDARY_WORDS = 90
 
@@ -87,6 +88,14 @@ def build_pdf(edition: Edition, device: Device, out_path: Path, work_dir: Path) 
     plan = plan_front(edition, device, images)
     html = render_html(edition, device, plan, images)
     doc = HTML(string=html).render()
+    puzzle_page = next((i for i, p in enumerate(doc.pages) if "puzzles-start" in p.anchors), None)
+    final_page = next((i for i, p in enumerate(doc.pages) if "final-start" in p.anchors), None)
+    # The sudoku and cryptogram share one page. A long quote that would spill onto a page of
+    # its own is left out of this format instead.
+    if puzzle_page is not None and final_page is not None and final_page - puzzle_page > 1:
+        log.info("cryptogram left out on %s: puzzle page overflowed", device.id)
+        html = render_html(edition, device, plan, images, cryptogram=False)
+        doc = HTML(string=html).render()
 
     final_page = next((i for i, p in enumerate(doc.pages) if "final-start" in p.anchors), None)
     end_page = next((i for i, p in enumerate(doc.pages) if "the-end" in p.anchors), None)

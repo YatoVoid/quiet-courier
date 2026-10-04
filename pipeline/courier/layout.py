@@ -166,8 +166,16 @@ def word_search(edition: Edition, device: Device) -> puzzle.WordSearch:
     return puzzle.build(text, size=device.puzzle_size, count=device.puzzle_words, seed=edition.date.isoformat())
 
 
+def puzzles(edition: Edition, cryptogram: bool = True) -> dict:
+    seed = edition.date.isoformat()
+    return dict(
+        sudoku=puzzle.sudoku(seed, edition.date.weekday()),
+        crypt=puzzle.cryptogram(edition.quote.text, seed) if edition.quote and cryptogram else None,
+    )
+
+
 def render_html(edition: Edition, device: Device, plan: FrontPlan, images: dict[Path, Path],
-                front_only: bool = False) -> str:
+                front_only: bool = False, cryptogram: bool = True) -> str:
     content_width_pt = (device.page_width_in - 2 * device.margin_in) * 72
     ear_share = 0 if device.id == "small" else 0.42
     nameplate_pt = fit_font_size(edition.paper_name, content_width_pt * (1 - ear_share), device.nameplate_pt)
@@ -191,6 +199,7 @@ def render_html(edition: Edition, device: Device, plan: FrontPlan, images: dict[
         images={k: v.as_uri() for k, v in images.items()},
         alm=almanac.compute(edition.location, edition.date),
         ws=word_search(edition, device),
+        **puzzles(edition, cryptogram),
         today=edition.weather.periods[0] if edition.weather else None,
         next_period=edition.weather.periods[1] if edition.weather else None,
     )

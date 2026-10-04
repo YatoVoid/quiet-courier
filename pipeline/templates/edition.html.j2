@@ -245,9 +245,24 @@
     {% endfor %}
     {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. {{ e.weather.license_name }}. {{ e.weather.source_url }}</li>{% endif %}
     <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. {{ e.poem.source_url }}</li>
+    {% if e.quote %}<li><b>Cryptogram</b>. A line from “{{ e.quote.title }},” {{ e.quote.author }}. {{ e.quote.license.name }}. {{ e.quote.source_url }}</li>{% endif %}
     {% if e.serial %}<li><b>{{ e.serial.title }}</b>, {{ e.serial.author }} ({{ e.serial.year }}), instalment {{ e.serial.number }}. {{ e.serial.license.name }}.</li>{% endif %}
     {% if e.brief %}<li><b>{{ brief_title() }}</b>. Wikipedia contributors, Current events portal. {{ e.brief.license.name }} ({{ e.brief.license.url }}). {{ e.brief.changes }} {{ e.brief.source_url }}</li>{% endif %}
   </ol>
+</section>
+
+<section class="puzzle-page" id="puzzles-start">
+  <h2 class="section-head"><span>Sudoku and Cryptogram</span></h2>
+  <h3 class="puzzle-title">Sudoku <span class="puzzle-level">{{ sudoku.level }}</span></h3>
+  <p class="puzzle-intro">Fill the grid so every row, column and three-by-three box holds the numbers 1 to 9 once.</p>
+  <table class="sudoku">
+    {% for row in sudoku.grid %}{% set r = loop.index %}<tr>{% for v in row %}<td class="{% if loop.index in (3, 6) %}box-r{% endif %}{% if r in (3, 6) %} box-b{% endif %}">{{ v if v else "" }}</td>{% endfor %}</tr>{% endfor %}
+  </table>
+  {% if crypt %}
+  <h3 class="puzzle-title">Cryptogram</h3>
+  <p class="puzzle-intro">A line of verse by {{ e.quote.author }}, with every letter swapped for another. {{ crypt.hint[0] }} stands for {{ crypt.hint[1] }}.</p>
+  <p class="crypt">{% for w in crypt.words %}<span class="crypt-word">{% for ch in w %}<span class="{{ 'crypt-ch' if ch.isalpha() else 'crypt-punct' }}">{{ ch }}</span>{% endfor %}</span> {% endfor %}</p>
+  {% endif %}
 </section>
 
 <section class="final" id="final-start">

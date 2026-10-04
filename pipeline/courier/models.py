@@ -119,6 +119,15 @@ class Poem:
 
 
 @dataclass(frozen=True)
+class Quote:
+    text: str
+    author: str
+    title: str
+    source_url: str
+    license: License
+
+
+@dataclass(frozen=True)
 class SerialBlock:
     kind: str
     text: str
@@ -192,6 +201,7 @@ class Edition:
     poem: Poem
     brief: Brief | None = None
     serial: Serial | None = None
+    quote: Quote | None = None
 
     @property
     def lead(self) -> Article:
@@ -226,6 +236,7 @@ def load_edition(path: Path) -> Edition:
     p = d["poem"]
     b = d.get("brief")
     s = d.get("serial")
+    q = d.get("quote")
     loc = d.get("location")
     return Edition(
         paper_name=d["paper_name"], motto=d["motto"], volume=d["volume"], number=d["edition_number"],
@@ -253,4 +264,5 @@ def load_edition(path: Path) -> Edition:
             tuple(SerialBlock(x["kind"], x["text"], x.get("title"), x.get("part")) for x in s["blocks"]),
             s["last"], s.get("next_title"), License.from_dict(s["license"]), s["attribution"],
         ) if s and s.get("blocks") else None,
+        quote=Quote(q["text"], q["author"], q["title"], q["source_url"], License.from_dict(q["license"])) if q else None,
     )

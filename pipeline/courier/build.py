@@ -157,6 +157,7 @@ def prepare_core(config: Config, date: dt.date, out_root: Path, store: Store, ht
             "front": {"lead": sel.lead["id"], "secondary": [a["id"] for a in sel.secondaries]},
             "articles": articles,
             "poem": poem,
+            "quote": poems.quote(date, {poem["id"]}, store.added_poems()),
             "serial": instalment,
             "words": sel.words + serial_words,
             "runs": [r.__dict__ for r in runs],
@@ -231,6 +232,7 @@ def build(config: Config, city: City, date: dt.date, out_root: Path, store: Stor
         "articles": core["articles"],
         "weather": weather,
         "poem": core["poem"],
+        "quote": core.get("quote"),
         "serial": core.get("serial"),
         "brief": brief,
     }
