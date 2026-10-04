@@ -38,6 +38,8 @@ def _chapters(edition: Edition, images: dict) -> list[tuple[str, str, str]]:
             continue
         out.append((f"{sec.id}.xhtml", sec.name, tpl.render(**base, kind="section", title=sec.name,
                                                             section=sec, articles=arts)))
+    if edition.serial:
+        out.append(("serial.xhtml", "The Serial", tpl.render(**base, kind="serial", title="The Serial")))
     out.append(("sources.xhtml", "Sources and Licenses", tpl.render(**base, kind="sources", title="Sources and Licenses")))
     out.append(("final.xhtml", "Puzzles and Almanac", tpl.render(**base, kind="final", title="Puzzles and Almanac")))
     return out

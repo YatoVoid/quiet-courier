@@ -46,3 +46,14 @@ CREATE TABLE IF NOT EXISTS wikisource_pages (
     reason        TEXT,
     checked_at    TEXT NOT NULL
 );
+
+-- Novels for the daily serial, by Project Gutenberg ebook number. book is the prepared text
+-- (instalments), or NULL with the reason it was turned down. started_on is the edition date
+-- of instalment 1; instalment n runs on started_on + n - 1.
+CREATE TABLE IF NOT EXISTS serial_books (
+    id            INTEGER PRIMARY KEY,
+    book          TEXT,
+    reason        TEXT,
+    started_on    TEXT,
+    checked_at    TEXT NOT NULL
+);

@@ -56,7 +56,7 @@ pipeline/            Python: fetch, clean, select, lay out, render
   courier/           The package
   templates/         Print HTML/CSS (Jinja) and EPUB templates
   courier/sources/   One module per source, all returning the same article shape
-  courier/data/      Poem library and the English word list used to score OCR
+  courier/data/      Poem library, serial novel list, and the English word list used to score OCR
   samples/           Sample edition data and images
   tests/             Offline: every source is tested against saved copies of its feed
   courier.toml       Paper name, reading length, cities, which sources are on
@@ -120,7 +120,8 @@ The list of 1926 issues for each edition date is read from `pipeline/courier/dat
 | Missing parts | If The World in Brief, a city's weather or the 1926 archives can't be had, the edition goes out without that part and no gap is shown. The owner gets one email per part per day, with the reason. |
 | Limits | Sending stops for the run when the Resend plan's daily or monthly limit is close, keeping room for sign-in links. |
 | The Conversation | After the first reader receives a date's edition, one copy goes to The Conversation listing their articles. On the 1st of each month, a report lists every article used, the dates it ran, and the circulation. Both are recorded so they go once. |
-| Weekly upkeep | `courier maintain` runs on Sundays. It downloads the latest 1926 archive index from this repo, which the monthly "Archive index" GitHub workflow extends about six weeks at a time to stay 13 months ahead (loc.gov blocks the server, not GitHub). It adds up to 30 new public-domain poems from Wikisource collections listed in `pipeline/courier/poem_refill.py` (each page is read once; poems that are too long, too short, not English, published 1931 or later, or too thin for a word search are turned down). Poems don't repeat within a year. It then emails the owner only if something is low: the 1926 archive index ends within 90 days, fewer than 30 poems are unused, or disk is under 5 GB. |
+| Weekly upkeep | `courier maintain` runs on Sundays. It downloads the latest 1926 archive index from this repo, which the monthly "Archive index" GitHub workflow extends about six weeks at a time to stay 13 months ahead (loc.gov blocks the server, not GitHub). It adds up to 30 new public-domain poems from Wikisource collections listed in `pipeline/courier/poem_refill.py` (each page is read once; poems that are too long, too short, not English, published 1931 or later, or too thin for a word search are turned down). Poems don't repeat within a year. It keeps the next two serial novels downloaded and cut into instalments. It then emails the owner only if something is low: the 1926 archive index ends within 90 days, fewer than 30 poems are unused, fewer than 3 serial novels are left, a serial book was turned down that week, or disk is under 5 GB. |
+| Daily serial | One instalment a day of a public-domain novel, from the list in `pipeline/courier/data/serials.json` (24 books, about five years). `courier/serial.py` strips Project Gutenberg's header, footer and name, finds the chapters (a heading followed by prose; contents pages are skipped), checks the chapter numbers run in order, and cuts the text into instalments of about 1,200 words (1,600 at most) at paragraph breaks. Instalment n of a book runs on its start date plus n − 1, so every edition of a date carries the same instalment however the builds are ordered. The next book starts the day after one ends. The instalment's words come out of the news budget, so an edition stays at 15 to 20 minutes. |
 | Off switch | Nothing is sent unless `DELIVERY_ENABLED=1`. |
 | Clean-up | Editions older than 14 days are deleted. |
 

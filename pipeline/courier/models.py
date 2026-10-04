@@ -119,6 +119,29 @@ class Poem:
 
 
 @dataclass(frozen=True)
+class SerialBlock:
+    kind: str
+    text: str
+    title: str | None = None
+    part: str | None = None
+
+
+@dataclass(frozen=True)
+class Serial:
+    title: str
+    author: str
+    year: int
+    number: int
+    total: int
+    started: dt.date
+    blocks: tuple[SerialBlock, ...]
+    last: bool
+    next_title: str | None
+    license: License
+    attribution: str
+
+
+@dataclass(frozen=True)
 class BriefItem:
     heading: str
     topic: str | None
@@ -168,6 +191,7 @@ class Edition:
     weather: Weather | None
     poem: Poem
     brief: Brief | None = None
+    serial: Serial | None = None
 
     @property
     def lead(self) -> Article:
@@ -201,6 +225,7 @@ def load_edition(path: Path) -> Edition:
     w = d.get("weather")
     p = d["poem"]
     b = d.get("brief")
+    s = d.get("serial")
     loc = d.get("location")
     return Edition(
         paper_name=d["paper_name"], motto=d["motto"], volume=d["volume"], number=d["edition_number"],
@@ -223,4 +248,9 @@ def load_edition(path: Path) -> Edition:
             tuple(BriefItem(i["heading"], i.get("topic"), i["text"], tuple(i.get("outlets", ()))) for i in b["items"]),
             b["source_url"], License.from_dict(b["license"]), b["attribution"], b["changes"],
         ) if b and b.get("items") else None,
+        serial=Serial(
+            s["title"], s["author"], s["year"], s["number"], s["total"], dt.date.fromisoformat(s["started"]),
+            tuple(SerialBlock(x["kind"], x["text"], x.get("title"), x.get("part")) for x in s["blocks"]),
+            s["last"], s.get("next_title"), License.from_dict(s["license"]), s["attribution"],
+        ) if s and s.get("blocks") else None,
     )

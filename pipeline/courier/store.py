@@ -57,6 +57,24 @@ class Store:
                 "SELECT poem FROM wikisource_pages WHERE poem IS NOT NULL ORDER BY checked_at, title")) as cur:
             return [json.loads(r[0]) for r in cur]
 
+    def serial_books(self) -> dict[int, dict]:
+        with closing(self.db.execute("SELECT id, book, reason, started_on, checked_at FROM serial_books")) as cur:
+            return {i: {"book": json.loads(b) if b else None, "reason": r,
+                        "started_on": dt.date.fromisoformat(s) if s else None,
+                        "checked_at": dt.datetime.fromisoformat(c)} for i, b, r, s, c in cur}
+
+    def serial_save(self, book_id: int, book: dict | None, reason: str | None) -> None:
+        with self.db:
+            self.db.execute(
+                "INSERT OR REPLACE INTO serial_books (id, book, reason, started_on, checked_at) VALUES (?, ?, ?, NULL, ?)",
+                (book_id, json.dumps(book, ensure_ascii=False) if book else None, reason,
+                 dt.datetime.now(dt.UTC).isoformat(timespec="seconds")))
+
+    def serial_start(self, book_id: int, date: dt.date) -> None:
+        with self.db:
+            self.db.execute("UPDATE serial_books SET started_on = ? WHERE id = ? AND started_on IS NULL",
+                            (date.isoformat(), book_id))
+
     def conversation_usage(self, first: dt.date, last: dt.date) -> list[dict]:
         with closing(self.db.execute(
             "SELECT i.title, i.source_url, group_concat(DISTINCT e.edition_date) FROM edition_items i "
@@ -70,6 +88,10 @@ class Store:
         edition_id = f"{edition['date']}/{city_id}"
         items = [("article", a) for a in edition["articles"]]
         items.append(("poem", edition["poem"]))
+        if edition.get("serial"):
+            s = edition["serial"]
+            items.append(("serial", s | {"title": f"{s['title']}, instalment {s['number']}",
+                                          "body": [b for b in s["blocks"] if b["kind"] == "p"]}))
         if edition.get("weather"):
             w = edition["weather"]
             items.append(("weather", {"id": f"weather-{city_id}", "title": f"Forecast for {w['city']}",

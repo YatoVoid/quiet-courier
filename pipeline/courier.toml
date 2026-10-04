@@ -19,6 +19,7 @@ nws = true
 metno = true
 chronicling_america = true
 current_events = true
+serial = true
 
 [editorial]
 # Stories whose title or opening paragraph contains any of these are skipped.

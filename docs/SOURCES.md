@@ -61,6 +61,12 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
 ### Wikisource (poems, essays)
 - The underlying works are public domain if published before 1931. Use the original text, not a later edition's notes or translation, which may still be under copyright.
 
+### Project Gutenberg, novels for the daily serial (checked 2026-10-04)
+- The novels are public domain. Gutenberg's license and trademark only cover copies that keep the Project Gutenberg name, so `courier/serial.py` cuts the header and footer and drops any paragraph that mentions the project. Nothing printed names Gutenberg; the credit reads "first published <year>. Public domain."
+- Readers live outside the US too, so a book goes in `pipeline/courier/data/serials.json` only if it was published before 1931 and its author died more than 70 years ago. The code checks both before downloading. That rules out, for example, Agatha Christie (died 1976) and E. M. Forster (died 1970).
+- For a translation, the translation's own date and translator count. Around the World in Eighty Days is George Makepeace Towle's 1873 translation (Towle died 1893).
+- End matter written by later editors (Gutenberg file 541 ends with a Library of America note) may still be under copyright, so a book stops at "THE END", "A Note on the Text", "Footnotes" and similar headings.
+
 ### Wikipedia, Current events portal (checked 2026-10-03)
 - License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Commercial use allowed. Older text may also be under the GFDL; the CC license is the one we rely on.
 - Terms page: https://en.wikipedia.org/wiki/Wikipedia:Reusing_Wikipedia_content

@@ -207,6 +207,36 @@
 </section>
 {% endfor %}
 
+{% if e.serial %}
+{% set sr = e.serial %}
+<section class="sec sec-serial">
+  {{ section_head("The Serial", "Instalment " ~ sr.number ~ " of " ~ sr.total, "sec-serial") }}
+  <div class="cols">
+  <article class="story serial">
+    <h3 class="serial-title">{{ sr.title }}</h3>
+    <p class="serial-author">By {{ sr.author }}, {{ sr.year }}</p>
+    {% if sr.number == 1 %}<p class="serial-note">Begins today. The next instalment comes with each morning’s paper.</p>{% endif %}
+    {% set ns = namespace(first=false) %}
+    {% for b in sr.blocks %}
+      {% if b.kind in ("chapter", "continued") %}
+        {% if b.part %}<p class="serial-part">{{ b.part }}</p>{% endif %}
+        <h4 class="serial-chapter">{{ b.text }}{% if b.title %}<span class="serial-chapter-title">{{ b.title }}</span>{% endif %}</h4>
+        {% if b.kind == "continued" %}<p class="serial-cont">Continued from yesterday</p>{% endif %}
+        {% set ns.first = b.kind == "chapter" %}
+      {% elif b.kind == "break" %}<p class="serial-break">* * *</p>
+      {% elif b.kind == "note" %}<p class="note">{{ b.text }}</p>
+      {% elif ns.first %}<p class="drop">{{ b.text | dropcap }}</p>{% set ns.first = false %}
+      {% else %}<p>{{ b.text }}</p>
+      {% endif %}
+    {% endfor %}
+    {% if sr.last %}<p class="serial-end">The End</p>{% if sr.next_title %}<p class="serial-next">Tomorrow, the first instalment of {{ sr.next_title }}.</p>{% endif %}
+    {% else %}<p class="serial-next">To be continued tomorrow.</p>{% endif %}
+    <p class="source">{{ sr.attribution }}</p>
+  </article>
+  </div>
+</section>
+{% endif %}
+
 <section class="sec sec-sources">
   {{ section_head("Sources and Licenses", id="sources") }}
   <ol class="sources">
@@ -215,6 +245,7 @@
     {% endfor %}
     {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. {{ e.weather.license_name }}. {{ e.weather.source_url }}</li>{% endif %}
     <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. {{ e.poem.source_url }}</li>
+    {% if e.serial %}<li><b>{{ e.serial.title }}</b>, {{ e.serial.author }} ({{ e.serial.year }}), instalment {{ e.serial.number }}. {{ e.serial.license.name }}.</li>{% endif %}
     {% if e.brief %}<li><b>{{ brief_title() }}</b>. Wikipedia contributors, Current events portal. {{ e.brief.license.name }} ({{ e.brief.license.url }}). {{ e.brief.changes }} {{ e.brief.source_url }}</li>{% endif %}
   </ol>
 </section>

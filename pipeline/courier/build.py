@@ -1,3 +1,4 @@
+import dataclasses
 import datetime as dt
 import fcntl
 import json
@@ -7,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import clean
+from . import clean, serial
 from .config import GENERAL, City, Config
 from .devices import DEVICES
 from .epub import build_epub
@@ -133,7 +134,14 @@ def prepare_core(config: Config, date: dt.date, out_root: Path, store: Store, ht
                 runs.append(run)
 
         poem = poems.fetch(ctx, store.recent_poems(date, POEM_REPEAT_DAYS), store.added_poems())
-        sel = select(pools, config, store.recent_urls(date, config.history_days))
+        instalment = None
+        if config.enabled("serial"):
+            instalment, run = _timed("serial", lambda: serial.for_date(store, date, http), None)
+            runs.append(run)
+        # The serial's words come out of the news budget, so the paper keeps its length.
+        serial_words = sum(len(b["text"].split()) for b in instalment["blocks"] if b["kind"] == "p") if instalment else 0
+        budget = dataclasses.replace(config, max_words=config.max_words - serial_words)
+        sel = select(pools, budget, store.recent_urls(date, config.history_days))
         if not sel.lead:
             failed = ", ".join(f"{r.source} ({r.error})" for r in runs if not r.ok) or "none"
             raise BuildError(f"no usable articles for {date}; failed sources: {failed}")
@@ -149,7 +157,8 @@ def prepare_core(config: Config, date: dt.date, out_root: Path, store: Store, ht
             "front": {"lead": sel.lead["id"], "secondary": [a["id"] for a in sel.secondaries]},
             "articles": articles,
             "poem": poem,
-            "words": sel.words,
+            "serial": instalment,
+            "words": sel.words + serial_words,
             "runs": [r.__dict__ for r in runs],
         }
         tmp = path.with_suffix(".tmp")
@@ -181,6 +190,8 @@ def _missing(config: Config, city: City, edition: dict, runs: list[SourceRun], n
                                               or f"no usable items on Wikipedia's page for {day:%B} {day.day}"))
     if city.location is not None and not edition["weather"]:
         out.append(f"Weather for {city.location.name}: " + (errors.get("weather") or "no forecast returned"))
+    if config.enabled("serial") and not edition.get("serial"):
+        out.append("The serial: " + (errors.get("serial") or "no instalment for this date (catalog used up or no book prepared)"))
     if config.enabled("chronicling_america") and not any(a["section"] == "archives" for a in edition["articles"]):
         out.append("From the Archives: " + (errors.get("chronicling_america") or "no readable 1926 stories found"))
     return out
@@ -220,6 +231,7 @@ def build(config: Config, city: City, date: dt.date, out_root: Path, store: Stor
         "articles": core["articles"],
         "weather": weather,
         "poem": core["poem"],
+        "serial": core.get("serial"),
         "brief": brief,
     }
     out_dir = out_root / date.isoformat() / city_id

@@ -1,0 +1,194 @@
+[
+ {
+  "id": 2852,
+  "title": "The Hound of the Baskervilles",
+  "match": "The Hound of the Baskervilles",
+  "author": "Arthur Conan Doyle",
+  "year": 1902,
+  "died": 1930
+ },
+ {
+  "id": 35,
+  "title": "The Time Machine",
+  "match": "The Time Machine",
+  "author": "H. G. Wells",
+  "year": 1895,
+  "died": 1946
+ },
+ {
+  "id": 103,
+  "title": "Around the World in Eighty Days",
+  "match": "Around the World in Eighty Days",
+  "author": "Jules Verne",
+  "year": 1873,
+  "died": 1905
+ },
+ {
+  "id": 558,
+  "title": "The Thirty-Nine Steps",
+  "match": "The Thirty-Nine Steps",
+  "author": "John Buchan",
+  "year": 1915,
+  "died": 1940
+ },
+ {
+  "id": 95,
+  "title": "The Prisoner of Zenda",
+  "match": "The prisoner of Zenda",
+  "author": "Anthony Hope",
+  "year": 1894,
+  "died": 1933
+ },
+ {
+  "id": 215,
+  "title": "The Call of the Wild",
+  "match": "The call of the wild",
+  "author": "Jack London",
+  "year": 1903,
+  "died": 1916
+ },
+ {
+  "id": 113,
+  "title": "The Secret Garden",
+  "match": "The Secret Garden",
+  "author": "Frances Hodgson Burnett",
+  "year": 1911,
+  "died": 1924
+ },
+ {
+  "id": 2097,
+  "title": "The Sign of the Four",
+  "match": "The Sign of the Four",
+  "author": "Arthur Conan Doyle",
+  "year": 1890,
+  "died": 1930
+ },
+ {
+  "id": 64317,
+  "title": "The Great Gatsby",
+  "match": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "year": 1925,
+  "died": 1940
+ },
+ {
+  "id": 60,
+  "title": "The Scarlet Pimpernel",
+  "match": "The Scarlet Pimpernel",
+  "author": "Baroness Orczy",
+  "year": 1905,
+  "died": 1947
+ },
+ {
+  "id": 36,
+  "title": "The War of the Worlds",
+  "match": "The war of the worlds",
+  "author": "H. G. Wells",
+  "year": 1898,
+  "died": 1946
+ },
+ {
+  "id": 120,
+  "title": "Treasure Island",
+  "match": "Treasure Island",
+  "author": "Robert Louis Stevenson",
+  "year": 1883,
+  "died": 1894
+ },
+ {
+  "id": 5230,
+  "title": "The Invisible Man",
+  "match": "The Invisible Man",
+  "author": "H. G. Wells",
+  "year": 1897,
+  "died": 1946
+ },
+ {
+  "id": 55,
+  "title": "The Wonderful Wizard of Oz",
+  "match": "The Wonderful Wizard of Oz",
+  "author": "L. Frank Baum",
+  "year": 1900,
+  "died": 1919
+ },
+ {
+  "id": 84,
+  "title": "Frankenstein",
+  "match": "Frankenstein",
+  "author": "Mary Shelley",
+  "year": 1818,
+  "died": 1851
+ },
+ {
+  "id": 244,
+  "title": "A Study in Scarlet",
+  "match": "A Study in Scarlet",
+  "author": "Arthur Conan Doyle",
+  "year": 1887,
+  "died": 1930
+ },
+ {
+  "id": 421,
+  "title": "Kidnapped",
+  "match": "Kidnapped",
+  "author": "Robert Louis Stevenson",
+  "year": 1886,
+  "died": 1894
+ },
+ {
+  "id": 174,
+  "title": "The Picture of Dorian Gray",
+  "match": "The Picture of Dorian Gray",
+  "author": "Oscar Wilde",
+  "year": 1890,
+  "died": 1900
+ },
+ {
+  "id": 541,
+  "title": "The Age of Innocence",
+  "match": "The Age of Innocence",
+  "author": "Edith Wharton",
+  "year": 1920,
+  "died": 1937
+ },
+ {
+  "id": 45,
+  "title": "Anne of Green Gables",
+  "match": "Anne of Green Gables",
+  "author": "L. M. Montgomery",
+  "year": 1908,
+  "died": 1942
+ },
+ {
+  "id": 768,
+  "title": "Wuthering Heights",
+  "match": "Wuthering Heights",
+  "author": "Emily Brontë",
+  "year": 1847,
+  "died": 1848
+ },
+ {
+  "id": 1260,
+  "title": "Jane Eyre",
+  "match": "Jane Eyre",
+  "author": "Charlotte Brontë",
+  "year": 1847,
+  "died": 1855
+ },
+ {
+  "id": 1400,
+  "title": "Great Expectations",
+  "match": "Great Expectations",
+  "author": "Charles Dickens",
+  "year": 1861,
+  "died": 1870
+ },
+ {
+  "id": 98,
+  "title": "A Tale of Two Cities",
+  "match": "A Tale of Two Cities",
+  "author": "Charles Dickens",
+  "year": 1859,
+  "died": 1870
+ }
+]

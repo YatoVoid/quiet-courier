@@ -97,7 +97,7 @@ def run_deliver(args) -> int:
 
 
 def run_maintain(args) -> int:
-    from . import poem_refill, watchdog
+    from . import poem_refill, serial, watchdog
     from .delivery import _addresses
     from .sources import chronicling
     from .http import Http
@@ -118,6 +118,11 @@ def run_maintain(args) -> int:
                   else "archive index already current")
         except Exception as e:
             warnings.append(f"Couldn't download the archive index from GitHub: {e}")
+        try:
+            queued = serial.queue_ahead(store, http, dt.date.today())
+            print(f"serial books prepared: {', '.join(queued)}" if queued else "serial queue already full")
+        except Exception as e:
+            warnings.append(f"Couldn't prepare the next serial book: {e}")
         warnings += watchdog.check(store, dt.date.today(), db_path.parent)
         total = len(store.added_poems())
     finally:

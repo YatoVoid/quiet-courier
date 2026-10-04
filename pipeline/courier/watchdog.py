@@ -8,11 +8,13 @@ from pathlib import Path
 
 from .build import POEM_REPEAT_DAYS
 from .mail import Mailer, MailError, Message
+from . import serial
 from .sources import chronicling, poems
 from .store import Store
 
 ARCHIVE_WARN_DAYS = 90
 POEMS_WARN = 30
+SERIAL_BOOKS_WARN = 3
 DISK_WARN_BYTES = 5 * 1024**3
 
 
@@ -43,6 +45,15 @@ def check(store: Store, today: dt.date, data_dir: Path) -> list[str]:
     if left < POEMS_WARN:
         warnings.append(f"Only {left} poems haven't run in the last year. The weekly refill adds more from "
                         "Wikisource; if it keeps finding none, its collection list in poem_refill.py is used up.")
+    books = serial.books_left(store)
+    if books < SERIAL_BOOKS_WARN:
+        warnings.append(f"Only {books} serial novels are left that haven't run. Add more to "
+                        "pipeline/courier/data/serials.json (public domain everywhere: published before 1931, "
+                        "author dead more than 70 years).")
+    week_ago = dt.datetime.combine(today - dt.timedelta(days=7), dt.time(), dt.UTC)
+    for book_id, r in store.serial_books().items():
+        if r["reason"] and r["checked_at"] >= week_ago:
+            warnings.append(f"Serial book {book_id} in serials.json was turned down: {r['reason']}.")
     free = shutil.disk_usage(data_dir).free
     if free < DISK_WARN_BYTES:
         warnings.append(f"The server has {free / 1024**3:.1f} GB of disk left.")

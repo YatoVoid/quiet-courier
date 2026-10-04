@@ -80,6 +80,31 @@
   {% for a in articles %}{{ story(a) }}{% endfor %}
 {% endif %}
 
+{% elif kind == "serial" %}
+{% set sr = e.serial %}
+<h2 class="section-head">The Serial<small>Instalment {{ sr.number }} of {{ sr.total }}</small></h2>
+<article class="story serial">
+  <h3>{{ sr.title }}</h3>
+  <p class="byline">By {{ sr.author }}, {{ sr.year }}</p>
+  {% if sr.number == 1 %}<p class="center"><i>Begins today. The next instalment comes with each morning’s paper.</i></p>{% endif %}
+  {% set ns = namespace(first=false) %}
+  {% for b in sr.blocks %}
+    {% if b.kind in ("chapter", "continued") %}
+      {% if b.part %}<p class="center serial-part">{{ b.part }}</p>{% endif %}
+      <h4>{{ b.text }}{% if b.title %}<br/><i>{{ b.title }}</i>{% endif %}</h4>
+      {% if b.kind == "continued" %}<p class="center"><i>Continued from yesterday</i></p>{% endif %}
+      {% set ns.first = b.kind == "chapter" %}
+    {% elif b.kind == "break" %}<p class="center">* * *</p>
+    {% elif b.kind == "note" %}<p class="note">{{ b.text }}</p>
+    {% elif ns.first %}<p class="first">{{ b.text }}</p>{% set ns.first = false %}
+    {% else %}<p>{{ b.text }}</p>
+    {% endif %}
+  {% endfor %}
+  {% if sr.last %}<p class="center"><b>The End</b></p>{% if sr.next_title %}<p class="center"><i>Tomorrow, the first instalment of {{ sr.next_title }}.</i></p>{% endif %}
+  {% else %}<p class="center"><i>To be continued tomorrow.</i></p>{% endif %}
+  <p class="source">{{ sr.attribution }}</p>
+</article>
+
 {% elif kind == "sources" %}
 <h2 class="section-head">Sources and Licenses</h2>
 <ol class="sources">
@@ -88,6 +113,7 @@
   {% endfor %}
   {% if e.weather %}<li><b>Weather</b>. {{ e.weather.office }}. {{ e.weather.license_name }}. <a href="{{ e.weather.source_url }}">{{ e.weather.source_url }}</a></li>{% endif %}
   <li><b>{{ e.poem.title }}</b>, {{ e.poem.author }}. {{ e.poem.license.name }}. <a href="{{ e.poem.source_url }}">{{ e.poem.source_url }}</a></li>
+  {% if e.serial %}<li><b>{{ e.serial.title }}</b>, {{ e.serial.author }} ({{ e.serial.year }}), instalment {{ e.serial.number }}. {{ e.serial.license.name }}.</li>{% endif %}
   {% if e.brief %}<li><b>The World in Brief</b>. Wikipedia contributors, Current events portal. {{ e.brief.license.name }} (<a href="{{ e.brief.license.url }}">{{ e.brief.license.url }}</a>). {{ e.brief.changes }} <a href="{{ e.brief.source_url }}">{{ e.brief.source_url }}</a></li>{% endif %}
 </ol>
 
