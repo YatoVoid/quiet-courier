@@ -49,7 +49,7 @@ const CONTENTS = [
 const QUESTIONS = [
   {
     q: "Which readers does it work with?",
-    a: "Any Kindle, through Amazon’s Send to Kindle email address. PocketBook readers have their own email address and work the same way, and Boox tablets can receive it through the Kindle app. Kobo and reMarkable don’t accept files by email yet.",
+    a: "Any Kindle, through Amazon’s Send to Kindle email address. PocketBook readers have their own email address and work the same way, and Boox tablets can receive it through the Kindle app. Kobo, reMarkable and other readers get a private download link instead, which also works as a catalog in KOReader.",
   },
   {
     q: "Is any of it written or summarized by AI?",

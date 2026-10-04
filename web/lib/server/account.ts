@@ -3,7 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users, type User } from "@/db/schema";
 import { PAPER_NAME, TERMS_VERSION } from "@/lib/site";
-import { fieldErrors, isDeviceInbox, isTimeZone, profileSchema } from "@/lib/validation";
+import { emailSchema, fieldErrors, isDeviceInbox, isTimeZone, profileSchema, type DeliveryMethod } from "@/lib/validation";
 import type { FormatId } from "@/lib/formats";
 import { audit } from "./audit";
 import { cancelForDeletion } from "./billing";
@@ -21,12 +21,13 @@ export type ProfileInput = {
   placeQuery?: string;
   timeZone?: string;
   format: string;
+  deliveryMethod?: string;
   deliveryEmail: string;
   acceptTerms?: boolean;
 };
 
 export type SaveResult =
-  | { ok: true; verificationSent: boolean; verificationThrottled: boolean }
+  | { ok: true; deliveryMethod: DeliveryMethod; verificationSent: boolean; verificationThrottled: boolean }
   | { ok: false; errors: Record<string, string> };
 
 export function deliveryNeedsVerification(accountEmail: string, deliveryEmail: string) {
@@ -49,6 +50,14 @@ export async function saveProfile(user: User, input: ProfileInput, ip: string, o
   const errors = parsed.success ? {} : fieldErrors(parsed.error);
   if (opts.requireTerms && !input.acceptTerms) errors.acceptTerms = "Tick the box to accept the terms and privacy policy.";
 
+  const method: DeliveryMethod = parsed.success ? parsed.data.deliveryMethod : input.deliveryMethod === "download" ? "download" : "email";
+  let deliveryEmail = user.deliveryEmail;
+  if (method === "email") {
+    const email = emailSchema.safeParse(input.deliveryEmail ?? "");
+    if (email.success) deliveryEmail = email.data;
+    else errors.deliveryEmail = email.error.issues[0].message;
+  }
+
   let placeId: number | null = null;
   let timeZone: string | null = null;
   if (parsed.success) {
@@ -69,8 +78,8 @@ export async function saveProfile(user: User, input: ProfileInput, ip: string, o
   if (!parsed.success || Object.keys(errors).length) return { ok: false, errors };
 
   const profile = parsed.data;
-  const deliveryChanged = profile.deliveryEmail !== user.deliveryEmail;
-  const needsVerification = deliveryNeedsVerification(user.email, profile.deliveryEmail);
+  const deliveryChanged = deliveryEmail !== user.deliveryEmail;
+  const needsVerification = deliveryEmail != null && deliveryNeedsVerification(user.email, deliveryEmail);
   const now = new Date();
 
   await db
@@ -81,7 +90,8 @@ export async function saveProfile(user: User, input: ProfileInput, ip: string, o
       placeId,
       timeZone,
       format: profile.format,
-      deliveryEmail: profile.deliveryEmail,
+      deliveryMethod: method,
+      deliveryEmail,
       ...(deliveryChanged ? { deliveryEmailVerifiedAt: needsVerification ? null : now } : {}),
       ...(opts.requireTerms ? { termsVersion: TERMS_VERSION, termsAcceptedAt: now } : {}),
       updatedAt: now,
@@ -89,11 +99,12 @@ export async function saveProfile(user: User, input: ProfileInput, ip: string, o
     .where(eq(users.id, user.id));
 
   if (opts.requireTerms) await audit("terms_accepted", { userId: user.id, ip, detail: { version: TERMS_VERSION } });
-  await audit("profile_updated", { userId: user.id, ip, detail: { deliveryChanged } });
+  await audit("profile_updated", { userId: user.id, ip, detail: { deliveryChanged, deliveryMethod: method } });
 
-  if (!(deliveryChanged && needsVerification)) return { ok: true, verificationSent: false, verificationThrottled: false };
-  const sent = await sendDeliveryVerification(user.id, profile.deliveryEmail, ip);
-  return { ok: true, verificationSent: sent, verificationThrottled: !sent };
+  const done = { ok: true as const, deliveryMethod: method };
+  if (!(deliveryChanged && needsVerification && deliveryEmail)) return { ...done, verificationSent: false, verificationThrottled: false };
+  const sent = await sendDeliveryVerification(user.id, deliveryEmail, ip);
+  return { ...done, verificationSent: sent, verificationThrottled: !sent };
 }
 
 export async function sendDeliveryVerification(userId: string, deliveryEmail: string, ip: string) {
@@ -153,7 +164,7 @@ export async function deleteAccount(user: User, ip: string) {
 export type TestEditionResult = "sent" | "throttled" | "not_ready" | "unverified" | "missing" | "failed";
 
 export async function sendTestEdition(user: User, ip: string): Promise<TestEditionResult> {
-  if (!user.deliveryEmail || !user.timeZone || !user.format) return "not_ready";
+  if (user.deliveryMethod !== "email" || !user.deliveryEmail || !user.timeZone || !user.format) return "not_ready";
   if (!user.deliveryEmailVerifiedAt) return "unverified";
   const key = `test_edition:user:${user.id}`;
   if (await isLimited(key, LIMITS.testEditionPerUser)) return "throttled";

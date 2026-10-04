@@ -2,7 +2,8 @@
 
 Each reader gets the edition for their own local date. Editions are built from 4 a.m.
 local time and sent from 5 a.m. A failed send is retried once an hour until 10 a.m.,
-then left failed and reported to the owner.
+then left failed and reported to the owner. Readers who chose a download link get no
+email: their delivery is recorded at 5 a.m. and the site serves the file from then on.
 """
 
 import datetime as dt
@@ -78,15 +79,17 @@ class Settings:
 @dataclass(frozen=True)
 class Subscriber:
     id: str
-    email: str
+    email: str | None
     format: str
     time_zone: str
     city: City
+    method: str = "email"
 
 
 @dataclass
 class Report:
     sent: int = 0
+    ready: int = 0
     failed: list[str] = field(default_factory=list)
     gave_up: list[str] = field(default_factory=list)
     build_errors: list[str] = field(default_factory=list)
@@ -106,7 +109,7 @@ class Report:
 
 # web/lib/server/admin.ts mirrors these conditions for its counts.
 RECEIVING = """u.delivery_status = 'active'
-  AND u.delivery_email IS NOT NULL AND u.delivery_email_verified_at IS NOT NULL
+  AND (u.delivery_method = 'download' OR (u.delivery_email IS NOT NULL AND u.delivery_email_verified_at IS NOT NULL))
   AND u.terms_accepted_at IS NOT NULL AND u.time_zone IS NOT NULL AND u.format IS NOT NULL
   AND (NOT u.local_weather OR u.place_id IS NOT NULL)"""
 # With billing on, a reader gets the paper until their trial ends, then only while Stripe says the
@@ -115,7 +118,7 @@ ENTITLED = """(u.trial_ends_at IS NULL OR u.trial_ends_at > %(now)s
   OR u.subscription_status IN ('trialing', 'active', 'past_due'))"""
 
 SUBSCRIBERS = """
-SELECT u.id::text AS id, u.delivery_email, u.format, u.time_zone, u.local_weather,
+SELECT u.id::text AS id, u.delivery_email, u.delivery_method, u.format, u.time_zone, u.local_weather,
        p.id AS place_id, p.name AS place_name, p.admin1, p.country, p.country_code,
        p.latitude, p.longitude, p.time_zone AS place_tz
 FROM users u LEFT JOIN places p ON p.id = u.place_id
@@ -143,7 +146,7 @@ class Db:
                                                              r["place_tz"], r["country_code"]))
             else:
                 city = GENERAL
-            out.append(Subscriber(r["id"], r["delivery_email"], r["format"], r["time_zone"], city))
+            out.append(Subscriber(r["id"], r["delivery_email"], r["format"], r["time_zone"], city, r["delivery_method"]))
         return out
 
     def delivery(self, user_id: str, date: dt.date) -> dict | None:
@@ -299,8 +302,12 @@ class Job:
                 log.error("build failed for %s %s: %s", key, date, e)
                 self.report.build_errors.append(f"{date} {key}: {e}")
 
-        for sub, date in to_send:
+        # Download readers first: they cost no email, so a used-up quota must not hold them back.
+        for sub, date in sorted(to_send, key=lambda t: t[0].method != "download"):
             if (sub.city.id, date) not in built_ok:
+                continue
+            if sub.method == "download":
+                self._make_ready(sub, date, now)
                 continue
             if self._quota_left(now) <= 0:
                 self.report.quota_hit = True
@@ -312,6 +319,22 @@ class Job:
         self._monthly_report(now)
         self._prune(now)
         return self.report
+
+    def _make_ready(self, sub: Subscriber, date: dt.date, now: dt.datetime) -> None:
+        attempts = self.db.begin(sub.id, date, sub.city.id, sub.format, now)
+        if attempts is None:
+            return
+        if not edition_file(self.settings.out_root, date, sub.city.id, sub.format).exists():
+            error = "edition file missing after build"
+            self.db.finish(sub.id, date, False, None, error, now)
+            self.report.failed.append(f"{date} {sub.id}: {error}")
+            if attempts >= self.settings.max_attempts:
+                self.report.gave_up.append(f"{date} reader {sub.id}: {error}")
+            return
+        self.db.finish(sub.id, date, True, None, None, now)
+        if self.settings.billing:
+            self.db.start_trial(sub.id, now + dt.timedelta(days=self.settings.trial_days))
+        self.report.ready += 1
 
     def _send(self, sub: Subscriber, date: dt.date, now: dt.datetime) -> None:
         attempts = self.db.begin(sub.id, date, sub.city.id, sub.format, now)

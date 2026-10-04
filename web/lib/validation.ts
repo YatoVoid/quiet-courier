@@ -35,6 +35,9 @@ export function isTimeZone(tz: string) {
   return TIME_ZONES.has(tz);
 }
 
+export const DELIVERY_METHODS = ["email", "download"] as const;
+export type DeliveryMethod = (typeof DELIVERY_METHODS)[number];
+
 export const profileSchema = z.object({
   name: nameSchema,
   weather: z.enum(["local", "none"], { error: "Choose whether to include local weather." }),
@@ -42,7 +45,9 @@ export const profileSchema = z.object({
   placeQuery: z.string().max(120).optional(),
   timeZone: z.string().max(64).optional(),
   format: z.enum(FORMAT_IDS, { error: "Choose the size of your reader." }),
-  deliveryEmail: emailSchema,
+  deliveryMethod: z.preprocess((v) => v || "email", z.enum(DELIVERY_METHODS, { error: "Choose how to get your paper." })),
+  // Checked in saveProfile, and only when the paper goes by email.
+  deliveryEmail: z.string().max(400).optional(),
 });
 
 export type Profile = z.infer<typeof profileSchema>;

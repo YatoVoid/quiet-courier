@@ -12,7 +12,8 @@ import {
   type TestEditionResult,
 } from "@/lib/server/account";
 import { editionSender } from "@/lib/server/config";
-import { clientIp, endSession, isOnboarded, requireUser } from "@/lib/server/session";
+import { resetReadLink } from "@/lib/server/read-link";
+import { clientIp, endSession, isOnboarded, requireOnboardedUser, requireUser } from "@/lib/server/session";
 
 export type ProfileState = { errors?: Record<string, string>; values?: Record<string, string>; saved?: string };
 
@@ -24,6 +25,7 @@ function readProfile(form: FormData) {
     placeQuery: String(form.get("placeQuery") ?? ""),
     timeZone: String(form.get("timeZone") ?? ""),
     format: String(form.get("format") ?? ""),
+    deliveryMethod: String(form.get("deliveryMethod") ?? ""),
     deliveryEmail: String(form.get("deliveryEmail") ?? ""),
     acceptTerms: form.get("acceptTerms") === "on",
   };
@@ -39,6 +41,7 @@ export async function onboardAction(_prev: ProfileState, form: FormData): Promis
   const input = readProfile(form);
   const result = await saveProfile(user, input, await clientIp(), { requireTerms: !isOnboarded(user) });
   if (!result.ok) return { errors: result.errors, values: echo(input) };
+  if (result.deliveryMethod === "download") redirect("/account?notice=link-ready#download");
   redirect(result.verificationSent ? "/guide?check=delivery" : "/guide?welcome=1");
 }
 
@@ -48,6 +51,9 @@ export async function updateProfileAction(_prev: ProfileState, form: FormData): 
   const result = await saveProfile(user, input, await clientIp(), { requireTerms: false });
   if (!result.ok) return { errors: result.errors, values: echo(input) };
   revalidatePath("/account");
+  if (result.deliveryMethod === "download" && user.deliveryMethod !== "download") {
+    return { saved: "Saved. From tomorrow morning the paper waits behind your download link instead of arriving by email." };
+  }
   if (result.verificationSent) return { saved: `Saved. We sent a confirmation link to ${input.deliveryEmail.trim().toLowerCase()}. Nothing will be delivered there until it's opened.` };
   if (result.verificationThrottled) return { saved: "Saved. We couldn't send another confirmation link today. Try again tomorrow from this page." };
   return { saved: "Saved." };
@@ -60,6 +66,12 @@ export async function resendDeliveryVerificationAction() {
     redirect(`/account?notice=${sent ? "verify-sent" : "verify-throttled"}`);
   }
   redirect("/account");
+}
+
+export async function resetReadLinkAction() {
+  const user = await requireOnboardedUser();
+  await resetReadLink(user, await clientIp());
+  redirect("/account?notice=link-reset#download");
 }
 
 export async function pauseAction() {

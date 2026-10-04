@@ -31,7 +31,7 @@ The site runs on a shared Ubuntu server that already hosts other sites behind ng
    sudo -u postgres createuser --pwprompt quietcourier
    sudo -u postgres createdb --owner quietcourier quietcourier
    ```
-6. `web/.env` from `web/.env.example`, mode 600, owned by `courier`. Set `RESEND_API_KEY`, `APP_URL=https://quietcourier.com`, and `ADMIN_EMAILS` (the addresses allowed to open `/admin`, comma separated).
+6. `web/.env` from `web/.env.example`, mode 600, owned by `courier`. Set `RESEND_API_KEY`, `APP_URL=https://quietcourier.com`, `ADMIN_EMAILS` (the addresses allowed to open `/admin`, comma separated), and `READ_LINK_SECRET` (`openssl rand -base64 48`; it signs the readers' download links, so changing it turns every link off).
 7. Install, migrate, build:
    ```sh
    sudo -u courier bash -c 'cd /srv/quiet-courier/app/web && npm ci --no-audit --no-fund && node db/migrate.mjs && node db/import-places.mjs && npm run build'

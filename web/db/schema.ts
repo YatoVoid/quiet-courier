@@ -49,6 +49,10 @@ export const users = pgTable(
     deliveryEmail: text("delivery_email"),
     deliveryEmailVerifiedAt: timestamp("delivery_email_verified_at", { withTimezone: true }),
     deliveryStatus: text("delivery_status", { enum: ["active", "paused"] }).notNull().default("active"),
+    // "download" readers have no inbox to send to; each morning's paper waits behind their private link.
+    deliveryMethod: text("delivery_method", { enum: ["email", "download"] }).notNull().default("email"),
+    // Part of the private download link's signature. Raising it makes every older link stop working.
+    readLinkVersion: integer("read_link_version").notNull().default(1),
     termsVersion: text("terms_version"),
     termsAcceptedAt: timestamp("terms_accepted_at", { withTimezone: true }),
     // The free trial starts with the first paper delivered after billing opens, so days spent
@@ -69,6 +73,7 @@ export const users = pgTable(
     check("users_email_lower", sql`${t.email} = lower(${t.email})`),
     check("users_format", sql`${t.format} in ('small', 'large', 'epub')`),
     check("users_delivery_status", sql`${t.deliveryStatus} in ('active', 'paused')`),
+    check("users_delivery_method", sql`${t.deliveryMethod} in ('email', 'download')`),
     check(
       "users_subscription_status",
       sql.raw(`subscription_status in (${SUBSCRIPTION_STATUSES.map((s) => `'${s}'`).join(", ")})`),

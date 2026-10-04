@@ -49,6 +49,31 @@ beforeEach(async () => {
 });
 
 describe("saveProfile", () => {
+  it("needs no delivery address when the paper comes by download link", async () => {
+    const result = await saveProfile(user, { ...valid, deliveryMethod: "download", deliveryEmail: "", acceptTerms: true }, "1.1.1.1", {
+      requireTerms: true,
+    });
+    expect(result).toMatchObject({ ok: true, deliveryMethod: "download", verificationSent: false });
+    const saved = await fresh();
+    expect(saved.deliveryMethod).toBe("download");
+    expect(saved.deliveryEmail).toBeNull();
+    expect(h.outbox).toHaveLength(0);
+  });
+
+  it("keeps the confirmed address when a reader switches to the link and back", async () => {
+    await saveProfile(user, valid, "1.1.1.1", { requireTerms: false });
+    const confirmedAt = (await fresh()).deliveryEmailVerifiedAt;
+    await saveProfile(await fresh(), { ...valid, deliveryMethod: "download", deliveryEmail: "" }, "1.1.1.1", { requireTerms: false });
+    expect(await fresh()).toMatchObject({ deliveryMethod: "download", deliveryEmail: valid.deliveryEmail, deliveryEmailVerifiedAt: confirmedAt });
+    await saveProfile(await fresh(), { ...valid, deliveryMethod: "email" }, "1.1.1.1", { requireTerms: false });
+    expect(await fresh()).toMatchObject({ deliveryMethod: "email", deliveryEmailVerifiedAt: confirmedAt });
+  });
+
+  it("still requires an address for email delivery", async () => {
+    const result = await saveProfile(user, { ...valid, deliveryMethod: "email", deliveryEmail: "" }, "1.1.1.1", { requireTerms: false });
+    expect(result).toEqual({ ok: false, errors: { deliveryEmail: expect.any(String) } });
+  });
+
   it("requires the terms box during onboarding and records the version", async () => {
     const refused = await saveProfile(user, valid, "1.1.1.1", { requireTerms: true });
     expect(refused).toEqual({ ok: false, errors: { acceptTerms: expect.any(String) } });
@@ -113,7 +138,7 @@ describe("saveProfile", () => {
 
   it("asks a third-party address to confirm before anything is sent there", async () => {
     const res = await saveProfile(user, { ...valid, deliveryEmail: "someone@else.com" }, "1.1.1.1", { requireTerms: false });
-    expect(res).toEqual({ ok: true, verificationSent: true, verificationThrottled: false });
+    expect(res).toEqual({ ok: true, deliveryMethod: "email", verificationSent: true, verificationThrottled: false });
     expect((await fresh()).deliveryEmailVerifiedAt).toBeNull();
     expect(h.outbox[0].to).toBe("someone@else.com");
     expect(await sendTestEdition(await fresh(), "1.1.1.1")).toBe("unverified");

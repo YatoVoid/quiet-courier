@@ -923,3 +923,25 @@ fieldset {
     font-family: var(--font-caps), serif;
   }
 }
+
+.copy-row {
+  display: flex;
+  gap: 0.6rem;
+  max-width: 40rem;
+}
+
+.copy-row input {
+  max-width: none;
+  flex: 1;
+  min-width: 0;
+  font-size: var(--step--1);
+}
+
+.read-steps {
+  padding-left: 1.25rem;
+  max-width: var(--measure);
+}
+
+.read-steps li {
+  margin-bottom: 0.45rem;
+}

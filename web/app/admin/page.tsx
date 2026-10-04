@@ -80,7 +80,7 @@ export default async function AdminPage() {
       />
       <p className="small-note">
         Of those getting the paper: {readers.small} small PDF, {readers.large} large PDF, {readers.epub} EPUB;{" "}
-        {readers.general} on the general edition.
+        {readers.general} on the general edition; {readers.byLink} by download link.
       </p>
 
       <h2>Subscriptions</h2>
@@ -143,7 +143,7 @@ export default async function AdminPage() {
         ]}
       />
       <p className="small-note">
-        {month.sent} papers sent, {month.failed} failed for good. {month.signInsThrottled} sign-in requests throttled,{" "}
+        {month.sent} papers sent or made ready, {month.failed} failed for good, {month.downloads} downloaded by link. {month.signInsThrottled} sign-in requests throttled,{" "}
         {month.linksRejected} sign-in links rejected. Account events are kept 90 days.
       </p>
 

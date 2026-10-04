@@ -1,6 +1,6 @@
 # Delivering to readers other than Kindle
 
-Checked 2026-10-01. Report only: nothing here is built yet.
+Checked 2026-10-01. The recommendation below is built: see "Download link" in the README.
 
 | Reader | Accepts email? | What works today | Best option for us |
 |---|---|---|---|
@@ -18,7 +18,7 @@ Checked 2026-10-01. Report only: nothing here is built yet.
 
 ## Recommendation
 
-One feature covers Kobo, reMarkable and anyone without an email inbox: a private, unguessable link per reader, such as `quietcourier.com/r/<token>/today`, that always serves that reader's latest edition in their format. Bookmark it in the reader's browser and tap it each morning. The same link can also serve an OPDS feed for apps like KOReader. The token must be revocable from the account page.
+One feature covers Kobo, reMarkable and anyone without an email inbox: a private, unguessable link per reader (built as `quietcourier.com/read/<token>`), that always serves that reader's latest edition in their format. Bookmark it in the reader's browser and tap it each morning. The same link can also serve an OPDS feed for apps like KOReader. The token must be revocable from the account page.
 
 ## Sources
 

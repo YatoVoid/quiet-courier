@@ -90,7 +90,7 @@ def run_deliver(args) -> int:
     report = run_once(load_config(args.config), Settings.from_env())
     if report is None:
         return 0
-    print(f"sent {report.sent}, failed {len(report.failed)}, gave up {len(report.gave_up)}, "
+    print(f"sent {report.sent}, ready to download {report.ready}, failed {len(report.failed)}, gave up {len(report.gave_up)}, "
           f"build errors {len(report.build_errors)}, copies to The Conversation {report.partner_copies}, "
           f"monthly reports {report.partner_reports}, missing parts {len(report.missing)}")
     return 1 if report.failed_run else 0

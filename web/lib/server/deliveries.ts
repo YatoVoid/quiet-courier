@@ -32,7 +32,7 @@ function stillRetrying(row: Delivery, timeZone: string, now: Date) {
   return `${get("year")}-${get("month")}-${get("day")}` === row.editionDate && Number(get("hour")) < GIVE_UP_HOUR;
 }
 
-export function describeDelivery(row: Delivery | null, timeZone: string | null, now = new Date()) {
+export function describeDelivery(row: Delivery | null, timeZone: string | null, now = new Date(), method: "email" | "download" = "email") {
   if (!row) return null;
   const day = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", timeZone: "UTC" }).format(
     new Date(`${row.editionDate}T00:00:00Z`),
@@ -42,7 +42,7 @@ export function describeDelivery(row: Delivery | null, timeZone: string | null, 
       .format(row.sentAt)
       .replace(/\s?AM$/, "\u00a0a.m")
       .replace(/\s?PM$/, "\u00a0p.m");
-    return `The ${day} edition was sent at ${time}.`;
+    return method === "download" ? `The ${day} edition was ready at ${time}.` : `The ${day} edition was sent at ${time}.`;
   }
   if (row.status === "failed") {
     return stillRetrying(row, timeZone ?? "UTC", now)

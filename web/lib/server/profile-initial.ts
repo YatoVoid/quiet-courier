@@ -13,6 +13,7 @@ export async function profileInitial(user: User) {
     placeLabel: place ? placeLabel(place) : "",
     timeZone: user.timeZone ?? "",
     format: user.format ?? "",
+    deliveryMethod: user.deliveryMethod,
     deliveryEmail: user.deliveryEmail ?? "",
   };
 }

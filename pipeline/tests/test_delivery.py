@@ -54,14 +54,14 @@ def conn(pg):
 
 
 def add_reader(conn, email="ada@kindle.com", fmt="small", place=4887398, tz="America/Chicago", local=True,
-               status="active", verified=True):
+               status="active", verified=True, method="email"):
     uid = str(uuid.uuid4())
     conn.execute(
         """INSERT INTO users (id, email, name, local_weather, place_id, time_zone, format, delivery_email,
-                              delivery_email_verified_at, delivery_status, terms_version, terms_accepted_at)
-           VALUES (%s, %s, 'Reader', %s, %s, %s, %s, %s, %s, %s, '2026-10-01', now())""",
+                              delivery_email_verified_at, delivery_status, delivery_method, terms_version, terms_accepted_at)
+           VALUES (%s, %s, 'Reader', %s, %s, %s, %s, %s, %s, %s, %s, '2026-10-01', now())""",
         (uid, f"{uid}@example.com", local, place if local else None, tz, fmt, email,
-         dt.datetime.now(UTC) if verified else None, status))
+         dt.datetime.now(UTC) if verified else None, status, method))
     return uid
 
 
@@ -99,6 +99,28 @@ def test_sends_the_readers_own_edition_at_five_and_only_once(conn, job_factory):
 
     assert job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=2)).sent == 0
     assert len(job_factory.mailer.to("ada@kindle.com")) == 1
+
+
+def test_download_reader_gets_the_edition_ready_without_any_email(conn, job_factory):
+    uid = add_reader(conn, email=None, verified=False, fmt="epub", method="download")
+    assert job_factory().run(MORNING_CHICAGO - dt.timedelta(hours=1)).ready == 0
+    assert delivery(conn, uid) is None
+    report = job_factory(billing=True).run(MORNING_CHICAGO)
+    assert report.ready == 1 and report.sent == 0 and job_factory.mailer.sent == []
+    row = delivery(conn, uid)
+    assert row["status"] == "sent" and row["provider_id"] is None and row["format"] == "epub"
+    assert edition_file(job_factory.out, DATE, "gn-4887398", "epub").exists()
+    trial = conn.execute("SELECT trial_ends_at FROM users WHERE id = %s", (uid,)).fetchone()["trial_ends_at"]
+    assert trial == MORNING_CHICAGO + dt.timedelta(days=14)
+    assert job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=1)).ready == 0
+
+
+def test_download_readers_do_not_use_the_email_quota(conn, job_factory):
+    add_reader(conn)
+    uid = add_reader(conn, email=None, verified=False, method="download")
+    report = job_factory(daily_limit=5).run(MORNING_CHICAGO)
+    assert report.quota_hit and report.sent == 0 and report.ready == 1
+    assert delivery(conn, uid)["status"] == "sent"
 
 
 def test_builds_ahead_at_four_and_waits_until_five(conn, job_factory):

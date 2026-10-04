@@ -10,6 +10,8 @@ export const LIMITS = {
   testEditionPerUser: { max: 3, windowMs: 24 * 60 * 60 * 1000 },
   verifyDeliveryPerUser: { max: 5, windowMs: 24 * 60 * 60 * 1000 },
   checkoutPerUser: { max: 10, windowMs: 60 * 60 * 1000 },
+  readFailuresPerIp: { max: 20, windowMs: 60 * 60 * 1000 },
+  readsPerUser: { max: 120, windowMs: 60 * 60 * 1000 },
 } as const;
 
 export type Limit = { max: number; windowMs: number };

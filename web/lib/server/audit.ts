@@ -23,7 +23,9 @@ export type AuditEvent =
   | "admin_edition_downloaded"
   | "billing_checkout_started"
   | "billing_portal_opened"
-  | "billing_status_changed";
+  | "billing_status_changed"
+  | "read_link_reset"
+  | "edition_downloaded";
 
 export async function audit(event: AuditEvent, opts: { userId?: string | null; ip?: string | null; detail?: Record<string, unknown> } = {}) {
   try {

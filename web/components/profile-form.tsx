@@ -12,6 +12,7 @@ type Values = {
   placeLabel: string;
   timeZone: string;
   format: string;
+  deliveryMethod: string;
   deliveryEmail: string;
 };
 
@@ -35,6 +36,7 @@ export function ProfileForm({
   const values: Record<string, string> = { ...initial, ...state.values };
   const errors = state.errors ?? {};
   const [weather, setWeather] = useState(values.weather || "local");
+  const [method, setMethod] = useState(values.deliveryMethod || "email");
   const detectedZone = useSyncExternalStore(noSubscribe, browserTimeZone, () => "");
   const zone = values.timeZone || (timeZones.includes(detectedZone) ? detectedZone : "");
   const describedBy = (field: string, hint?: string) =>
@@ -127,17 +129,36 @@ export function ProfileForm({
         {error("format")}
       </fieldset>
 
-      <div className="field">
-        <label htmlFor="deliveryEmail">Deliver to</label>
-        <span className="hint" id="delivery-hint">
-          Your Send to Kindle address, ending in @kindle.com. The setup guide shows where to find it. Another address works
-          too; we&rsquo;ll ask it to confirm first.
-        </span>
-        <input id="deliveryEmail" name="deliveryEmail" type="email" autoComplete="off" spellCheck={false}
-          defaultValue={values.deliveryEmail} aria-describedby={describedBy("deliveryEmail", "delivery-hint")}
-          aria-invalid={errors.deliveryEmail ? true : undefined} />
-        {error("deliveryEmail")}
-      </div>
+      <fieldset className="field">
+        <legend>Delivery</legend>
+        <label className="choice">
+          <input type="radio" name="deliveryMethod" value="email" checked={method === "email"} onChange={() => setMethod("email")} />
+          <strong>Email it to my reader</strong>
+          <span>For Kindle and PocketBook, which take documents sent to their own address.</span>
+        </label>
+        {method === "email" && (
+          <div className="sub-field">
+            <label htmlFor="deliveryEmail" className="sub-label">Deliver to</label>
+            <span className="hint" id="delivery-hint">
+              Your Send to Kindle address, ending in @kindle.com. The setup guide shows where to find it. Another address
+              works too; we&rsquo;ll ask it to confirm first.
+            </span>
+            <input id="deliveryEmail" name="deliveryEmail" type="email" autoComplete="off" spellCheck={false}
+              defaultValue={values.deliveryEmail} aria-describedby={describedBy("deliveryEmail", "delivery-hint")}
+              aria-invalid={errors.deliveryEmail ? true : undefined} />
+            {error("deliveryEmail")}
+          </div>
+        )}
+        <label className="choice">
+          <input type="radio" name="deliveryMethod" value="download" checked={method === "download"} onChange={() => setMethod("download")} />
+          <strong>Give me a download link</strong>
+          <span>
+            For Kobo, reMarkable, Boox, or a tablet. Each morning&rsquo;s paper waits behind a private link you can open in a
+            browser or add to KOReader.
+          </span>
+        </label>
+        {error("deliveryMethod")}
+      </fieldset>
 
       {withTerms && (
         <div className="field">

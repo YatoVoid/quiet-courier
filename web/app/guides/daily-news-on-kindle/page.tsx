@@ -214,7 +214,8 @@ export default function DailyNewsOnKindle() {
           <p>
             PocketBook readers have their own email address and work the same way as a Kindle. Boox tablets can install the
             Kindle app and use its Send to Kindle address. Kobo and reMarkable don&rsquo;t accept files by email, so the
-            emailed methods above need a computer or the reader&rsquo;s own browser to bring the file across.
+            emailed methods above need a computer or the reader&rsquo;s own browser to bring the file across. The Quiet
+            Courier gives those readers a private download link instead, which KOReader can also follow as a catalog.
           </p>
         </div>
       </article>

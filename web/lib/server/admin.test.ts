@@ -56,9 +56,10 @@ describe("readerCounts", () => {
       { ...ready, email: "d@example.com", deliveryEmail: "d@gmail.com", deliveryEmailVerifiedAt: null },
       { ...ready, email: "e@example.com", deliveryEmail: "e@kindle.com", localWeather: true, placeId: null },
       { email: "f@example.com" },
+      { ...ready, email: "g@example.com", deliveryMethod: "download", deliveryEmailVerifiedAt: null, format: "large" },
     ]);
     expect(await readerCounts()).toEqual({
-      accounts: 6, onboarded: 5, receiving: 2, paused: 1, unconfirmed: 1, small: 1, large: 0, epub: 1, general: 1,
+      accounts: 7, onboarded: 6, receiving: 3, paused: 1, unconfirmed: 1, small: 1, large: 1, epub: 1, general: 1, byLink: 1,
     });
   });
 });

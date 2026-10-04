@@ -126,7 +126,9 @@ export default async function GuidePage({ searchParams }: { searchParams: Promis
         <p>Install the Kindle app on the Boox, then use the Send to Kindle address Amazon gives that app.</p>
         <h3>Kobo and reMarkable</h3>
         <p>
-          Neither accepts files by email, so the paper can&rsquo;t be delivered to them yet. We&rsquo;re working on it.
+          Neither accepts files by email. Choose <em>Give me a download link</em> under Delivery on your{" "}
+          <Link href="/account">account page</Link>: each morning&rsquo;s paper waits behind a private link, and the account
+          page shows how to open it on each reader, including as a KOReader catalog.
         </p>
       </div>
     </PageShell>

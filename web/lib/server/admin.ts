@@ -31,8 +31,9 @@ export async function requireAdmin() {
 const count = (where: ReturnType<typeof sql>) => sql<number>`count(*) filter (where ${where})`.mapWith(Number);
 
 // Mirrors SUBSCRIBERS in pipeline/courier/delivery.py, which decides who is actually sent a paper.
-const receivingBase = sql`${users.deliveryStatus} = 'active' and ${users.deliveryEmail} is not null
-  and ${users.deliveryEmailVerifiedAt} is not null and ${users.termsAcceptedAt} is not null
+const receivingBase = sql`${users.deliveryStatus} = 'active'
+  and (${users.deliveryMethod} = 'download' or (${users.deliveryEmail} is not null and ${users.deliveryEmailVerifiedAt} is not null))
+  and ${users.termsAcceptedAt} is not null
   and ${users.timeZone} is not null and ${users.format} is not null
   and (not ${users.localWeather} or ${users.placeId} is not null)`;
 // Mirrors ENTITLED in delivery.py; only applies once billing is on.
@@ -49,7 +50,8 @@ export async function readerCounts(now = new Date()) {
       onboarded: count(onboarded),
       receiving: count(receiving),
       paused: count(sql`${onboarded} and ${users.deliveryStatus} = 'paused'`),
-      unconfirmed: count(sql`${onboarded} and ${users.deliveryEmailVerifiedAt} is null`),
+      unconfirmed: count(sql`${onboarded} and ${users.deliveryMethod} = 'email' and ${users.deliveryEmailVerifiedAt} is null`),
+      byLink: count(sql`${receiving} and ${users.deliveryMethod} = 'download'`),
       small: count(sql`${receiving} and ${users.format} = 'small'`),
       large: count(sql`${receiving} and ${users.format} = 'large'`),
       epub: count(sql`${receiving} and ${users.format} = 'epub'`),
@@ -84,6 +86,7 @@ export async function activity(days: number, now = new Date()) {
     deleted: of("account_deleted"),
     signInsThrottled: of("sign_in_throttled"),
     linksRejected: of("sign_in_link_rejected"),
+    downloads: of("edition_downloaded"),
     sent: sends.sent,
     failed: sends.failed,
     successRate: finished ? sends.sent / finished : null,

@@ -4,7 +4,14 @@ import { PageShell } from "@/components/page-shell";
 import { ProfileForm } from "@/components/profile-form";
 import { TestEditionButton } from "@/components/test-edition-button";
 import { DeleteAccount } from "@/components/delete-account";
-import { pauseAction, resendDeliveryVerificationAction, resumeAction, updateProfileAction } from "@/app/actions/account";
+import { CopyField } from "@/components/copy-field";
+import {
+  pauseAction,
+  resendDeliveryVerificationAction,
+  resetReadLinkAction,
+  resumeAction,
+  updateProfileAction,
+} from "@/app/actions/account";
 import { signOutAction, signOutEverywhereAction } from "@/app/actions/auth";
 import { describeWeatherChoice } from "@/lib/server/places";
 import { deliveryLive, describeDelivery, lastDelivery } from "@/lib/server/deliveries";
@@ -14,6 +21,7 @@ import { formatLabel } from "@/lib/formats";
 import { PRICE_PER_MONTH, TRIAL_DAYS } from "@/lib/site";
 import { manageBillingAction } from "@/app/actions/billing";
 import { planFor, type Plan } from "@/lib/server/billing";
+import { opdsUrl, readLinkUrl } from "@/lib/server/read-link";
 
 export const metadata: Metadata = { title: "Your account" };
 
@@ -24,7 +32,47 @@ const NOTICES: Record<string, string> = {
   "verify-throttled": "We've sent several confirmation links today already. Try again tomorrow.",
   subscribed: "Thank you for subscribing. A confirmation is on its way to your email.",
   "billing-unavailable": "We couldn't reach our payment provider. Try again in a few minutes.",
+  "link-ready": "You're set. Each morning's paper will be waiting at the link below from 5 a.m. your time.",
+  "link-reset": "Made a new link. The old one has stopped working, so update any bookmarks or KOReader catalogs.",
 };
+
+function DownloadSection({ link, opds, primary }: { link: string; opds: string; primary: boolean }) {
+  return (
+    <>
+      <h2 id="download">Download link</h2>
+      <p>
+        {primary
+          ? "Your paper waits here each morning from 5 a.m. your time. The link always opens the latest edition."
+          : "The same paper that goes to your reader, ready in a browser too. Useful on a second device or if an email goes astray."}{" "}
+        Keep it to yourself: anyone with the link can open your paper.
+      </p>
+      <CopyField id="read-link" label="Today's paper" value={link} />
+      <CopyField id="opds-link" label="KOReader catalog (OPDS)" value={opds} />
+      <ol className="read-steps">
+        <li>
+          <strong>Kobo or PocketBook with KOReader:</strong> open the search menu, choose OPDS catalog, add a catalog with the
+          address above, and download the newest edition from it each morning.
+        </li>
+        <li>
+          <strong>Kobo without KOReader:</strong> choose the reflowable book under Your reader, then open the link in the
+          Kobo&rsquo;s web browser (under Beta features). The paper saves to your library.
+        </li>
+        <li>
+          <strong>reMarkable:</strong> open the link on your phone or computer, then send the file to the tablet with the
+          reMarkable app.
+        </li>
+        <li>
+          <strong>Boox, tablets and phones:</strong> open the link in the browser and the file downloads.
+        </li>
+      </ol>
+      <form action={resetReadLinkAction}>
+        <button className="link-button" type="submit">
+          Make a new link and turn off this one
+        </button>
+      </form>
+    </>
+  );
+}
 
 const longDate = (d: Date, timeZone: string | null) =>
   new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: timeZone ?? "UTC" }).format(d);
@@ -103,7 +151,8 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   const paused = user.deliveryStatus === "paused";
   const verified = user.deliveryEmailVerifiedAt != null;
   const live = deliveryLive();
-  const latest = describeDelivery(await lastDelivery(user.id), user.timeZone);
+  const byLink = user.deliveryMethod === "download";
+  const latest = describeDelivery(await lastDelivery(user.id), user.timeZone, new Date(), user.deliveryMethod);
 
   return (
     <PageShell>
@@ -118,7 +167,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         <div className="notice">
           <p>
             Daily delivery hasn&rsquo;t started yet. We&rsquo;ll email {user.email} before the first edition goes out.
-            Until then you can send yourself a test edition.
+            {byLink ? "" : " Until then you can send yourself a test edition."}
           </p>
         </div>
       )}
@@ -132,7 +181,9 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
             : planFor(user).kind === "ended"
               ? "Stopped, because the free trial has ended"
               : live
-                ? "On, each morning at 5 a.m. your time"
+                ? byLink
+                  ? "On, ready each morning at 5 a.m. your time"
+                  : "On, each morning at 5 a.m. your time"
                 : "On"}
         </dd>
         {latest && (
@@ -142,9 +193,17 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           </>
         )}
         <dt>Delivered to</dt>
-        <dd className="address">{user.deliveryEmail}</dd>
-        <dt>Address</dt>
-        <dd>{verified ? "Confirmed" : "Waiting for you to open the confirmation link we emailed to it"}</dd>
+        {byLink ? (
+          <dd>
+            Your <a href="#download">download link</a>
+          </dd>
+        ) : (
+          <>
+            <dd className="address">{user.deliveryEmail}</dd>
+            <dt>Address</dt>
+            <dd>{verified ? "Confirmed" : "Waiting for you to open the confirmation link we emailed to it"}</dd>
+          </>
+        )}
         <dt>Weather</dt>
         <dd>{await describeWeatherChoice(user)}</dd>
         <dt>Reader</dt>
@@ -156,7 +215,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
             {paused ? "Resume delivery" : "Pause delivery"}
           </button>
         </form>
-        {!verified && (
+        {!byLink && !verified && (
           <form action={resendDeliveryVerificationAction}>
             <button className="link-button" type="submit">
               Send the confirmation link again
@@ -165,12 +224,18 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         )}
       </div>
 
-      <h3>Test edition</h3>
-      <p>
-        Sends a recent edition to {user.deliveryEmail}. First add our address to your approved senders, as
-        the <Link href="/guide">setup guide</Link> shows.
-      </p>
-      <TestEditionButton />
+      {byLink ? (
+        <DownloadSection link={readLinkUrl(user)} opds={opdsUrl(user)} primary />
+      ) : (
+        <>
+          <h3>Test edition</h3>
+          <p>
+            Sends a recent edition to {user.deliveryEmail}. First add our address to your approved senders, as
+            the <Link href="/guide">setup guide</Link> shows.
+          </p>
+          <TestEditionButton />
+        </>
+      )}
 
       <h2>Your paper</h2>
       <ProfileForm
@@ -180,6 +245,8 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         timeZones={TIME_ZONES}
         initial={await profileInitial(user)}
       />
+
+      {!byLink && <DownloadSection link={readLinkUrl(user)} opds={opdsUrl(user)} primary={false} />}
 
       <h2>Billing</h2>
       <BillingSection plan={planFor(user)} timeZone={user.timeZone} hasCustomer={user.stripeCustomerId != null} />
