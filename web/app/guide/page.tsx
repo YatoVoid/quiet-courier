@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
 import { TestEditionButton } from "@/components/test-edition-button";
+import { CopyField } from "@/components/copy-field";
 import { editionSender } from "@/lib/server/config";
 import { currentUser, isOnboarded } from "@/lib/server/session";
 import approveSender from "@/public/guide/approve-sender.png";
@@ -12,7 +13,8 @@ export const metadata: Metadata = { title: "Setup guide" };
 
 export default async function GuidePage({ searchParams }: { searchParams: Promise<{ welcome?: string; check?: string }> }) {
   const user = await currentUser();
-  const ready = user != null && isOnboarded(user);
+  const ready = user != null && isOnboarded(user) && user.deliveryMethod === "email";
+  const byLink = user != null && isOnboarded(user) && user.deliveryMethod === "download";
   const { welcome, check } = await searchParams;
   const sender = editionSender();
 
@@ -28,6 +30,14 @@ export default async function GuidePage({ searchParams }: { searchParams: Promis
           <p>
             Your paper is set up. We sent a confirmation link to {user.deliveryEmail}. Open it before sending a test
             edition, since nothing is sent to an unconfirmed address.
+          </p>
+        </div>
+      )}
+      {byLink && (
+        <div className="notice">
+          <p>
+            You chose a download link, so none of this is needed. Your link and how to open it on your reader are on{" "}
+            <Link href="/account#download">your account page</Link>. This guide is for delivery by email.
           </p>
         </div>
       )}
@@ -65,9 +75,11 @@ export default async function GuidePage({ searchParams }: { searchParams: Promis
           </li>
           <li>
             Choose <em>Add a new approved e-mail address</em> and enter <span className="address">{sender}</span>.
+            Copying it avoids typos, which make Amazon drop every paper.
           </li>
           <li>Save. Amazon drops mail from any address that isn&rsquo;t on this list, without telling either of us.</li>
         </ol>
+        <CopyField id="sender-address" label="Our sending address" value={sender} />
         <figure className="guide-shot">
           <Image
             src={approveSender}
@@ -88,6 +100,14 @@ export default async function GuidePage({ searchParams }: { searchParams: Promis
           />
           <figcaption>When you&rsquo;re done: archiving enabled, and the address on the approved list.</figcaption>
         </figure>
+        {ready && user.deliveryEmailVerifiedAt && (
+          <div className="inline-test">
+            <p>
+              Added it? Check now: we&rsquo;ll send a test edition to <span className="address">{user.deliveryEmail}</span>.
+            </p>
+            <TestEditionButton />
+          </div>
+        )}
 
         <h2>3. Tell us where to send it</h2>
         {ready ? (
@@ -97,8 +117,17 @@ export default async function GuidePage({ searchParams }: { searchParams: Promis
           </p>
         ) : (
           <p>
-            <Link href={user ? "/welcome" : "/signin"}>{user ? "Finish setting up" : "Sign in"}</Link> and paste the
-            @kindle.com address into <em>Deliver to</em>.
+            {byLink ? (
+              <>
+                To switch to email, choose <em>Email it to my reader</em> on <Link href="/account">your account page</Link>{" "}
+                and paste the @kindle.com address into <em>Deliver to</em>.
+              </>
+            ) : (
+              <>
+                <Link href={user ? "/welcome" : "/signin"}>{user ? "Finish setting up" : "Sign in"}</Link> and paste the
+                @kindle.com address into <em>Deliver to</em>.
+              </>
+            )}
           </p>
         )}
 

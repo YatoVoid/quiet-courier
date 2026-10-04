@@ -59,6 +59,8 @@ export const users = pgTable(
     // waiting for launch don't count. Null means the trial hasn't started.
     trialEndsAt: timestamp("trial_ends_at", { withTimezone: true }),
     trialReminderSentAt: timestamp("trial_reminder_sent_at", { withTimezone: true }),
+    // The one reminder sent to a reader who signed up but didn't finish setting up or confirm their address.
+    setupReminderSentAt: timestamp("setup_reminder_sent_at", { withTimezone: true }),
     stripeCustomerId: text("stripe_customer_id").unique(),
     stripeSubscriptionId: text("stripe_subscription_id").unique(),
     subscriptionStatus: text("subscription_status", { enum: SUBSCRIPTION_STATUSES }),

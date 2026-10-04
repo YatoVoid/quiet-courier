@@ -21,7 +21,8 @@ export default function PrivacyPage() {
         <h2>What we store, and why</h2>
         <ul>
           <li>
-            Your account email address, to sign you in and to write to you about your subscription. Needed to provide the
+            Your account email address, to sign you in and to write to you about your subscription. If you sign up but
+            don&rsquo;t finish setting up, we send it one reminder a day later, and never another. Needed to provide the
             service.
           </li>
           <li>

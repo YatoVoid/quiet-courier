@@ -29,6 +29,13 @@
       "when": 1791121363480,
       "tag": "0003_download_link",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791126056829,
+      "tag": "0004_setup_reminder",
+      "breakpoints": true
     }
   ]
 }

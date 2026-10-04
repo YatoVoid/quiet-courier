@@ -117,6 +117,11 @@ RECEIVING = """u.delivery_status = 'active'
 ENTITLED = """(u.trial_ends_at IS NULL OR u.trial_ends_at > %(now)s
   OR u.subscription_status IN ('trialing', 'active', 'past_due'))"""
 
+# One reminder, a day after sign-up, to readers who stopped before their first paper could go out.
+# Accounts older than a week are left alone.
+SETUP_REMINDER_AFTER = dt.timedelta(days=1)
+SETUP_REMINDER_UNTIL = dt.timedelta(days=7)
+
 SUBSCRIBERS = """
 SELECT u.id::text AS id, u.delivery_email, u.delivery_method, u.format, u.time_zone, u.local_weather,
        p.id AS place_id, p.name AS place_name, p.admin1, p.country, p.country_code,
@@ -190,14 +195,30 @@ class Db:
     def mark_trial_reminded(self, user_id: str, now: dt.datetime) -> None:
         self.conn.execute("UPDATE users SET trial_reminder_sent_at = %s WHERE id = %s", (now, user_id))
 
+    def setup_reminders_due(self, now: dt.datetime) -> list[dict]:
+        return self.conn.execute(
+            """SELECT u.id::text AS id, u.email, u.delivery_email,
+                      (u.terms_accepted_at IS NULL OR u.time_zone IS NULL) AS unfinished
+               FROM users u
+               WHERE u.setup_reminder_sent_at IS NULL AND u.delivery_status = 'active'
+                 AND u.created_at <= %(late)s AND u.created_at > %(stale)s
+                 AND (u.terms_accepted_at IS NULL OR u.time_zone IS NULL
+                      OR (u.delivery_method = 'email' AND u.delivery_email IS NOT NULL
+                          AND u.delivery_email_verified_at IS NULL AND u.terms_accepted_at <= %(late)s))""",
+            {"late": now - SETUP_REMINDER_AFTER, "stale": now - SETUP_REMINDER_UNTIL}).fetchall()
+
+    def mark_setup_reminded(self, user_id: str, now: dt.datetime) -> None:
+        self.conn.execute("UPDATE users SET setup_reminder_sent_at = %s WHERE id = %s", (now, user_id))
+
     def emails_since(self, since: dt.datetime) -> int:
         row = self.conn.execute(
-            """SELECT (SELECT count(*) FROM deliveries WHERE sent_at >= %(s)s)
+            """SELECT (SELECT count(*) FROM deliveries WHERE sent_at >= %(s)s AND provider_id IS NOT NULL)
                     + (SELECT count(*) FROM audit_events WHERE created_at >= %(s)s AND event IN
                        ('sign_in_requested', 'test_edition_sent', 'delivery_verify_sent'))
                     + (SELECT count(*) FROM partner_copies WHERE sent_at >= %(s)s)
                     + (SELECT count(*) FROM partner_reports WHERE sent_at >= %(s)s)
-                    + (SELECT count(*) FROM users WHERE trial_reminder_sent_at >= %(s)s) AS n""", {"s": since}).fetchone()
+                    + (SELECT count(*) FROM users WHERE trial_reminder_sent_at >= %(s)s)
+                    + (SELECT count(*) FROM users WHERE setup_reminder_sent_at >= %(s)s) AS n""", {"s": since}).fetchone()
         return int(row["n"])
 
     def delivered_on(self, date: dt.date) -> bool:
@@ -315,6 +336,7 @@ class Job:
             self._send(sub, date, now)
 
         self._trial_reminders(now)
+        self._setup_reminders(now)
         self._partner_copies(now)
         self._monthly_report(now)
         self._prune(now)
@@ -385,6 +407,32 @@ class Job:
                 self.report.build_errors.append(f"trial reminder for {r['id']}: {e}")
                 continue
             self.db.mark_trial_reminded(r["id"], now)
+
+    def _setup_reminders(self, now: dt.datetime) -> None:
+        site = self.settings.app_url
+        for r in self.db.setup_reminders_due(now):
+            if self._quota_left(now) <= 0:
+                self.report.quota_hit = True
+                return
+            if r["unfinished"]:
+                subject = "Finish setting up your paper"
+                text = (f"You signed up for {self.config.paper_name} but didn't finish setting it up, so no paper "
+                        "is going out yet.\n\n"
+                        f"It takes about five minutes: {site}/welcome\n\n")
+            else:
+                subject = "Confirm where to send your paper"
+                text = (f"When you set up {self.config.paper_name}, we sent a confirmation link to "
+                        f"{r['delivery_email']}. Nothing is delivered there until it's opened.\n\n"
+                        f"If it never arrived, check that inbox's spam folder, or send a new link from {site}/account\n\n")
+            text += (f"This is the only reminder we'll send. If you've changed your mind, you can delete the "
+                     f"account at {site}/account, or leave it and we won't write again.\n")
+            try:
+                self.mailer.send(Message(to=[r["email"]], subject=subject, text=text,
+                                         idempotency_key=f"setup-reminder/{r['id']}"))
+            except MailError as e:
+                self.report.build_errors.append(f"setup reminder for {r['id']}: {e}")
+                continue
+            self.db.mark_setup_reminded(r["id"], now)
 
     # Promised to The Conversation: a copy of each edition that runs their articles. Every
     # edition of a date has the same stories, so one copy per date covers them all.

@@ -309,3 +309,45 @@ def test_a_complete_paper_reports_nothing_missing(conn, job_factory):
     add_reader(conn, "full@kindle.com")
     report = job_factory(alert_to=["owner@example.com"]).run(MORNING_CHICAGO)
     assert report.sent == 1 and report.missing == [] and not report.needs_alert
+
+
+def add_signup(conn, age, finished=False, delivery=None, verified=False, method="email", status="active"):
+    uid = str(uuid.uuid4())
+    created = MORNING_CHICAGO - age
+    conn.execute(
+        """INSERT INTO users (id, email, created_at, time_zone, format, delivery_email, delivery_email_verified_at,
+                              delivery_method, delivery_status, terms_version, terms_accepted_at)
+           VALUES (%s, %s, %s, %s, 'small', %s, %s, %s, %s, %s, %s)""",
+        (uid, f"{uid}@example.com", created, "America/Chicago" if finished else None, delivery,
+         created if verified else None, method, status, "1" if finished else None, created if finished else None))
+    return uid
+
+
+def test_one_setup_reminder_a_day_after_signing_up(conn, job_factory):
+    stuck = add_signup(conn, dt.timedelta(days=2))
+    unconfirmed = add_signup(conn, dt.timedelta(days=2), finished=True, delivery="me@gmail.com")
+    add_signup(conn, dt.timedelta(hours=12))
+    add_signup(conn, dt.timedelta(days=10))
+    add_signup(conn, dt.timedelta(days=2), finished=True, delivery="ok@kindle.com", verified=True)
+    add_signup(conn, dt.timedelta(days=2), finished=True, method="download")
+    add_signup(conn, dt.timedelta(days=2), status="paused")
+
+    job_factory().run(MORNING_CHICAGO)
+    [first] = job_factory.mailer.to(f"{stuck}@example.com")
+    assert "/welcome" in first.text and "only reminder" in first.text
+    assert first.idempotency_key == f"setup-reminder/{stuck}"
+    [second] = job_factory.mailer.to(f"{unconfirmed}@example.com")
+    assert second.subject == "Confirm where to send your paper" and "me@gmail.com" in second.text
+    assert len([m for m in job_factory.mailer.sent if m.idempotency_key.startswith("setup-reminder/")]) == 2
+
+    job_factory().run(MORNING_CHICAGO + dt.timedelta(days=1))
+    reminders = [m for m in job_factory.mailer.sent if m.idempotency_key.startswith("setup-reminder/")]
+    assert len(reminders) == 3 and reminders[-1].subject == "Finish setting up your paper"
+
+
+def test_download_deliveries_do_not_count_against_the_email_quota(conn, job_factory):
+    for _ in range(3):
+        add_reader(conn, email=None, verified=False, method="download")
+    job = job_factory(daily_limit=12)
+    job.run(MORNING_CHICAGO)
+    assert job._quota_left(MORNING_CHICAGO) == 2
