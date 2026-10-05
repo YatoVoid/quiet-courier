@@ -200,3 +200,16 @@ describe("statements", () => {
     expect(yearly).toContain("Total,,,,3.00");
   });
 });
+
+describe("stats page", () => {
+  it("opens only with the signed address for that referrer", async () => {
+    const { openStats, statsUrl } = await import("./referrals");
+    const a = await addReferrer("Alysia", "alysia");
+    const b = await addReferrer("Other", "other");
+    const token = statsUrl(a.id).split("/stats/")[1];
+    expect((await openStats(token, "1.1.1.1", NOW))?.name).toBe("Alysia");
+    const forged = `${b.id}-${token.split("-").slice(1).join("-")}`;
+    expect(await openStats(forged, "1.1.1.1", NOW)).toBeNull();
+    expect(await openStats("nonsense", "1.1.1.1", NOW)).toBeNull();
+  });
+});

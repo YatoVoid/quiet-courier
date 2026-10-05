@@ -1,8 +1,10 @@
 import "server-only";
+import { createHmac, timingSafeEqual } from "node:crypto";
 import { and, count, eq, isNull, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { referralClicks, referralConversions, referralLinks, referralPayouts, referrers, users, type Referrer } from "@/db/schema";
 import { isLimited, LIMITS, record } from "./rate-limit";
+import { appUrl, linkSecret } from "./config";
 
 export const REF_COOKIE = "qc_ref";
 export const REF_TTL_MS = 30 * 24 * 60 * 60 * 1000;
@@ -242,4 +244,31 @@ export async function accountingCsv(year: number) {
     [],
     ["Total", "", "", "", dollars(total), "", ""],
   ]);
+}
+
+
+// A referrer's private stats page: the id plus a signature over it, keyed by the same server secret
+// as readers' download links. Nothing to store, and it can be shown again at any time.
+const STATS_TOKEN = /^(\d{1,9})-([A-Za-z0-9_-]{24})$/;
+
+function statsMac(referrerId: number) {
+  return createHmac("sha256", linkSecret()).update(`referral-stats:${referrerId}`).digest().subarray(0, 18);
+}
+
+export function statsUrl(referrerId: number) {
+  return `${appUrl()}/stats/${referrerId}-${statsMac(referrerId).toString("base64url")}`;
+}
+
+export async function openStats(token: string, ip: string, now = new Date()) {
+  const failKey = `stats_fail:ip:${ip}`;
+  if (await isLimited(failKey, LIMITS.readFailuresPerIp, now)) return null;
+  const m = STATS_TOKEN.exec(token);
+  const id = m ? Number(m[1]) : NaN;
+  const given = m ? Buffer.from(m[2], "base64url") : Buffer.alloc(0);
+  const [referrer] = m ? await db.select().from(referrers).where(eq(referrers.id, id)) : [];
+  if (!referrer || given.length !== 18 || !timingSafeEqual(given, statsMac(id))) {
+    await record(failKey, now);
+    return null;
+  }
+  return referrer;
 }

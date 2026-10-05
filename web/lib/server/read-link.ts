@@ -8,7 +8,7 @@ import { deliveries, users, type User } from "@/db/schema";
 import type { FormatId } from "@/lib/formats";
 import { audit } from "./audit";
 import { planFor } from "./billing";
-import { appUrl, isProduction } from "./config";
+import { appUrl, linkSecret as secret } from "./config";
 import { editionFilename, editionsDir } from "./editions";
 import { isLimited, LIMITS, record } from "./rate-limit";
 
@@ -20,13 +20,6 @@ const TOKEN = /^[A-Za-z0-9_-]{46}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const KEY = /^(general|gn-\d+)$/;
 const FORMATS = new Set<string>(["small", "large", "epub"]);
-
-function secret() {
-  const value = process.env.READ_LINK_SECRET;
-  if (value && value.length >= 32) return value;
-  if (isProduction) throw new Error("READ_LINK_SECRET must be set to at least 32 characters");
-  return "development-only-read-link-secret-not-for-production";
-}
 
 function mac(userId: string, version: number) {
   return createHmac("sha256", secret()).update(`read-link:${userId}:${version}`).digest().subarray(0, MAC_BYTES);

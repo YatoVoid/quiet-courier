@@ -23,3 +23,11 @@ export function editionSender() {
 export function contactEmail() {
   return process.env.CONTACT_EMAIL ?? "hello@quietcourier.com";
 }
+
+// Signs readers' download links and referrers' stats pages. Changing it turns all of them off.
+export function linkSecret() {
+  const value = process.env.READ_LINK_SECRET;
+  if (value && value.length >= 32) return value;
+  if (isProduction) throw new Error("READ_LINK_SECRET must be set to at least 32 characters");
+  return "development-only-read-link-secret-not-for-production";
+}

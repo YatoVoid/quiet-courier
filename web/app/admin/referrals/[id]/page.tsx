@@ -10,7 +10,7 @@ import { CopyField } from "@/components/copy-field";
 import { addLinkAction, endReferrerAction, recordPayoutAction, setPausedAction, updateTermsAction } from "@/app/actions/referrals";
 import { requireAdmin } from "@/lib/server/admin";
 import { appUrl } from "@/lib/server/config";
-import { FORM_1099_CENTS, monthlyFigures, referrerFigures, referrerLinks, referrerPayouts, referrerStatus } from "@/lib/server/referrals";
+import { FORM_1099_CENTS, monthlyFigures, referrerFigures, referrerLinks, referrerPayouts, referrerStatus, statsUrl } from "@/lib/server/referrals";
 
 export const metadata: Metadata = { title: "Referrer", robots: { index: false, follow: false } };
 
@@ -67,6 +67,10 @@ export default async function ReferrerPage({ params }: { params: Promise<{ id: s
           </div>
         ))}
       </dl>
+
+      <h2>Their stats page</h2>
+      <p>Send this to {referrer.name}. It shows their clicks, sign-ups and paying readers live, and nothing else.</p>
+      <CopyField id="stats-url" label="Private stats page" value={statsUrl(id)} />
 
       <h2>Links</h2>
       {links.map((l) => (
