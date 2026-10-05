@@ -13,6 +13,7 @@ export function Footer() {
       </p>
       <nav aria-label="More">
         <Link href="/guides/daily-news-on-kindle">Daily news on a Kindle</Link>
+        <Link href="/guides/daily-news-on-kobo-and-remarkable">On a Kobo or reMarkable</Link>
         <Link href="/privacy">Privacy</Link>
         <Link href="/terms">Terms</Link>
       </nav>

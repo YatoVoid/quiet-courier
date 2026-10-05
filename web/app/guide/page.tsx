@@ -157,7 +157,8 @@ export default async function GuidePage({ searchParams }: { searchParams: Promis
         <p>
           Neither accepts files by email. Choose <em>Give me a download link</em> under Delivery on your{" "}
           <Link href="/account">account page</Link>: each morning&rsquo;s paper waits behind a private link, and the account
-          page shows how to open it on each reader, including as a KOReader catalog.
+          page shows how to open it on each reader, including as a KOReader catalog. For other ways to get news onto those
+          readers, see our <Link href="/guides/daily-news-on-kobo-and-remarkable">Kobo and reMarkable guide</Link>.
         </p>
       </div>
     </PageShell>
