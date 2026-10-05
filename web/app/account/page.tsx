@@ -32,7 +32,7 @@ const NOTICES: Record<string, string> = {
   "verify-throttled": "We've sent several confirmation links today already. Try again tomorrow.",
   subscribed: "Thank you for subscribing. A confirmation is on its way to your email.",
   "billing-unavailable": "We couldn't reach our payment provider. Try again in a few minutes.",
-  "link-ready": "You're set. Each morning's paper will be waiting at the link below from 5 a.m. your time.",
+  "link-ready": "You're set. If it's past 5 a.m. where you are, today's paper will be at the link below within 15 minutes. After that it's there from 5 a.m. each morning.",
   "link-reset": "Made a new link. The old one has stopped working, so update any bookmarks or KOReader catalogs.",
 };
 

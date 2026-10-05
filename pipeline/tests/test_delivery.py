@@ -115,6 +115,45 @@ def test_download_reader_gets_the_edition_ready_without_any_email(conn, job_fact
     assert job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=1)).ready == 0
 
 
+def test_download_reader_who_changes_format_after_five_gets_it_the_same_morning(conn, job_factory):
+    uid = add_reader(conn, email=None, verified=False, fmt="epub", method="download")
+    job_factory().run(MORNING_CHICAGO)
+    assert delivery(conn, uid)["format"] == "epub"
+    conn.execute("UPDATE users SET format = 'small' WHERE id = %s", (uid,))
+    report = job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=7))
+    row = delivery(conn, uid)
+    assert row["format"] == "small" and row["edition_key"] == "gn-4887398" and row["error"] is None
+    assert edition_file(job_factory.out, DATE, "gn-4887398", "small").exists()
+    assert report.ready == 0 and job_factory.mailer.sent == []
+
+
+def test_email_reader_who_changes_format_after_five_waits_for_tomorrow(conn, job_factory):
+    uid = add_reader(conn)
+    job_factory().run(MORNING_CHICAGO)
+    conn.execute("UPDATE users SET format = 'epub' WHERE id = %s", (uid,))
+    job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=1))
+    assert delivery(conn, uid)["format"] == "small"
+    assert len(job_factory.mailer.to("ada@kindle.com")) == 1
+
+
+def test_a_reader_who_signs_up_in_the_afternoon_gets_todays_paper(conn, job_factory):
+    afternoon = MORNING_CHICAGO + dt.timedelta(hours=9)
+    mail = add_reader(conn)
+    link = add_reader(conn, email=None, verified=False, method="download")
+    report = job_factory().run(afternoon)
+    assert report.sent == 1 and report.ready == 1
+    assert delivery(conn, mail)["edition_date"] == DATE and delivery(conn, link)["status"] == "sent"
+
+
+def test_after_ten_a_reader_with_earlier_papers_waits_for_tomorrow(conn, job_factory):
+    uid = add_reader(conn)
+    conn.execute(
+        """INSERT INTO deliveries (user_id, edition_date, edition_key, format, status, attempts, sent_at, created_at, updated_at)
+           VALUES (%s, %s, 'gn-4887398', 'small', 'sent', 1, now(), now(), now())""", (uid, DATE - dt.timedelta(days=1)))
+    assert job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=9)).sent == 0
+    assert job_factory.mailer.to("ada@kindle.com") == []
+
+
 def test_download_readers_do_not_use_the_email_quota(conn, job_factory):
     add_reader(conn)
     uid = add_reader(conn, email=None, verified=False, method="download")
@@ -136,16 +175,18 @@ def test_builds_ahead_at_four_and_waits_until_five(conn, job_factory):
 def test_each_reader_gets_their_own_local_date_and_format(conn, job_factory):
     add_reader(conn, "lyon@kindle.com", fmt="epub", place=2996944, tz="Europe/Paris")
     add_reader(conn, "tokyo@kindle.com", fmt="large", local=False, tz="Asia/Tokyo")
-    morning_lyon = dt.datetime(2026, 10, 2, 3, 30, tzinfo=UTC)
-    job_factory().run(morning_lyon)
-    [lyon] = job_factory.mailer.to("lyon@kindle.com")
-    assert lyon.attachments[0].name == "gn-2996944.epub" and "2026-10-02" in str(lyon.attachments[0])
-    assert job_factory.mailer.to("tokyo@kindle.com") == []
-
     morning_tokyo = dt.datetime(2026, 10, 1, 20, 30, tzinfo=UTC)
     job_factory().run(morning_tokyo)
     [tokyo] = job_factory.mailer.to("tokyo@kindle.com")
     assert tokyo.attachments[0].name == "general_large.pdf" and "2026-10-02" in str(tokyo.attachments[0])
+    [first] = job_factory.mailer.to("lyon@kindle.com")
+    assert "2026-10-01" in str(first.attachments[0])
+
+    morning_lyon = dt.datetime(2026, 10, 2, 3, 30, tzinfo=UTC)
+    job_factory().run(morning_lyon)
+    [_, lyon] = job_factory.mailer.to("lyon@kindle.com")
+    assert lyon.attachments[0].name == "gn-2996944.epub" and "2026-10-02" in str(lyon.attachments[0])
+    assert len(job_factory.mailer.to("tokyo@kindle.com")) == 1
 
 
 def test_skips_paused_and_unconfirmed_readers(conn, job_factory):

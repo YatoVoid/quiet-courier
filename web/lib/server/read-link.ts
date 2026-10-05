@@ -161,7 +161,7 @@ export function nothingYet(user: User) {
   return readMessage(404, [
     user.deliveryStatus === "paused"
       ? `Delivery is paused, so there's no paper here. Resume it at ${appUrl()}/account.`
-      : "Your first paper isn't ready yet. It appears here at 5 a.m. your time each morning.",
+      : "Your first paper isn't ready yet. If it's past 5 a.m. where you are, it appears here within 15 minutes of finishing setup. After that it's here at 5 a.m. your time each morning.",
   ]);
 }
 

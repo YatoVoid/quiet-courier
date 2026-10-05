@@ -2,7 +2,9 @@
 
 Each reader gets the edition for their own local date. Editions are built from 4 a.m.
 local time and sent from 5 a.m. A failed send is retried once an hour until 10 a.m.,
-then left failed and reported to the owner. Readers who chose a download link get no
+then left failed and reported to the owner. A reader who has never had a paper gets
+today's as soon as they finish setting up, at any hour after 5 a.m., so a midday sign-up
+doesn't wait for tomorrow. Readers who chose a download link get no
 email: their delivery is recorded at 5 a.m. and the site serves the file from then on.
 """
 
@@ -87,6 +89,7 @@ class Subscriber:
     time_zone: str
     city: City
     method: str = "email"
+    first: bool = False
 
 
 @dataclass
@@ -128,7 +131,8 @@ SETUP_REMINDER_UNTIL = dt.timedelta(days=7)
 SUBSCRIBERS = """
 SELECT u.id::text AS id, u.delivery_email, u.delivery_method, u.format, u.time_zone, u.local_weather,
        p.id AS place_id, p.name AS place_name, p.admin1, p.country, p.country_code,
-       p.latitude, p.longitude, p.time_zone AS place_tz
+       p.latitude, p.longitude, p.time_zone AS place_tz,
+       NOT EXISTS (SELECT 1 FROM deliveries d WHERE d.user_id = u.id AND d.status = 'sent') AS first
 FROM users u LEFT JOIN places p ON p.id = u.place_id
 WHERE """
 
@@ -154,12 +158,13 @@ class Db:
                                                              r["place_tz"], r["country_code"]))
             else:
                 city = GENERAL
-            out.append(Subscriber(r["id"], r["delivery_email"], r["format"], r["time_zone"], city, r["delivery_method"]))
+            out.append(Subscriber(r["id"], r["delivery_email"], r["format"], r["time_zone"], city, r["delivery_method"],
+                                  r["first"]))
         return out
 
     def delivery(self, user_id: str, date: dt.date) -> dict | None:
         return self.conn.execute(
-            "SELECT status, attempts, updated_at FROM deliveries WHERE user_id = %s AND edition_date = %s",
+            "SELECT status, attempts, edition_key, format, error, updated_at FROM deliveries WHERE user_id = %s AND edition_date = %s",
             (user_id, date)).fetchone()
 
     # The WHERE on the conflict branch is what stops a second send: a row already marked
@@ -182,6 +187,16 @@ class Db:
                  sent_at = CASE WHEN %s THEN %s ELSE sent_at END, updated_at = %s
                WHERE user_id = %s AND edition_date = %s""",
             ("sent" if ok else "failed", provider_id, error, ok, now, now, user_id, date))
+
+    def repoint(self, user_id: str, date: dt.date, key: str, fmt: str, now: dt.datetime) -> None:
+        self.conn.execute(
+            """UPDATE deliveries SET edition_key = %s, format = %s, error = NULL, updated_at = %s
+               WHERE user_id = %s AND edition_date = %s AND status = 'sent'""",
+            (key, fmt, now, user_id, date))
+
+    def note_error(self, user_id: str, date: dt.date, error: str, now: dt.datetime) -> None:
+        self.conn.execute("UPDATE deliveries SET error = %s, updated_at = %s WHERE user_id = %s AND edition_date = %s",
+                          (error[:500], now, user_id, date))
 
     def start_trial(self, user_id: str, ends: dt.datetime) -> None:
         self.conn.execute("UPDATE users SET trial_ends_at = %s WHERE id = %s AND trial_ends_at IS NULL", (ends, user_id))
@@ -301,7 +316,9 @@ class Job:
         to_send: list[tuple[Subscriber, dt.date]] = []
         for sub in subs:
             local = self._local(sub, now)
-            if not (self.settings.prepare_hour <= local.hour < self.settings.give_up_hour):
+            if local.hour < self.settings.prepare_hour:
+                continue
+            if local.hour >= self.settings.give_up_hour and not sub.first:
                 continue
             date = local.date()
             state = self.db.delivery(sub.id, date)
@@ -342,6 +359,7 @@ class Job:
                 break
             self._send(sub, date, now)
 
+        self._follow_changes(subs, now)
         self._trial_reminders(now)
         self._setup_reminders(now)
         self._partner_copies(now)
@@ -364,6 +382,35 @@ class Job:
         if self.settings.billing:
             self.db.start_trial(sub.id, now + dt.timedelta(days=self.settings.trial_days))
         self.report.ready += 1
+
+    # A download reader who changes format or city after 5 a.m. would otherwise keep getting the
+    # paper recorded that morning until tomorrow. Build what they chose now and point the link at it.
+    def _follow_changes(self, subs: list[Subscriber], now: dt.datetime) -> None:
+        for sub in subs:
+            if sub.method != "download":
+                continue
+            local = self._local(sub, now)
+            if local.hour < self.settings.send_hour:
+                continue
+            date = local.date()
+            state = self.db.delivery(sub.id, date)
+            if not state or state["status"] != "sent":
+                continue
+            if state["format"] == sub.format and state["edition_key"] == sub.city.id:
+                continue
+            if state["error"] and now - state["updated_at"] < self.settings.retry_gap:
+                continue
+            try:
+                ensure_edition(self.config, self.settings, self.store, sub.city, date, {sub.format}, self.http, now)
+            except (BuildError, OSError, ValueError) as e:
+                log.error("rebuild failed for reader %s %s: %s", sub.id, date, e)
+                self.report.failed.append(f"{date} {sub.id}: rebuild after a changed choice failed: {e}")
+                self.db.note_error(sub.id, date, f"rebuild failed: {e}", now)
+                continue
+            if edition_file(self.settings.out_root, date, sub.city.id, sub.format).exists():
+                self.db.repoint(sub.id, date, sub.city.id, sub.format, now)
+            else:
+                self.db.note_error(sub.id, date, "edition file missing after rebuild", now)
 
     def _send(self, sub: Subscriber, date: dt.date, now: dt.datetime) -> None:
         attempts = self.db.begin(sub.id, date, sub.city.id, sub.format, now)
