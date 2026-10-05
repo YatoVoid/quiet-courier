@@ -1,8 +1,18 @@
 # The Quiet Courier
 
-A daily newspaper for e-ink readers, laid out like an early-1900s broadsheet. Every article is written by people and is either public domain or openly licensed.
+<p align="center">
+  <a href="https://quietcourier.com"><img src="https://img.shields.io/badge/Get_the_paper-quietcourier.com-111111?style=for-the-badge" alt="Get the paper at quietcourier.com" height="56"></a>
+</p>
 
-![Front pages of the Kansas City, Chicago and Denver editions for October 1, 2026](docs/showcase/front-pages.png)
+<h2 align="center"><a href="https://quietcourier.com">quietcourier.com</a></h2>
+
+<p align="center">A daily newspaper for your Kindle or Kobo, every morning at 5 a.m. 14 days free, no card needed. <a href="https://quietcourier.com/sample">See a full sample edition.</a></p>
+
+<p align="center"><a href="https://quietcourier.com"><img src="docs/showcase/front-pages.png" alt="Front pages of the Kansas City, Chicago and Denver editions for October 1, 2026"></a></p>
+
+---
+
+A daily newspaper for e-ink readers, laid out like an early-1900s broadsheet. Every article is written by people and is either public domain or openly licensed. This repository is the code behind it.
 
 The name and motto are set in the edition data (`paper_name`, `motto`), so custom editions can carry a different masthead.
 
