@@ -36,6 +36,13 @@
       "when": 1791126056829,
       "tag": "0004_setup_reminder",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791157936870,
+      "tag": "0005_referrals",
+      "breakpoints": true
     }
   ]
 }

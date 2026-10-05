@@ -9,6 +9,7 @@ import { audit } from "./audit";
 import { appUrl } from "./config";
 import { sendMail } from "./mail";
 import { isLimited, LIMITS, pruneRateEvents, record } from "./rate-limit";
+import { attribute, CODE } from "./referrals";
 
 export const SIGN_IN_TTL_MS = 15 * 60 * 1000;
 export const VERIFY_DELIVERY_TTL_MS = 48 * 60 * 60 * 1000;
@@ -17,13 +18,20 @@ export const AUDIT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 
 type Purpose = (typeof emailTokens.$inferInsert)["purpose"];
 
-export async function issueEmailToken(purpose: Purpose, email: string, ttlMs: number, userId: string | null = null) {
+export async function issueEmailToken(
+  purpose: Purpose,
+  email: string,
+  ttlMs: number,
+  userId: string | null = null,
+  referralCode: string | null = null,
+) {
   const token = newToken();
   await db.insert(emailTokens).values({
     tokenHash: hashToken(token),
     purpose,
     email,
     userId,
+    referralCode,
     expiresAt: new Date(Date.now() + ttlMs),
   });
   return token;
@@ -43,7 +51,7 @@ export async function redeemEmailToken(token: string, purpose: Purpose) {
         gt(emailTokens.expiresAt, new Date()),
       ),
     )
-    .returning({ email: emailTokens.email, userId: emailTokens.userId });
+    .returning({ email: emailTokens.email, userId: emailTokens.userId, referralCode: emailTokens.referralCode });
   return row ?? null;
 }
 
@@ -55,7 +63,7 @@ export type SignInRequestResult =
 
 // New and returning readers get the same email and the same response, so the form
 // never reveals whether an address has an account.
-export async function requestSignIn(rawEmail: string, ip: string): Promise<SignInRequestResult> {
+export async function requestSignIn(rawEmail: string, ip: string, referralCode?: string | null): Promise<SignInRequestResult> {
   const parsed = emailSchema.safeParse(rawEmail);
   if (!parsed.success) return { ok: false, reason: "invalid", message: parsed.error.issues[0].message };
   const email = parsed.data;
@@ -74,7 +82,8 @@ export async function requestSignIn(rawEmail: string, ip: string): Promise<SignI
   await record(emailKey);
 
   await pruneExpired();
-  const token = await issueEmailToken("sign_in", email, SIGN_IN_TTL_MS);
+  const code = referralCode && CODE.test(referralCode) ? referralCode : null;
+  const token = await issueEmailToken("sign_in", email, SIGN_IN_TTL_MS, null, code);
   const link = `${appUrl()}/signin/confirm#${token}`;
   try {
     await sendMail({
@@ -113,7 +122,10 @@ export async function completeSignIn(token: string, ip: string): Promise<SignInR
   const inserted = await db.insert(users).values({ email: redeemed.email }).onConflictDoNothing().returning();
   const isNew = inserted.length > 0;
   const [user] = isNew ? inserted : await db.select().from(users).where(eq(users.email, redeemed.email));
-  if (isNew) await audit("account_created", { userId: user.id, ip });
+  if (isNew) {
+    await audit("account_created", { userId: user.id, ip });
+    if (await attribute(user.id, redeemed.referralCode)) user.referredBy = redeemed.referralCode;
+  }
 
   await db
     .update(emailTokens)

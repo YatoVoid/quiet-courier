@@ -351,3 +351,11 @@ def test_download_deliveries_do_not_count_against_the_email_quota(conn, job_fact
     job = job_factory(daily_limit=12)
     job.run(MORNING_CHICAGO)
     assert job._quota_left(MORNING_CHICAGO) == 2
+
+
+def test_general_edition_is_built_every_morning_for_the_public_sample(conn, job_factory):
+    # 10:05 UTC is 6:05 a.m. in New York.
+    job_factory().run(MORNING_CHICAGO)
+    for fmt in ("small", "large", "epub"):
+        assert edition_file(job_factory.out, DATE, "general", fmt).exists()
+    assert job_factory.mailer.sent == []

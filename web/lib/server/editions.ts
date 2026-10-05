@@ -58,3 +58,23 @@ export async function readEdition(found: { path: string }) {
   if (info.size > MAX_ATTACHMENT_BYTES) throw new Error(`edition file is ${info.size} bytes, over the attachment limit`);
   return readFile(found.path);
 }
+
+// The newest general edition, which the delivery job builds every morning for the public sample.
+export async function latestSample(): Promise<{ date: string; files: Record<FormatId, string | null> } | null> {
+  const root = editionsDir();
+  let dates: string[];
+  try {
+    dates = (await readdir(root)).filter((d) => DATE_DIR.test(d)).sort().reverse();
+  } catch {
+    return null;
+  }
+  for (const date of dates) {
+    const files = {} as Record<FormatId, string | null>;
+    for (const format of ["small", "large", "epub"] as FormatId[]) {
+      const p = path.join(/*turbopackIgnore: true*/ root, date, "general", editionFilename("general", format));
+      files[format] = (await isFile(p)) ? p : null;
+    }
+    if (files.small || files.large || files.epub) return { date, files };
+  }
+  return null;
+}

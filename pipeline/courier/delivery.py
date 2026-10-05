@@ -28,6 +28,9 @@ from .store import Store
 log = logging.getLogger("courier.delivery")
 
 FORMATS = ("small", "large", "epub")
+# The public sample on the website is the general edition (no local weather, so it shows no
+# reader's city), built each morning in every format on US Eastern time.
+SAMPLE_TZ = "America/New_York"
 
 
 def _addresses(raw: str | None) -> list[str]:
@@ -311,6 +314,10 @@ class Job:
             to_build.setdefault((sub.city.id, date), (sub.city, set()))[1].add(sub.format)
             if local.hour >= self.settings.send_hour:
                 to_send.append((sub, date))
+
+        sample_local = now.astimezone(ZoneInfo(SAMPLE_TZ))
+        if self.settings.prepare_hour <= sample_local.hour < self.settings.give_up_hour:
+            to_build.setdefault((GENERAL.id, sample_local.date()), (GENERAL, set()))[1].update(FORMATS)
 
         built_ok: set[tuple[str, dt.date]] = set()
         for (key, date), (city, fmts) in to_build.items():

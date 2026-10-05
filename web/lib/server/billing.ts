@@ -7,6 +7,7 @@ import { TERMS_VERSION, TRIAL_DAYS } from "@/lib/site";
 import { appUrl } from "./config";
 import { audit } from "./audit";
 import { sendSubscriptionConfirmation } from "./billing-mail";
+import { recordConversion, voidConversion } from "./referrals";
 
 const DAY_MS = 86_400_000;
 // Stripe refuses a trial that ends less than 48 hours after the subscription starts.
@@ -205,9 +206,29 @@ export async function handleStripeEvent(event: Stripe.Event) {
         return;
       case "invoice.paid":
       case "invoice.payment_failed": {
-        const parent = event.data.object.parent;
-        const sub = parent?.subscription_details?.subscription;
+        const invoice = event.data.object;
+        const sub = invoice.parent?.subscription_details?.subscription;
         if (sub) await syncSubscription(tx, idOf(sub)!, after);
+        const customer = idOf(invoice.customer);
+        if (event.type === "invoice.paid" && invoice.id && customer) {
+          const [user] = await tx.select().from(users).where(eq(users.stripeCustomerId, customer)).limit(1);
+          const paidAt = new Date((invoice.status_transitions?.paid_at ?? event.created) * 1000);
+          if (user) await recordConversion(tx, user, { id: invoice.id, amountPaid: invoice.amount_paid, paidAt });
+        }
+        return;
+      }
+      // Only a full refund takes back a referral payout. Charges don't name their invoice, so it is
+      // found through the payment.
+      case "charge.refunded": {
+        const charge = event.data.object;
+        const paymentIntent = idOf(charge.payment_intent);
+        if (!charge.refunded || !paymentIntent) return;
+        const payments = await stripe().invoicePayments.list({
+          payment: { type: "payment_intent", payment_intent: paymentIntent },
+          limit: 1,
+        });
+        const invoiceId = idOf(payments.data[0]?.invoice ?? null);
+        if (invoiceId) await voidConversion(tx, invoiceId);
         return;
       }
     }

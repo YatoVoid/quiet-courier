@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { bigserial, boolean, check, date, doublePrecision, index, integer, jsonb, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
+import { bigserial, boolean, check, date, doublePrecision, index, integer, jsonb, pgTable, primaryKey, serial, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
 
 // Every city and town with 1,000 or more people, from GeoNames (CC BY 4.0). Loaded by db/import-places.mjs.
 export const places = pgTable(
@@ -36,6 +36,43 @@ export const SUBSCRIPTION_STATUSES = [
   "paused",
 ] as const;
 
+// Someone paid a fixed amount for each reader they send who goes on to pay: a newspaper's
+// Instagram, a creator, a blog. Terms live here; codes live in referral_links.
+export const referrers = pgTable(
+  "referrers",
+  {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    contact: text("contact"),
+    kind: text("kind", { enum: ["organization", "individual"] }).notNull(),
+    payoutCents: integer("payout_cents").notNull(),
+    maxPayouts: integer("max_payouts"),
+    startsAt: timestamp("starts_at", { withTimezone: true }).notNull().defaultNow(),
+    endsAt: timestamp("ends_at", { withTimezone: true }),
+    pausedAt: timestamp("paused_at", { withTimezone: true }),
+    agreedAt: date("agreed_at"),
+    w9OnFile: boolean("w9_on_file").notNull().default(false),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    check("referrers_kind", sql`${t.kind} in ('organization', 'individual')`),
+    check("referrers_payout", sql`${t.payoutCents} >= 0`),
+  ],
+);
+
+// Codes are never reused, so a link is disabled rather than deleted.
+export const referralLinks = pgTable(
+  "referral_links",
+  {
+    code: text("code").primaryKey(),
+    referrerId: integer("referrer_id").notNull().references(() => referrers.id),
+    label: text("label"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    disabledAt: timestamp("disabled_at", { withTimezone: true }),
+  },
+  (t) => [check("referral_links_code", sql`${t.code} ~ '^[a-z0-9-]{2,32}$'`)],
+);
+
 export const users = pgTable(
   "users",
   {
@@ -68,6 +105,8 @@ export const users = pgTable(
     cancelAtPeriodEnd: boolean("cancel_at_period_end").notNull().default(false),
     billingConsentVersion: text("billing_consent_version"),
     billingConsentAt: timestamp("billing_consent_at", { withTimezone: true }),
+    referredBy: text("referred_by").references(() => referralLinks.code),
+    referredAt: timestamp("referred_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
@@ -103,6 +142,9 @@ export const emailTokens = pgTable(
     userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
     expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
     usedAt: timestamp("used_at", { withTimezone: true }),
+    // The referral code from the browser that asked for the sign-in link, so it survives the
+    // link being opened on another device.
+    referralCode: text("referral_code"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
@@ -182,5 +224,50 @@ export const stripeEvents = pgTable("stripe_events", {
   receivedAt: timestamp("received_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+// One row per link per day. Nothing about who clicked is kept.
+export const referralClicks = pgTable(
+  "referral_clicks",
+  {
+    code: text("code").notNull().references(() => referralLinks.code),
+    day: date("day").notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.code, t.day] })],
+);
+
+// A referred reader's first paid invoice. The payout is copied from the referrer's terms at that
+// moment, so a later change of rate never rewrites past months. user_id is a plain column so the
+// record outlives a deleted account, as accounting needs.
+export const referralConversions = pgTable(
+  "referral_conversions",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    userId: uuid("user_id").notNull().unique(),
+    code: text("code").notNull().references(() => referralLinks.code),
+    referrerId: integer("referrer_id").notNull().references(() => referrers.id),
+    stripeInvoiceId: text("stripe_invoice_id").notNull().unique(),
+    amountCents: integer("amount_cents").notNull(),
+    payoutCents: integer("payout_cents").notNull(),
+    paidAt: timestamp("paid_at", { withTimezone: true }).notNull(),
+    voidedAt: timestamp("voided_at", { withTimezone: true }),
+  },
+  (t) => [index("referral_conversions_referrer").on(t.referrerId, t.paidAt)],
+);
+
+export const referralPayouts = pgTable(
+  "referral_payouts",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    referrerId: integer("referrer_id").notNull().references(() => referrers.id),
+    amountCents: integer("amount_cents").notNull(),
+    paidOn: date("paid_on").notNull(),
+    method: text("method").notNull(),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [check("referral_payouts_amount", sql`${t.amountCents} > 0`)],
+);
+
 export type User = typeof users.$inferSelect;
+export type Referrer = typeof referrers.$inferSelect;
 export type Place = typeof places.$inferSelect;

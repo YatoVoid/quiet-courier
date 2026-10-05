@@ -957,3 +957,43 @@ fieldset {
 .inline-test p {
   margin-top: 0;
 }
+
+.admin-form {
+  max-width: 34rem;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.admin-form .error {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.figures tr.totals td {
+  font-weight: 700;
+  border-top: 1.5px solid var(--rule);
+}
+
+.sample-files {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 1.75rem;
+  max-width: var(--measure);
+}
+
+.sample-files li {
+  border-top: 1px solid var(--rule);
+  padding: 0.7rem 0;
+}
+
+.sample-files a {
+  font-weight: 700;
+  display: block;
+}
+
+.sample-files span {
+  font-size: var(--step--1);
+}
+
+.admin-form .check {
+  margin-bottom: 1rem;
+}

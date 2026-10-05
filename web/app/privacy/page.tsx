@@ -44,7 +44,9 @@ export default function PrivacyPage() {
           </li>
         </ul>
         <p>
-          We set one cookie, which keeps you signed in. There are no advertising or analytics scripts on the site, and we
+          We set one cookie, which keeps you signed in. If you arrive through a partner&rsquo;s link (quietcourier.com/via/&hellip;),
+          a second cookie holds that link&rsquo;s short code for 30 days, so the partner can be paid if you subscribe. It
+          belongs to this site only, holds nothing about you, and is copied to your account only if you create one. There are no advertising or analytics scripts on the site, and we
           don&rsquo;t track whether you open or read an edition. Because we don&rsquo;t track you across sites, browser
           &ldquo;Do Not Track&rdquo; and Global Privacy Control signals don&rsquo;t change anything we do.
         </p>

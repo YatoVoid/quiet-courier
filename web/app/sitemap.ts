@@ -4,6 +4,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const site = (process.env.APP_URL ?? "http://localhost:3000").replace(/\/$/, "");
   return [
     { url: `${site}/`, changeFrequency: "weekly", priority: 1 },
+    { url: `${site}/sample`, changeFrequency: "daily", priority: 0.8 },
     { url: `${site}/guide`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${site}/guides/daily-news-on-kindle`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${site}/signin`, changeFrequency: "yearly", priority: 0.3 },

@@ -123,6 +123,7 @@ The list of 1926 issues for each edition date is read from `pipeline/courier/dat
 | Weekly upkeep | `courier maintain` runs on Sundays. It downloads the latest 1926 archive index from this repo, which the monthly "Archive index" GitHub workflow extends about six weeks at a time to stay 13 months ahead (loc.gov blocks the server, not GitHub). It adds up to 30 new public-domain poems from Wikisource collections listed in `pipeline/courier/poem_refill.py` (each page is read once; poems that are too long, too short, not English, published 1931 or later, or too thin for a word search are turned down). Poems don't repeat within a year. It keeps the next two serial novels downloaded and cut into instalments. It then emails the owner only if something is low: the 1926 archive index ends within 90 days, fewer than 30 poems are unused, fewer than 3 serial novels are left, a serial book was turned down that week, or disk is under 5 GB. |
 | Setup reminder | The delivery job emails the account address once, a day after sign-up, if setup wasn't finished or the delivery address was never confirmed. Accounts older than a week are skipped, paused ones too, and `users.setup_reminder_sent_at` makes sure it's sent only once. It counts against the email quota. |
 | Puzzles | A page before the last one carries a sudoku and a cryptogram (`courier/puzzle.py`). The sudoku is generated from the date, always has exactly one solution, and gets harder through the week: 38 givens on Monday down to 28 on Saturday. The cryptogram enciphers a whole sentence (40 to 90 letters) from a pool poem other than the day's, with no letter standing for itself and one letter given as a hint. If the cryptogram would push the page past one page in a format, that format leaves it out for the day. There is no answer sheet. |
+| Public sample | `/sample` offers the newest general edition (no local weather, so no reader's city shows) as both PDFs and the EPUB, with no sign-up. The delivery job builds it every morning on US Eastern time. |
 | Daily serial | One instalment a day of a public-domain novel, from the list in `pipeline/courier/data/serials.json` (24 books, about five years). `courier/serial.py` strips Project Gutenberg's header, footer and name, finds the chapters (a heading followed by prose; contents pages are skipped), checks the chapter numbers run in order, and cuts the text into instalments of about 1,200 words (1,600 at most) at paragraph breaks. Instalment n of a book runs on its start date plus n − 1, so every edition of a date carries the same instalment however the builds are ordered. The next book starts the day after one ends. The instalment's words come out of the news budget, so an edition stays at 15 to 20 minutes. |
 | Off switch | Nothing is sent unless `DELIVERY_ENABLED=1`. |
 | Clean-up | Editions older than 14 days are deleted. |
@@ -185,9 +186,11 @@ Off until `BILLING_ENABLED=1` is set in both `web/.env` and `pipeline.env`. Unti
 | Who gets a paper | With billing on: readers whose trial hasn't started or hasn't ended, and readers whose subscription is `trialing`, `active` or `past_due` (Stripe is still retrying the card). |
 | Deleting an account | Cancels the subscription at Stripe first. If Stripe can't be reached, nothing is deleted. |
 
-### Referral links (planned, not built)
+### Referral links
 
-Lets outside accounts (a newspaper's Instagram, a blog, a forum, a creator) send readers with their own link, and pays each one a fixed amount for every reader who goes on to pay. Any number of referrers can run at once, each with its own numbers, terms and money owed. Built the day the first referrer agrees; nothing below exists in the code yet.
+Lets outside accounts (a newspaper's Instagram, a blog, a forum, a creator) send readers with their own link, and pays each one a fixed amount for every reader who goes on to pay. Any number of referrers can run at once, each with its own numbers, terms and money owed. Code: `web/lib/server/referrals.ts`, `web/app/via/[code]`, `web/app/admin/referrals`, `web/app/actions/referrals.ts`.
+
+Set up once in the Stripe dashboard: add `charge.refunded` to the webhook endpoint's events, or refunds won't take payouts back.
 
 Two ideas are kept separate:
 
@@ -198,7 +201,7 @@ Two ideas are kept separate:
 |---|---|
 | Link | `https://quietcourier.com/via/<code>`, e.g. `/via/cougar`. Codes are lowercase `[a-z0-9-]{2,32}` and never reused, even after a referrer ends. A code that is active sets a first-party cookie `qc_ref` (`HttpOnly`, `Secure`, `SameSite=Lax`, 30 days) and redirects to the home page. Unknown, paused or ended codes redirect without a cookie. The route is rate limited like sign-in. |
 | Attribution | First touch wins and is never overwritten. The sign-in form reads `qc_ref` and stores the code on the email token, so it survives the sign-in link being opened on another device or in a mail app's browser. `completeSignIn` copies it to the new user. Existing accounts are never attributed. |
-| Paying reader | The first `invoice.paid` with an amount above zero for a referred user writes one row to `referral_conversions`, with the payout copied from the referrer's terms at that moment, so changing a rate later never rewrites past months. A refund of that invoice (`charge.refunded`, added to the webhook's events) marks it void; if it was already paid out, the next statement shows it as a deduction. Trial sign-ups who never pay cost nothing. |
+| Paying reader | The first `invoice.paid` with an amount above zero for a referred user writes one row to `referral_conversions`, with the payout copied from the referrer's terms at that moment, so changing a rate later never rewrites past months. A full refund of that invoice (`charge.refunded`; the charge is matched to its invoice through Stripe's invoice payments) marks it void; if it was already paid out, owed drops by that much and never goes below zero. Trial sign-ups who never pay cost nothing. |
 | Terms per referrer | `payout_cents` per paying reader (below the price, so card fees are covered), optional `max_payouts` cap, `starts_at` and `ends_at`. Readers who arrive after `ends_at` aren't attributed; readers attributed before it still count when they pay. |
 | Clicks | Counted per link per day in one row (`referral_clicks`). No IP, user agent or reader identity is stored for a click. |
 | Disclosure | Each referrer's post must be marked as paid ("Sponsored" or Instagram's "Paid partnership"), as the FTC requires. The agreement (rate, cap, dates, disclosure) is confirmed in writing and its date stored on the referrer. |
@@ -208,8 +211,7 @@ Admin pages, all behind the existing `ADMIN_EMAILS` check and written to the aud
 
 | Page | What it does |
 |---|---|
-| `/admin/referrals` | One row per referrer: status, links, clicks, sign-ups, finished setup, in trial, paying, voided, earned, paid out, owed. Totals row at the bottom. Filter by month. |
-| `/admin/referrals/new` | Add a referrer and its first link: name, contact, payout, cap, dates, agreement date. Shows the finished link to copy. |
+| `/admin/referrals` | One row per referrer: status, links, clicks, sign-ups, finished setup, paying, voided, earned, paid out, owed, with a totals row. Below it, the form to add a referrer and its first link (name, contact, payout, cap, end date, agreement date). |
 | `/admin/referrals/<id>` | One referrer: the same figures per link and per month, edit terms (applies to future conversions only), add a link, pause or end. |
 | Record payout | A form on the referrer page: amount, date, method, note. Owed = earned − voided − paid out, never below zero; an overpayment carries to the next month. |
 | Statement | Per referrer per month, as a page and a CSV, ready to send them: clicks, sign-ups, paying readers, voided, amount earned, paid, still owed. Dates and counts only, no names or emails. |

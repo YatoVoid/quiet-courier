@@ -14,7 +14,7 @@ export async function testDb() {
 export type TestDb = Awaited<ReturnType<typeof testDb>>;
 
 export async function truncateAll(db: TestDb) {
-  await db.execute(`truncate users, sessions, email_tokens, rate_events, audit_events restart identity cascade`);
+  await db.execute(`truncate users, sessions, email_tokens, rate_events, audit_events, referral_conversions, referral_payouts, referral_clicks, referral_links, referrers restart identity cascade`);
 }
 
 const base = { admin1Code: null, latitude: 0, longitude: 0 };

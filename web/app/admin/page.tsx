@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
 import {
   activity,
@@ -61,6 +62,9 @@ export default async function AdminPage() {
     <PageShell wide>
       <h1>Publisher&rsquo;s desk</h1>
       <p className="lede">Counts come from the site&rsquo;s own database. Nothing here tracks readers on the page.</p>
+      <p>
+        <Link href="/admin/referrals">Referrals and payouts</Link>
+      </p>
       <div className="notice" role="status">
         <p>
           Daily delivery is <strong>{live ? "on" : "off"}</strong>

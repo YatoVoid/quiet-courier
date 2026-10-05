@@ -1,6 +1,8 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { REF_COOKIE } from "@/lib/server/referrals";
 import { completeSignIn, deleteAllSessions, requestSignIn } from "@/lib/server/auth";
 import { audit } from "@/lib/server/audit";
 import { clientIp, currentUser, endSession, isOnboarded, setSessionCookie } from "@/lib/server/session";
@@ -9,7 +11,7 @@ export type SignInState = { error?: string; email?: string };
 
 export async function requestSignInAction(_prev: SignInState, form: FormData): Promise<SignInState> {
   const email = String(form.get("email") ?? "");
-  const result = await requestSignIn(email, await clientIp());
+  const result = await requestSignIn(email, await clientIp(), (await cookies()).get(REF_COOKIE)?.value);
   if (result.ok) redirect("/signin/sent");
   switch (result.reason) {
     case "invalid":

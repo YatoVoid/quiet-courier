@@ -173,6 +173,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
               <Link className="button" href={next}>
                 {nextLabel}
               </Link>
+              <Link href="/sample">Read today&rsquo;s paper</Link>
               <a href="#price">
                 {TRIAL_DAYS} days free, then {PRICE_PER_MONTH} a month
               </a>
