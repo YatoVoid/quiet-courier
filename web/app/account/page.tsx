@@ -36,15 +36,12 @@ const NOTICES: Record<string, string> = {
   "link-reset": "Made a new link. The old one has stopped working, so update any bookmarks or KOReader catalogs.",
 };
 
-function DownloadSection({ link, opds, primary }: { link: string; opds: string; primary: boolean }) {
+function DownloadSection({ link, opds }: { link: string; opds: string }) {
   return (
     <>
       <h2 id="download">Download link</h2>
       <p>
-        {primary
-          ? "Your paper waits here each morning from 5 a.m. your time. The link always opens the latest edition."
-          : "The same paper that goes to your reader, ready in a browser too. Useful on a second device or if an email goes astray."}{" "}
-        Keep it to yourself: anyone with the link can open your paper.
+        Your paper waits here each morning from 5 a.m. your time. The link always opens the latest edition. Keep it to yourself: anyone with the link can open your paper.
       </p>
       <CopyField id="read-link" label="Today's paper" value={link} />
       <CopyField id="opds-link" label="KOReader catalog (OPDS)" value={opds} />
@@ -225,7 +222,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       </div>
 
       {byLink ? (
-        <DownloadSection link={readLinkUrl(user)} opds={opdsUrl(user)} primary />
+        <DownloadSection link={readLinkUrl(user)} opds={opdsUrl(user)} />
       ) : (
         <>
           <h3>Test edition</h3>
@@ -245,8 +242,6 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         timeZones={TIME_ZONES}
         initial={await profileInitial(user)}
       />
-
-      {!byLink && <DownloadSection link={readLinkUrl(user)} opds={opdsUrl(user)} primary={false} />}
 
       <h2>Billing</h2>
       <BillingSection plan={planFor(user)} timeZone={user.timeZone} hasCustomer={user.stripeCustomerId != null} />
