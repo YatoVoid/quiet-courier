@@ -30,6 +30,14 @@ describe("describeDelivery", () => {
     expect(describeDelivery(row, "America/Chicago", new Date("2026-10-04T12:30:00Z"))).not.toContain("We retry");
   });
 
+  it("keeps retrying a first paper for the rest of the day", () => {
+    const row = { ...base, editionDate: "2026-10-03", status: "failed" as const, sentAt: null, firstPaper: true };
+    const afternoon = describeDelivery(row, "America/Chicago", new Date("2026-10-03T20:00:00Z"));
+    expect(afternoon).toBe("The October 3 edition couldn't be sent. We retry every hour for the rest of the day.");
+    expect(describeDelivery({ ...row, attempts: 5 }, "America/Chicago", new Date("2026-10-03T20:00:00Z"))).not.toContain("We retry");
+    expect(describeDelivery(row, "America/Chicago", new Date("2026-10-04T13:00:00Z"))).not.toContain("We retry");
+  });
+
   it("mentions the emailed link once a failed paper was sent that way", () => {
     const row = { ...base, editionDate: "2026-10-03", status: "failed" as const, sentAt: null, attempts: 5, backupSentAt: new Date() };
     expect(describeDelivery(row, "America/Chicago", new Date("2026-10-03T18:00:00Z"))).toContain("we emailed you a link");
