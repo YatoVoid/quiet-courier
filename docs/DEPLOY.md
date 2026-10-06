@@ -55,7 +55,7 @@ The pipeline needs Python 3.11 or newer and Pango. Ubuntu 22.04 ships Python 3.1
      && bin/uv python install 3.12 && bin/uv venv --python 3.12 venv && venv/bin/pip install -e app/pipeline'
    sudo -u courier mkdir -p /srv/quiet-courier/data /srv/quiet-courier/.cache
    ```
-3. `/srv/quiet-courier/pipeline.env` from `deploy/pipeline.env.example`, mode 600, owned by `courier`. Put The Conversation's addresses in `PARTNER_COPY_TO` and `PARTNER_REPORT_TO` here, never in the repo.
+3. `/srv/quiet-courier/pipeline.env` from `deploy/pipeline.env.example`, mode 600, owned by `courier`. Put The Conversation's addresses in `PARTNER_COPY_TO` and `PARTNER_REPORT_TO` here, never in the repo. Copy `READ_LINK_SECRET` from `web/.env` exactly: the job signs the links in the check-in and backup emails with it, and without it neither email is sent.
 4. Copy `deploy/quiet-courier-deliver.service` and `.timer` to `/etc/systemd/system/`, `daemon-reload`, then `systemctl enable --now quiet-courier-deliver.timer`. Do the same for `quiet-courier-maintain.service` and `.timer`.
 5. Test it with `DELIVERY_ENABLED=0` first: `systemctl start quiet-courier-deliver` should log "nothing sent". Then set it to `1` in both `pipeline.env` and `web/.env` and restart the site.
 

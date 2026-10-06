@@ -108,6 +108,12 @@ describe("readyEditions", () => {
     expect(ready.map((e) => e.date)).toEqual(["2026-10-03", "2026-10-02"]);
   });
 
+  it("includes a paper whose email failed, so the backup link in that email works", async () => {
+    await deliver(user.id, "2026-10-02");
+    await deliver(user.id, "2026-10-03", "failed");
+    expect((await readyEditions(user.id)).map((e) => e.date)).toEqual(["2026-10-03", "2026-10-02"]);
+  });
+
   it("never builds a path from a key the pipeline wouldn't write", async () => {
     await deliver(user.id, "2026-10-03", "sent", "../../etc");
     expect(await readyEditions(user.id)).toEqual([]);

@@ -92,7 +92,8 @@ def run_deliver(args) -> int:
         return 0
     print(f"sent {report.sent}, ready to download {report.ready}, failed {len(report.failed)}, gave up {len(report.gave_up)}, "
           f"build errors {len(report.build_errors)}, copies to The Conversation {report.partner_copies}, "
-          f"monthly reports {report.partner_reports}, missing parts {len(report.missing)}")
+          f"monthly reports {report.partner_reports}, missing parts {len(report.missing)}, "
+          f"backup links {report.backups}, check-ins {report.check_ins}")
     return 1 if report.failed_run else 0
 
 

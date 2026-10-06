@@ -13,6 +13,7 @@ export const LIMITS = {
   readFailuresPerIp: { max: 20, windowMs: 60 * 60 * 1000 },
   readsPerUser: { max: 120, windowMs: 60 * 60 * 1000 },
   viaPerIp: { max: 60, windowMs: 60 * 60 * 1000 },
+  checkInPerUser: { max: 10, windowMs: 24 * 60 * 60 * 1000 },
 } as const;
 
 export type Limit = { max: number; windowMs: number };

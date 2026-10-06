@@ -78,6 +78,16 @@ export async function activity(days: number, now = new Date()) {
     .from(deliveries)
     .where(gte(deliveries.editionDate, sinceDate));
   const finished = sends.sent + sends.failed;
+  const [checkIns] = await db
+    .select({
+      asked: count(sql`${users.checkInSentAt} >= ${at(since)}`),
+      yes: count(sql`${users.checkInAnsweredAt} >= ${at(since)} and ${users.checkInAnswer} = 'yes'`),
+      no: count(sql`${users.checkInAnsweredAt} >= ${at(since)} and ${users.checkInAnswer} = 'no'`),
+    })
+    .from(users);
+  const [backups] = await db
+    .select({ sent: count(sql`${deliveries.backupSentAt} >= ${at(since)}`) })
+    .from(deliveries);
   return {
     signups: of("account_created"),
     setupsFinished: of("terms_accepted"),
@@ -90,6 +100,10 @@ export async function activity(days: number, now = new Date()) {
     sent: sends.sent,
     failed: sends.failed,
     successRate: finished ? sends.sent / finished : null,
+    checkInsAsked: checkIns.asked,
+    checkInsYes: checkIns.yes,
+    checkInsNo: checkIns.no,
+    backupLinks: backups.sent,
   };
 }
 

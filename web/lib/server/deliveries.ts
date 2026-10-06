@@ -45,8 +45,9 @@ export function describeDelivery(row: Delivery | null, timeZone: string | null, 
     return method === "download" ? `The ${day} edition was ready at ${time}.` : `The ${day} edition was sent at ${time}.`;
   }
   if (row.status === "failed") {
-    return stillRetrying(row, timeZone ?? "UTC", now)
-      ? `The ${day} edition couldn't be sent. We retry every hour until 10 a.m. your time.`
+    if (stillRetrying(row, timeZone ?? "UTC", now)) return `The ${day} edition couldn't be sent. We retry every hour until 10 a.m. your time.`;
+    return row.backupSentAt
+      ? `The ${day} edition couldn't be sent, so we emailed you a link to read it instead. The next paper comes at 5 a.m. as usual.`
       : `The ${day} edition couldn't be sent. The next paper comes at 5 a.m. as usual.`;
   }
   return `The ${day} edition is being sent.`;

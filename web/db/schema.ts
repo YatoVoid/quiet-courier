@@ -98,6 +98,10 @@ export const users = pgTable(
     trialReminderSentAt: timestamp("trial_reminder_sent_at", { withTimezone: true }),
     // The one reminder sent to a reader who signed up but didn't finish setting up or confirm their address.
     setupReminderSentAt: timestamp("setup_reminder_sent_at", { withTimezone: true }),
+    // The one "did your paper arrive?" email, sent to email readers on their third morning, and their answer.
+    checkInSentAt: timestamp("check_in_sent_at", { withTimezone: true }),
+    checkInAnswer: text("check_in_answer", { enum: ["yes", "no"] }),
+    checkInAnsweredAt: timestamp("check_in_answered_at", { withTimezone: true }),
     stripeCustomerId: text("stripe_customer_id").unique(),
     stripeSubscriptionId: text("stripe_subscription_id").unique(),
     subscriptionStatus: text("subscription_status", { enum: SUBSCRIPTION_STATUSES }),
@@ -115,6 +119,7 @@ export const users = pgTable(
     check("users_format", sql`${t.format} in ('small', 'large', 'epub')`),
     check("users_delivery_status", sql`${t.deliveryStatus} in ('active', 'paused')`),
     check("users_delivery_method", sql`${t.deliveryMethod} in ('email', 'download')`),
+    check("users_check_in_answer", sql`${t.checkInAnswer} in ('yes', 'no')`),
     check(
       "users_subscription_status",
       sql.raw(`subscription_status in (${SUBSCRIPTION_STATUSES.map((s) => `'${s}'`).join(", ")})`),
@@ -192,6 +197,8 @@ export const deliveries = pgTable(
     providerId: text("provider_id"),
     error: text("error"),
     sentAt: timestamp("sent_at", { withTimezone: true }),
+    // When a send failed for good, the reader is emailed their download link to that day's paper instead.
+    backupSentAt: timestamp("backup_sent_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },

@@ -7,7 +7,7 @@ import { describeDelivery } from "./deliveries";
 
 const base = {
   id: 1, userId: "u", editionKey: "general", format: "small", attempts: 1, providerId: null, error: null,
-  createdAt: new Date(), updatedAt: new Date(),
+  backupSentAt: null, createdAt: new Date(), updatedAt: new Date(),
 };
 
 describe("describeDelivery", () => {
@@ -28,6 +28,11 @@ describe("describeDelivery", () => {
     const spent = describeDelivery({ ...row, attempts: 5 }, "America/Chicago", new Date("2026-10-03T13:00:00Z"));
     expect(spent).not.toContain("We retry");
     expect(describeDelivery(row, "America/Chicago", new Date("2026-10-04T12:30:00Z"))).not.toContain("We retry");
+  });
+
+  it("mentions the emailed link once a failed paper was sent that way", () => {
+    const row = { ...base, editionDate: "2026-10-03", status: "failed" as const, sentAt: null, attempts: 5, backupSentAt: new Date() };
+    expect(describeDelivery(row, "America/Chicago", new Date("2026-10-03T18:00:00Z"))).toContain("we emailed you a link");
   });
 
   it("returns nothing before the first paper", () => {

@@ -2,7 +2,7 @@ import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { deliveries, users, type User } from "@/db/schema";
 import type { FormatId } from "@/lib/formats";
@@ -30,7 +30,8 @@ export function readToken(user: Pick<User, "id" | "readLinkVersion">) {
   return id + mac(user.id, user.readLinkVersion).toString("base64url");
 }
 
-function parseToken(token: string) {
+// Shared with check-in links, which carry the same user id part with a different signature.
+export function parseToken(token: string) {
   if (!TOKEN.test(token)) return null;
   const hex = Buffer.from(token.slice(0, ID_CHARS), "base64url").toString("hex");
   if (hex.length !== 32) return null;
@@ -77,11 +78,12 @@ export async function openReadLink(token: string, ip: string, now = new Date()):
 export type ReadyEdition = { date: string; key: string; format: FormatId; readyAt: Date; path: string; bytes: number };
 
 // Only papers the delivery job recorded for this reader, so the link can never reach another edition.
+// A failed email send counts too: the reader is emailed this link to get that paper another way.
 export async function readyEditions(userId: string, limit = 7): Promise<ReadyEdition[]> {
   const rows = await db
     .select()
     .from(deliveries)
-    .where(and(eq(deliveries.userId, userId), eq(deliveries.status, "sent")))
+    .where(and(eq(deliveries.userId, userId), inArray(deliveries.status, ["sent", "failed"])))
     .orderBy(desc(deliveries.editionDate))
     .limit(limit);
   const out: ReadyEdition[] = [];

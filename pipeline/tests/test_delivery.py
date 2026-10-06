@@ -6,6 +6,7 @@ import pytest
 
 from courier.config import load_config
 from courier.delivery import Db, Job, Settings, edition_file, run_once
+from courier.links import check_in_token, read_link
 from courier.mail import MailError
 from courier.store import Store
 from fakes import FakeHttp
@@ -15,6 +16,7 @@ UTC = dt.UTC
 # 5:05 a.m. in Chicago, 12:05 p.m. in Lyon, 7:05 p.m. in Tokyo.
 MORNING_CHICAGO = dt.datetime(2026, 10, 1, 10, 5, tzinfo=UTC)
 DATE = dt.date(2026, 10, 1)
+SECRET = "development-only-read-link-secret-not-for-production"
 
 
 class FakeMailer:
@@ -71,6 +73,7 @@ def job_factory(conn, tmp_path):
     mailer = FakeMailer()
 
     def make(fail=frozenset(), **overrides):
+        overrides.setdefault("link_secret", SECRET)
         settings = Settings(database_url="", out_root=tmp_path / "out", store_path=tmp_path / "courier.db",
                             enabled=True, **overrides)
         return Job(load_config(), settings, Db(conn), mailer, store, http=FakeHttp(fail=fail))
@@ -400,3 +403,111 @@ def test_general_edition_is_built_every_morning_for_the_public_sample(conn, job_
     for fmt in ("small", "large", "epub"):
         assert edition_file(job_factory.out, DATE, "general", fmt).exists()
     assert job_factory.mailer.sent == []
+
+
+def account(uid):
+    return f"{uid}@example.com"
+
+
+def today(conn, uid):
+    return conn.execute("SELECT * FROM deliveries WHERE user_id = %s AND edition_date = %s", (uid, DATE)).fetchone()
+
+
+def test_asks_once_on_the_third_day_whether_the_paper_arrives(conn, job_factory):
+    uid = add_reader(conn)
+    job_factory().run(MORNING_CHICAGO)
+    assert job_factory.mailer.to(account(uid)) == []
+
+    day_two_noon = MORNING_CHICAGO + dt.timedelta(days=1, hours=7)
+    job_factory().run(day_two_noon)
+    assert job_factory.mailer.to(account(uid)) == [], "waits two full days"
+
+    day_three_ten = MORNING_CHICAGO + dt.timedelta(days=2, hours=5)
+    report = job_factory().run(day_three_ten)
+    [m] = job_factory.mailer.to(account(uid))
+    assert report.check_ins == 1 and m.subject == "Is your paper arriving?"
+    token = check_in_token(SECRET, uid)
+    assert f"https://quietcourier.com/check-in?answer=yes#{token}" in m.text
+    assert f"https://quietcourier.com/check-in?answer=no#{token}" in m.text
+    assert "edition@quietcourier.com" in m.text and "ada@kindle.com" in m.text
+    assert m.idempotency_key == f"check-in/{uid}"
+
+    job_factory().run(day_three_ten + dt.timedelta(hours=1))
+    job_factory().run(day_three_ten + dt.timedelta(days=1))
+    assert len(job_factory.mailer.to(account(uid))) == 1
+
+
+def test_check_in_waits_for_the_readers_daytime(conn, job_factory):
+    uid = add_reader(conn)
+    job_factory().run(MORNING_CHICAGO)
+    day_three_six_am = MORNING_CHICAGO + dt.timedelta(days=2, hours=1)
+    job_factory().run(day_three_six_am)
+    assert [m for m in job_factory.mailer.to(account(uid)) if "arriving" in m.subject] == []
+    job_factory().run(day_three_six_am + dt.timedelta(hours=3))
+    assert len([m for m in job_factory.mailer.to(account(uid)) if "arriving" in m.subject]) == 1
+
+
+def test_no_check_in_for_download_readers_old_readers_or_without_the_secret(conn, job_factory):
+    link = add_reader(conn, email=None, verified=False, method="download")
+    old = add_reader(conn, "old@kindle.com")
+    conn.execute(
+        """INSERT INTO deliveries (user_id, edition_date, edition_key, format, status, attempts, provider_id, sent_at, created_at, updated_at)
+           VALUES (%s, %s, 'gn-4887398', 'small', 'sent', 1, 'id-old', %s, now(), now())""",
+        (old, DATE - dt.timedelta(days=10), MORNING_CHICAGO - dt.timedelta(days=10)))
+    fresh = add_reader(conn, "fresh@kindle.com")
+    job_factory(link_secret=None).run(MORNING_CHICAGO)
+    report = job_factory(link_secret=None).run(MORNING_CHICAGO + dt.timedelta(days=2, hours=5))
+    assert report.check_ins == 0
+    report = job_factory().run(MORNING_CHICAGO + dt.timedelta(days=2, hours=6))
+    assert report.check_ins == 1
+    assert job_factory.mailer.to(account(link)) == [] and job_factory.mailer.to(account(old)) == []
+    assert len(job_factory.mailer.to(account(fresh))) == 1
+
+
+def test_a_failed_paper_is_sent_as_a_download_link_once_retries_are_used_up(conn, job_factory):
+    uid = add_reader(conn, "broken@kindle.com")
+    job_factory.mailer.fail_for = {"broken@kindle.com"}
+    for hour in range(4):
+        job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=hour))
+    assert delivery(conn, uid)["attempts"] == 4
+    assert job_factory.mailer.to(account(uid)) == [], "no backup while a retry is still coming"
+
+    report = job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=4))
+    assert delivery(conn, uid)["attempts"] == 5 and report.backups == 1
+    [m] = job_factory.mailer.to(account(uid))
+    assert m.subject == "Your paper for Thursday, October 1 couldn't be delivered"
+    assert read_link("https://quietcourier.com", SECRET, uid, 1) in m.text
+    assert "broken@kindle.com" in m.text
+    assert m.idempotency_key == f"backup/{uid}/2026-10-01"
+    assert delivery(conn, uid)["backup_sent_at"] is not None
+
+    job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=7))
+    assert len(job_factory.mailer.to(account(uid))) == 1
+
+
+def test_backup_link_also_goes_out_when_the_retry_window_closes_early(conn, job_factory):
+    uid = add_reader(conn, "broken@kindle.com")
+    conn.execute(
+        """INSERT INTO deliveries (user_id, edition_date, edition_key, format, status, attempts, provider_id, sent_at, created_at, updated_at)
+           VALUES (%s, %s, 'gn-4887398', 'small', 'sent', 1, 'id-0', %s, now(), now())""",
+        (uid, DATE - dt.timedelta(days=1), MORNING_CHICAGO - dt.timedelta(days=1)))
+    job_factory.mailer.fail_for = {"broken@kindle.com"}
+    job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=3, minutes=55))
+    job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=4, minutes=50))
+    assert today(conn, uid)["attempts"] == 2
+    job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=5, minutes=50))
+    assert job_factory.mailer.to(account(uid)) == []
+    report = job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=6, minutes=50))
+    assert today(conn, uid)["attempts"] == 2 and report.backups == 1
+    assert len(job_factory.mailer.to(account(uid))) == 1
+
+
+def test_no_backup_link_for_a_paper_that_got_through_on_a_retry(conn, job_factory):
+    uid = add_reader(conn, "flaky@kindle.com")
+    job_factory.mailer.fail_for = {"flaky@kindle.com"}
+    job_factory().run(MORNING_CHICAGO)
+    job_factory.mailer.fail_for = set()
+    job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=1))
+    assert delivery(conn, uid)["status"] == "sent"
+    job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=5))
+    assert job_factory.mailer.to(account(uid)) == []

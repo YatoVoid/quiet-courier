@@ -23,6 +23,7 @@ from psycopg.rows import dict_row
 
 from .build import BuildError, BuildResult, build
 from .config import GENERAL, City, Config
+from .links import check_in_token, read_link
 from .mail import Mailer, MailError, Message
 from .models import Location
 from .store import Store
@@ -33,6 +34,10 @@ FORMATS = ("small", "large", "epub")
 # The public sample on the website is the general edition (no local weather, so it shows no
 # reader's city), built each morning in every format on US Eastern time.
 SAMPLE_TZ = "America/New_York"
+
+
+def _address(raw: str) -> str:
+    return raw.split("<", 1)[1].split(">", 1)[0].strip() if "<" in raw else raw.strip()
 
 
 def _addresses(raw: str | None) -> list[str]:
@@ -61,6 +66,10 @@ class Settings:
     reminder_days: int = 3
     app_url: str = "https://quietcourier.com"
     price: str = "$4"
+    # Signs the links in check-in and backup emails; the site's READ_LINK_SECRET. Without it neither is sent.
+    link_secret: str | None = None
+    # The address readers approve on Amazon, quoted in the check-in email.
+    sender: str = "edition@quietcourier.com"
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -78,6 +87,8 @@ class Settings:
             billing=e.get("BILLING_ENABLED") == "1",
             trial_days=int(e.get("TRIAL_DAYS", "14")),
             app_url=e.get("APP_URL", "https://quietcourier.com").rstrip("/"),
+            link_secret=e.get("READ_LINK_SECRET") if len(e.get("READ_LINK_SECRET", "")) >= 32 else None,
+            sender=_address(e.get("MAIL_FROM", "edition@quietcourier.com")),
         )
 
 
@@ -103,6 +114,8 @@ class Report:
     partner_copies: list[str] = field(default_factory=list)
     partner_reports: list[str] = field(default_factory=list)
     missing: list[str] = field(default_factory=list)
+    backups: int = 0
+    check_ins: int = 0
 
     @property
     def failed_run(self) -> bool:
@@ -127,6 +140,13 @@ ENTITLED = """(u.trial_ends_at IS NULL OR u.trial_ends_at > %(now)s
 # Accounts older than a week are left alone.
 SETUP_REMINDER_AFTER = dt.timedelta(days=1)
 SETUP_REMINDER_UNTIL = dt.timedelta(days=7)
+
+# One "did your paper arrive?" email to each email reader, two days after their first paper went out,
+# in the reader's daytime. Amazon drops mail from unapproved senders without a bounce, so this is the
+# only way to hear about it. Readers whose first paper is older than a week are left alone.
+CHECK_IN_AFTER = dt.timedelta(days=2)
+CHECK_IN_UNTIL = dt.timedelta(days=7)
+CHECK_IN_HOURS = range(9, 21)
 
 SUBSCRIBERS = """
 SELECT u.id::text AS id, u.delivery_email, u.delivery_method, u.format, u.time_zone, u.local_weather,
@@ -228,6 +248,35 @@ class Db:
     def mark_setup_reminded(self, user_id: str, now: dt.datetime) -> None:
         self.conn.execute("UPDATE users SET setup_reminder_sent_at = %s WHERE id = %s", (now, user_id))
 
+    def check_ins_due(self, now: dt.datetime) -> list[dict]:
+        return self.conn.execute(
+            """SELECT u.id::text AS id, u.email, u.delivery_email, u.time_zone FROM users u
+               WHERE u.check_in_sent_at IS NULL AND u.delivery_method = 'email' AND u.delivery_status = 'active'
+                 AND u.delivery_email IS NOT NULL
+                 AND (SELECT min(d.sent_at) FROM deliveries d
+                      WHERE d.user_id = u.id AND d.status = 'sent' AND d.provider_id IS NOT NULL)
+                     BETWEEN %(stale)s AND %(due)s""",
+            {"due": now - CHECK_IN_AFTER, "stale": now - CHECK_IN_UNTIL}).fetchall()
+
+    def mark_checked_in(self, user_id: str, now: dt.datetime) -> None:
+        self.conn.execute("UPDATE users SET check_in_sent_at = %s WHERE id = %s", (now, user_id))
+
+    # A send is finished failing once it has used every attempt or nothing has retried it for two
+    # retry gaps (the retry window closed, or the day ended).
+    def backups_due(self, now: dt.datetime, max_attempts: int, quiet: dt.timedelta) -> list[dict]:
+        return self.conn.execute(
+            """SELECT d.user_id::text AS id, d.edition_date, d.edition_key, d.format,
+                      u.email, u.delivery_email, u.read_link_version
+               FROM deliveries d JOIN users u ON u.id = d.user_id
+               WHERE d.status = 'failed' AND d.backup_sent_at IS NULL AND u.delivery_method = 'email'
+                 AND d.edition_date >= %(since)s
+                 AND (d.attempts >= %(max)s OR d.updated_at <= %(quiet)s)""",
+            {"since": now.date() - dt.timedelta(days=2), "max": max_attempts, "quiet": now - quiet}).fetchall()
+
+    def mark_backup_sent(self, user_id: str, date: dt.date, now: dt.datetime) -> None:
+        self.conn.execute("UPDATE deliveries SET backup_sent_at = %s WHERE user_id = %s AND edition_date = %s",
+                          (now, user_id, date))
+
     def emails_since(self, since: dt.datetime) -> int:
         row = self.conn.execute(
             """SELECT (SELECT count(*) FROM deliveries WHERE sent_at >= %(s)s AND provider_id IS NOT NULL)
@@ -236,7 +285,9 @@ class Db:
                     + (SELECT count(*) FROM partner_copies WHERE sent_at >= %(s)s)
                     + (SELECT count(*) FROM partner_reports WHERE sent_at >= %(s)s)
                     + (SELECT count(*) FROM users WHERE trial_reminder_sent_at >= %(s)s)
-                    + (SELECT count(*) FROM users WHERE setup_reminder_sent_at >= %(s)s) AS n""", {"s": since}).fetchone()
+                    + (SELECT count(*) FROM users WHERE setup_reminder_sent_at >= %(s)s)
+                    + (SELECT count(*) FROM users WHERE check_in_sent_at >= %(s)s)
+                    + (SELECT count(*) FROM deliveries WHERE backup_sent_at >= %(s)s) AS n""", {"s": since}).fetchone()
         return int(row["n"])
 
     def delivered_on(self, date: dt.date) -> bool:
@@ -360,6 +411,8 @@ class Job:
             self._send(sub, date, now)
 
         self._follow_changes(subs, now)
+        self._backup_links(now)
+        self._check_ins(now)
         self._trial_reminders(now)
         self._setup_reminders(now)
         self._partner_copies(now)
@@ -461,6 +514,63 @@ class Job:
                 self.report.build_errors.append(f"trial reminder for {r['id']}: {e}")
                 continue
             self.db.mark_trial_reminded(r["id"], now)
+
+    def _backup_links(self, now: dt.datetime) -> None:
+        secret = self.settings.link_secret
+        if not secret:
+            return
+        for r in self.db.backups_due(now, self.settings.max_attempts, 2 * self.settings.retry_gap):
+            date = r["edition_date"]
+            if not edition_file(self.settings.out_root, date, r["edition_key"], r["format"]).exists():
+                continue
+            if self._quota_left(now) <= 0:
+                self.report.quota_hit = True
+                return
+            link = read_link(self.settings.app_url, secret, r["id"], r["read_link_version"])
+            day = f"{date:%A, %B} {date.day}"
+            text = (f"We tried to send {self.config.paper_name} for {day} to {r['delivery_email']}, but the email "
+                    "didn't go through, so it isn't on your reader.\n\n"
+                    f"You can read that paper here instead. The link opens or downloads the file:\n{link}\n\n"
+                    "The link is private to you, so please don't share it. Tomorrow's paper will be sent as usual. "
+                    f"Your delivery settings are at {self.settings.app_url}/account\n")
+            try:
+                self.mailer.send(Message(to=[r["email"]], subject=f"Your paper for {day} couldn't be delivered",
+                                         text=text, idempotency_key=f"backup/{r['id']}/{date.isoformat()}"))
+            except MailError as e:
+                self.report.build_errors.append(f"backup link for {r['id']} {date}: {e}")
+                continue
+            self.db.mark_backup_sent(r["id"], date, now)
+            self.report.backups += 1
+
+    def _check_ins(self, now: dt.datetime) -> None:
+        secret = self.settings.link_secret
+        if not secret:
+            return
+        site = self.settings.app_url
+        for r in self.db.check_ins_due(now):
+            if now.astimezone(ZoneInfo(r["time_zone"] or "UTC")).hour not in CHECK_IN_HOURS:
+                continue
+            if self._quota_left(now) <= 0:
+                self.report.quota_hit = True
+                return
+            token = check_in_token(secret, r["id"])
+            sender = self.settings.sender
+            text = (f"{self.config.paper_name} has been going to {r['delivery_email']} for three mornings now. "
+                    "Is it showing up on your reader?\n\n"
+                    f"Yes, it arrives:\n{site}/check-in?answer=yes#{token}\n\n"
+                    f"No, I haven't seen it:\n{site}/check-in?answer=no#{token}\n\n"
+                    f"If it hasn't arrived, the usual cause is that {sender} isn't on your Kindle's approved list. "
+                    "Amazon drops the paper without telling either of us. The setup guide shows where to add it: "
+                    f"{site}/guide\n\n"
+                    "This is the only time we'll ask.\n")
+            try:
+                self.mailer.send(Message(to=[r["email"]], subject="Is your paper arriving?", text=text,
+                                         idempotency_key=f"check-in/{r['id']}"))
+            except MailError as e:
+                self.report.build_errors.append(f"check-in for {r['id']}: {e}")
+                continue
+            self.db.mark_checked_in(r["id"], now)
+            self.report.check_ins += 1
 
     def _setup_reminders(self, now: dt.datetime) -> None:
         site = self.settings.app_url

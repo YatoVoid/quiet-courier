@@ -150,6 +150,10 @@ export default async function AdminPage() {
         {month.sent} papers sent or made ready, {month.failed} failed for good, {month.downloads} downloaded by link. {month.signInsThrottled} sign-in requests throttled,{" "}
         {month.linksRejected} sign-in links rejected. Account events are kept 90 days.
       </p>
+      <p className="small-note">
+        &ldquo;Is your paper arriving?&rdquo; asked {month.checkInsAsked}: {month.checkInsYes} said yes, {month.checkInsNo} said no.{" "}
+        {month.backupLinks} download links sent after a failed delivery.
+      </p>
 
       <h2>Deliveries</h2>
       {byDay.length ? (

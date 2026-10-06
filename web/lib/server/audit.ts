@@ -26,7 +26,8 @@ export type AuditEvent =
   | "billing_status_changed"
   | "read_link_reset"
   | "edition_downloaded"
-  | "admin_referral_changed";
+  | "admin_referral_changed"
+  | "check_in_answered";
 
 export async function audit(event: AuditEvent, opts: { userId?: string | null; ip?: string | null; detail?: Record<string, unknown> } = {}) {
   try {
