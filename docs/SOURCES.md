@@ -93,6 +93,12 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
 - It is a standing daily box like the weather, not a news article, so it is not run through the article de-duplication and its URL repeats day to day by design. BLS updates monthly, so the figures change about once a month.
 - Attribution printed: "Figures from the U.S. Bureau of Labor Statistics. Public domain." Changes note: year-over-year figures computed from the published monthly series.
 
+### Wikipedia, On this day (This Day in History)
+- License: CC BY-SA 4.0, same as the Current events portal. Commercial use allowed; paywall allowed. ShareAlike covers only the selection box.
+- Reachable from the server (en.wikipedia.org), unlike loc.gov. The Library of Congress "Today in History" would be the obvious source but loc.gov answers the server with a Cloudflare challenge and has no JSON API for it.
+- Feed: https://en.wikipedia.org/api/rest_v1/feed/onthisday/selected/MM/DD (`sources/onthisday.py`). Up to five anniversaries for the calendar day, oldest first, each the one-sentence Wikipedia text unedited.
+- The paper is calm, so war, violence and disasters are filtered out by keyword; the box is skipped on a day with fewer than three gentle items. Choosing some items is an adaptation, so the box is CC BY-SA 4.0 and says so. Attribution and the day's Wikipedia page URL are printed.
+
 ## Waiting on permission (checked 2026-10-04)
 
 ### KFF Health News (health policy reporting)

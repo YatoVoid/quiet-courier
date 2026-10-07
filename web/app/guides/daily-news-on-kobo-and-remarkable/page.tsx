@@ -197,7 +197,7 @@ export default function DailyNewsOnKoboAndRemarkable() {
             only you have: a lead story from The Conversation, the day&rsquo;s events in brief, world reporting, science from
             NASA, the forecast for any city you choose, stories printed on this date in 1926, a chapter of a classic novel, a
             poem, and a sudoku, cryptogram and word search. It&rsquo;s laid out like an old broadsheet, as a PDF cut to your
-            screen (three columns on a 10-inch reMarkable or Kobo Elipsa) or as an EPUB, and takes fifteen to twenty minutes to
+            screen (three columns on a 10-inch reMarkable or Kobo Elipsa) or as an EPUB, and takes about twenty minutes to
             read.
           </p>
           <p>How it gets onto the reader:</p>

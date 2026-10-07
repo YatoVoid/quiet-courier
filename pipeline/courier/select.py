@@ -74,8 +74,9 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
     nasa = fresh(pools.get("nasa", []), used_urls, config.avoid, seen)
     eso = fresh(pools.get("eso", []), used_urls, config.avoid, seen)
     archives = fresh(pools.get("chronicling_america", []), used_urls, (), seen)
+    hist = fresh(pools.get("onthisday", []), used_urls, (), seen)
     taken: set[str] = set()
-    sel = Selection(sections={"world": [], "ideas": [], "science": [], "economy": [], "weather": [], "archives": []})
+    sel = Selection(sections={"world": [], "ideas": [], "science": [], "economy": [], "history": [], "weather": [], "archives": []})
 
     def room() -> int:
         return config.max_words - sel.words
@@ -151,6 +152,7 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
     for a in pools.get("economy", []):
         if put("economy", take([a], 400)):
             break
+    put("history", take(hist, 600))
     wx = take(nasa, WEATHER_MAX, weather) or take_conv(WEATHER_MAX, weather)
     put("weather", wx)
 

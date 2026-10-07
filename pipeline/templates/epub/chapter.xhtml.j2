@@ -86,6 +86,15 @@
     <p class="source">{{ a.attribution }}</p>
   </article>
   {% endfor %}
+{% elif section.id == "history" %}
+  {% for a in articles %}
+  <article class="story">
+    <div class="centered-block"><table class="forecast">
+      {% for s in a.stats %}<tr><th>{{ s.label }}</th><td>{{ s.note }}</td></tr>{% endfor %}
+    </table></div>
+    <p class="source">{{ a.attribution }}</p>
+  </article>
+  {% endfor %}
 {% else %}
   {% for a in articles %}{{ story(a) }}{% endfor %}
 {% endif %}

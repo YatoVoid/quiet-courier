@@ -26,18 +26,33 @@ const CONTENTS = [
   },
   {
     title: "World",
-    body: "A report from somewhere you probably weren't reading about, written by people who live there.",
+    body: "Two reports from places you probably weren't reading about, written by people who live there.",
     source: "Global Voices",
   },
   {
+    title: "Ideas",
+    body: "One longer read beyond science: politics, the economy, health, history or culture, explained by someone who studies it.",
+    source: "The Conversation",
+  },
+  {
     title: "Science and space",
-    body: "Two shorter pieces from the missions, satellites and labs, with a halftone picture when there is one.",
-    source: "NASA and NASA Earth Observatory",
+    body: "Shorter pieces from the missions, satellites and labs, including discoveries from the great telescopes, with a halftone picture when there is one.",
+    source: "NASA, NASA Earth Observatory and the European Southern Observatory",
+  },
+  {
+    title: "The economy in brief",
+    body: "Jobs, unemployment, prices and pay, the latest official figures laid out in a small table. Updated as new figures are released.",
+    source: "U.S. Bureau of Labor Statistics",
   },
   {
     title: "Your weather, if you want it",
     body: "Today and tonight for any city in the world in the corners of the masthead, plus the full forecast inside. Or leave it out.",
     source: "National Weather Service and MET Norway",
+  },
+  {
+    title: "This day in history",
+    body: "A few of the day's anniversaries through the years, the gentler ones: inventions, openings, discoveries, first performances.",
+    source: "Wikipedia",
   },
   {
     title: "A hundred years ago today",
@@ -72,7 +87,7 @@ const QUESTIONS = [
   },
   {
     q: "Why does the paper end?",
-    a: "Because a feed doesn’t. Each edition is fitted to fifteen or twenty minutes of reading. When you reach the puzzles, you’ve read the news for the day.",
+    a: "Because a feed doesn’t. Each edition is fitted to about twenty minutes of reading. When you reach the puzzles, you’ve read the news for the day.",
   },
   {
     q: "Does my city change the news?",
@@ -150,7 +165,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
           <div>
             <h2 className="headline">A morning paper for your e-reader, with a last page</h2>
             <p className="deck">
-              Fifteen to twenty minutes of news, science and history, set in columns like a 1920s broadsheet and emailed to your Kindle before you wake up.
+              About twenty minutes of news, science and history, set in columns like a 1920s broadsheet and emailed to your Kindle before you wake up.
             </p>
             <div className="body-columns">
               <p className="dropcap">
@@ -160,7 +175,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
               </p>
               <p>
                 Every edition is put together from writing that is free to republish: research explained by the people who
-                did it, reporting from around the world, NASA&rsquo;s own news, a forecast for your city, a newspaper printed
+                did it, reporting from around the world, science from the labs and the great telescopes, the week&rsquo;s economy, a forecast for your city, this day in history, a newspaper printed
                 on this date a hundred years ago, and the next chapter of a classic novel. Each piece runs whole, with its author
                 and license printed beside it.
               </p>

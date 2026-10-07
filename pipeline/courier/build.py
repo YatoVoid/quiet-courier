@@ -16,7 +16,7 @@ from .http import Http
 from .models import load_edition
 from .pdf import build_pdf
 from .select import select
-from .sources import Context, chronicling, conversation, current_events, economy, eso, globalvoices, metno, nasa, nws, poems
+from .sources import Context, chronicling, conversation, current_events, economy, eso, globalvoices, metno, nasa, nws, onthisday, poems
 from .store import SourceRun, Store
 
 log = logging.getLogger("courier")
@@ -27,6 +27,7 @@ ARTICLE_SOURCES = {
     "nasa": nasa.fetch,
     "eso": eso.fetch,
     "economy": economy.fetch,
+    "onthisday": onthisday.fetch,
     "chronicling_america": chronicling.fetch,
 }
 SECTIONS = [
@@ -34,6 +35,7 @@ SECTIONS = [
     {"id": "ideas", "name": "Ideas"},
     {"id": "science", "name": "Science"},
     {"id": "economy", "name": "Economy"},
+    {"id": "history", "name": "This Day in History"},
     {"id": "weather", "name": "Weather"},
     {"id": "archives", "name": "From the Archives", "subtitle": "One Hundred Years Ago Today"},
     {"id": "puzzles", "name": "Puzzles"},

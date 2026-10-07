@@ -160,6 +160,17 @@
       {{ source(a) }}
     </article>
     {% endfor %}
+  {% elif sec.id == "history" %}
+    {% for a in articles %}
+    <article class="story economy history">
+      <table class="forecast-table hist-table">
+        {% for s in a.stats %}
+        <tr><th class="temp">{{ s.label }}</th><td>{{ s.note }}</td></tr>
+        {% endfor %}
+      </table>
+      {{ source(a) }}
+    </article>
+    {% endfor %}
   {% else %}
   <div class="cols">
   {% if sec.id == "weather" and e.weather %}

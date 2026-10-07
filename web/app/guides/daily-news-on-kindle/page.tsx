@@ -190,7 +190,7 @@ export default function DailyNewsOnKindle() {
             story from The Conversation, the day&rsquo;s events in brief, world reporting from Global Voices, science from NASA,
             the forecast for any city you choose, stories printed on this date in 1926, a chapter of a classic novel, a poem,
             and a sudoku, cryptogram and word search. It&rsquo;s laid out in
-            columns like an old broadsheet, sized to your Kindle&rsquo;s screen, and takes fifteen to twenty minutes to read.
+            columns like an old broadsheet, sized to your Kindle&rsquo;s screen, and takes about twenty minutes to read.
           </p>
           <p>
             <strong>Good for:</strong> people who want a paper that ends, without running software or choosing feeds.{" "}
