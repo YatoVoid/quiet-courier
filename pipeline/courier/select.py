@@ -68,6 +68,7 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
     conv = fresh(pools.get("conversation", []), used_urls, config.avoid, seen)
     gv = fresh(pools.get("globalvoices", []), used_urls, config.avoid, seen)
     nasa = fresh(pools.get("nasa", []), used_urls, config.avoid, seen)
+    eso = fresh(pools.get("eso", []), used_urls, config.avoid, seen)
     archives = fresh(pools.get("chronicling_america", []), used_urls, (), seen)
     taken: set[str] = set()
     sel = Selection(sections={"world": [], "science": [], "weather": [], "archives": []})
@@ -119,7 +120,7 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
         if len(sel.sections["archives"]) >= 2:
             break
         put("archives", take([a], 400))
-    put("science", take(with_images + nasa, NASA_FEATURE_MAX))
+    put("science", take(eso + with_images + nasa, NASA_FEATURE_MAX))
     for a in archives:
         if len(sel.sections["archives"]) >= ARCHIVE_ITEMS:
             break

@@ -16,7 +16,7 @@ from .http import Http
 from .models import load_edition
 from .pdf import build_pdf
 from .select import select
-from .sources import Context, chronicling, conversation, current_events, globalvoices, metno, nasa, nws, poems
+from .sources import Context, chronicling, conversation, current_events, eso, globalvoices, metno, nasa, nws, poems
 from .store import SourceRun, Store
 
 log = logging.getLogger("courier")
@@ -25,6 +25,7 @@ ARTICLE_SOURCES = {
     "conversation": conversation.fetch,
     "globalvoices": globalvoices.fetch,
     "nasa": nasa.fetch,
+    "eso": eso.fetch,
     "chronicling_america": chronicling.fetch,
 }
 SECTIONS = [

@@ -27,6 +27,13 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
 - Photos are often "used with permission" from the photographer, which does not pass to us. We omit images.
 - Some posts quote sources in the original language followed by an English translation. The paper's fonts are Latin-only, so we drop the original-language lines, keep the translation, and say so in the credit.
 
+### European Southern Observatory (ESO)
+- License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Commercial use allowed. Covers press releases, announcements and captions; does NOT cover the ESO logo, scientific papers, code, or the photographs. Terms: https://www.eso.org/public/outreach/copyright/
+- Must not state or imply ESO endorses the paper. We omit images (they are the part the license excludes most often) and credit the text: "European Southern Observatory (ESO), CC BY 4.0. ESO does not endorse this publication." The changes note says images were omitted.
+- Feed: https://www.eso.org/public/news/feed/ (10 items). Each item's full text comes from its release page; the body is taken from the paragraphs before the "More information"/"Links"/"Contacts" tail.
+- Astronomy discoveries (stars, exoplanets, black holes), which complement NASA's solar-system and mission news rather than repeating it, and read as global rather than US-centric.
+- ESO publishes slowly (about one release a week or two, with longer gaps). `sources/eso.py` only runs a release within 60 days of publication (MAX_AGE_DAYS), so the paper never prints a months-old result as if it were news; 60 days matches history_days so each release runs once. On weeks with nothing recent, the science feature falls back to NASA.
+
 ### NASA
 - U.S. government work, public domain in the U.S.
 - Must not imply NASA endorses the paper. Never use the NASA insignia or "meatball" logo.

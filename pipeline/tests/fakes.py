@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image
 
 from courier.http import FetchError
-from courier.sources import conversation, globalvoices, nasa
+from courier.sources import conversation, eso, globalvoices, nasa
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 
@@ -50,6 +50,10 @@ class FakeHttp:
             return "globalvoices", (FIXTURES / "globalvoices.xml").read_bytes()
         if url == nasa.FEED:
             return "nasa", (FIXTURES / "nasa.xml").read_bytes()
+        if url == eso.FEED:
+            return "eso", (FIXTURES / "eso.xml").read_bytes()
+        if "eso.org/public/news/" in url:
+            return "eso", (FIXTURES / "eso-article.html").read_bytes()
         if "api.weather.gov/points" in url:
             return "nws", (FIXTURES / "nws-points.json").read_bytes()
         if "api.met.no/weatherapi/locationforecast" in url:

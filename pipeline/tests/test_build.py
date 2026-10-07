@@ -43,7 +43,7 @@ def test_builds_and_stores_an_edition(tmp_path, store):
     (serial_row,) = db.execute("SELECT title, word_count FROM edition_items WHERE kind = 'serial'").fetchall()
     assert serial_row[0] == "The Hound of the Baskervilles, instalment 1" and serial_row[1] == 900
     licenses = {row[0] for row in db.execute("SELECT DISTINCT license_id FROM edition_items")}
-    assert licenses <= {"cc-by-nd-4.0", "cc-by-3.0", "us-gov-pd", "pd-expired"}
+    assert licenses <= {"cc-by-nd-4.0", "cc-by-4.0", "cc-by-3.0", "us-gov-pd", "pd-expired"}
 
 
 def test_downloaded_images_are_local_files(tmp_path, store):
