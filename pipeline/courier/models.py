@@ -38,6 +38,13 @@ class Image:
 
 
 @dataclass(frozen=True)
+class Stat:
+    label: str
+    value: str
+    note: str = ""
+
+
+@dataclass(frozen=True)
 class Article:
     id: str
     section: str
@@ -54,6 +61,7 @@ class Article:
     changes: str | None = None
     kind: str = "article"
     images: tuple[Image, ...] = ()
+    stats: tuple[Stat, ...] = ()
 
     @property
     def word_count(self) -> int:
@@ -83,6 +91,7 @@ class Article:
             attribution=d["attribution"], published=d.get("published"), deck=d.get("deck"),
             author=d.get("author"), author_affiliation=d.get("author_affiliation"),
             changes=d.get("changes"), kind=d.get("kind", "article"), images=images,
+            stats=tuple(Stat(s["label"], s["value"], s.get("note", "")) for s in d.get("stats", [])),
         )
 
 

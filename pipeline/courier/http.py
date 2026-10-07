@@ -61,3 +61,24 @@ class Http:
 
     def json(self, url: str):
         return json.loads(self.get(url, accept="application/json"))
+
+    def post(self, url: str, body: bytes, content_type: str = "application/json") -> bytes:
+        last: Exception | None = None
+        for attempt in range(self.retries):
+            if attempt:
+                time.sleep(self.backoff * attempt)
+            req = urllib.request.Request(
+                url, data=body, method="POST",
+                headers={"User-Agent": self.user_agent, "Content-Type": content_type, "Accept": "application/json"})
+            try:
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                    return resp.read()
+            except urllib.error.HTTPError as e:
+                last = e
+                if e.code in RETRYABLE:
+                    continue
+                raise FetchError(f"{url}: HTTP {e.code}") from e
+            except (urllib.error.URLError, http.client.HTTPException, TimeoutError, ConnectionError) as e:
+                last = e
+                continue
+        raise FetchError(f"{url}: gave up after {self.retries} attempts ({last})")

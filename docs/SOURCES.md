@@ -86,6 +86,13 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
   - Wikimedia APIs require a User-Agent with contact details and modest request rates. One request per day is enough.
 - Risks: anyone can edit, so a bad edit could be live when we fetch. Use a revision at least a few hours old and the day that has already ended. Coverage is world-first and thin on some days.
 
+### U.S. Bureau of Labor Statistics (economy brief)
+- Works of the U.S. government are public domain (17 U.S.C. 105), commercial use allowed. No key needed for the BLS public API v1 (modest query limits).
+- API: https://api.bls.gov/publicAPI/v1/timeseries/data/ (POST). Series used: unemployment rate (LNS14000000), labor force participation (LNS11300000), nonfarm payrolls (CES0000000001), average hourly earnings (CES0500000003), CPI all items (CUUR0000SA0), CPI less food and energy (CUUR0000SA0L1E).
+- `sources/economy.py` reads the official numbers and lays them out as a small "Economy in Brief" table by fixed rules (direction words, year-over-year percent computed from the monthly index). Nothing is written or guessed by a model. US figures only, so it is a small brief, never the lead.
+- It is a standing daily box like the weather, not a news article, so it is not run through the article de-duplication and its URL repeats day to day by design. BLS updates monthly, so the figures change about once a month.
+- Attribution printed: "Figures from the U.S. Bureau of Labor Statistics. Public domain." Changes note: year-over-year figures computed from the published monthly series.
+
 ## Waiting on permission (checked 2026-10-04)
 
 ### KFF Health News (health policy reporting)

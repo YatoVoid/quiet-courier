@@ -75,7 +75,7 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
     eso = fresh(pools.get("eso", []), used_urls, config.avoid, seen)
     archives = fresh(pools.get("chronicling_america", []), used_urls, (), seen)
     taken: set[str] = set()
-    sel = Selection(sections={"world": [], "ideas": [], "science": [], "weather": [], "archives": []})
+    sel = Selection(sections={"world": [], "ideas": [], "science": [], "economy": [], "weather": [], "archives": []})
 
     def room() -> int:
         return config.max_words - sel.words
@@ -148,6 +148,9 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
         if len(sel.sections["archives"]) >= ARCHIVE_ITEMS:
             break
         put("archives", take([a], 400))
+    for a in pools.get("economy", []):
+        if put("economy", take([a], 400)):
+            break
     wx = take(nasa, WEATHER_MAX, weather) or take_conv(WEATHER_MAX, weather)
     put("weather", wx)
 

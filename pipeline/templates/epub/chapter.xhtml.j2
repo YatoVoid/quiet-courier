@@ -76,6 +76,16 @@
     </div></div>
     <p class="source">{{ e.poem.attribution }} Text from {{ e.poem.source_name }}.</p>
   </article>
+{% elif section.id == "economy" %}
+  {% for a in articles %}
+  <article class="story">
+    {% for b in a.body %}<p>{{ b.text }}</p>{% endfor %}
+    <div class="centered-block"><table class="forecast">
+      {% for s in a.stats %}<tr><th>{{ s.label }}</th><td>{{ s.value }}</td><td>{{ s.note }}</td></tr>{% endfor %}
+    </table></div>
+    <p class="source">{{ a.attribution }}</p>
+  </article>
+  {% endfor %}
 {% else %}
   {% for a in articles %}{{ story(a) }}{% endfor %}
 {% endif %}

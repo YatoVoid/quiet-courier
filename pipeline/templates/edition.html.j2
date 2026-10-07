@@ -148,6 +148,19 @@
 {% for sec, articles in sections %}
 <section class="sec sec-{{ sec.id }}">
   {{ section_head(sec.name, sec.subtitle, "sec-" ~ sec.id) }}
+  {% if sec.id == "economy" %}
+    {% for a in articles %}
+    <article class="story economy">
+      {{ blocks(a.body) }}
+      <table class="forecast-table econ-table">
+        {% for s in a.stats %}
+        <tr><th>{{ s.label }}</th><td class="temp">{{ s.value }}</td><td>{{ s.note }}</td></tr>
+        {% endfor %}
+      </table>
+      {{ source(a) }}
+    </article>
+    {% endfor %}
+  {% else %}
   <div class="cols">
   {% if sec.id == "weather" and e.weather %}
   <article class="story forecast">
@@ -191,7 +204,7 @@
       {% endfor %}
       <p class="source">{{ e.poem.attribution }} Text from {{ e.poem.source_name }}.</p>
     </aside>
-  {% else %}
+  {% elif sec.id != "economy" %}
     {% for a in articles %}
     <article class="story">
       <h3 class="headline">{{ a.title }}</h3>
@@ -204,6 +217,7 @@
     {% endfor %}
   {% endif %}
   </div>
+  {% endif %}
 </section>
 {% endfor %}
 

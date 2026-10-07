@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image
 
 from courier.http import FetchError
-from courier.sources import conversation, eso, globalvoices, nasa
+from courier.sources import conversation, economy, eso, globalvoices, nasa
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 
@@ -52,6 +52,8 @@ class FakeHttp:
             return "nasa", (FIXTURES / "nasa.xml").read_bytes()
         if url == eso.FEED:
             return "eso", (FIXTURES / "eso.xml").read_bytes()
+        if url == economy.API:
+            return "economy", (FIXTURES / "bls.json").read_bytes()
         if "eso.org/public/news/" in url:
             return "eso", (FIXTURES / "eso-article.html").read_bytes()
         if "api.weather.gov/points" in url:
@@ -85,6 +87,13 @@ class FakeHttp:
         if source in self.fail:
             raise FetchError(f"{url}: simulated outage")
         return body
+
+    def post(self, url: str, body: bytes, content_type: str = "application/json") -> bytes:
+        self.requests.append(url)
+        source, data = self._route(url)
+        if source in self.fail:
+            raise FetchError(f"{url}: simulated outage")
+        return data
 
     def json(self, url: str):
         return json.loads(self.get(url, accept="application/json"))

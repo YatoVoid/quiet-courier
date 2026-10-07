@@ -111,7 +111,9 @@ def test_next_day_does_not_repeat_articles(tmp_path, store):
     config = load_config()
     first = build(config, config.cities["kansas-city"], DATE, tmp_path, store, http=FakeHttp(), render=False)
     second = build(config, config.cities["kansas-city"], DATE + dt.timedelta(days=1), tmp_path, store, http=FakeHttp(), render=False)
-    urls = lambda r: {a["source_url"] for a in json.loads(r.json_path.read_text())["articles"]}
+    # The economy box is a standing daily summary, like the weather, so its URL repeats by design.
+    urls = lambda r: {a["source_url"] for a in json.loads(r.json_path.read_text())["articles"]
+                      if a["section"] != "economy"}
     assert not (urls(first) & urls(second))
 
 

@@ -5,6 +5,7 @@ import re
 import xml.etree.ElementTree as ET
 
 from .. import clean
+from ..http import FetchError
 from . import LICENSES, Context, article_id
 
 FEED = "https://www.eso.org/public/news/feed/"
@@ -51,7 +52,7 @@ def fetch(ctx: Context) -> list[dict]:
         deck = re.split(r"(?<=[.!?])\s", deck, maxsplit=1)[0][:200] if deck else None
         try:
             page = ctx.http.get(url)
-        except OSError:
+        except (OSError, FetchError):
             continue
         if isinstance(page, bytes):
             page = page.decode("utf-8", "replace")
