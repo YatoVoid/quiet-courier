@@ -6,8 +6,8 @@ launch_date = "2026-10-01"
 [reading]
 # 240 words a minute puts 3,600-4,800 words at 15-20 minutes.
 words_per_minute = 240
-target_words = 4200
-max_words = 4800
+target_words = 5000
+max_words = 5600
 # Articles used in an edition are not reused for this many days.
 history_days = 60
 

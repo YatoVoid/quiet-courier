@@ -23,7 +23,7 @@ def art(id, words, source="The Conversation", title=None, published="2026-10-01T
 def pools():
     return {
         "conversation": [art("c1", 1000), art("c2", 900, text="research"), art("c3", 1100)],
-        "globalvoices": [art("g1", 1200, "Global Voices", text="people"), art("g2", 2500, "Global Voices")],
+        "globalvoices": [art("g1", 900, "Global Voices", text="people"), art("g2", 2500, "Global Voices")],
         "nasa": [art("n1", 300, "NASA"), art("n2", 250, "NASA"), art("n3", 400, "NASA", images=[{"url": "x"}]),
                  art("n4", 600, "NASA", text="storm")],
         "chronicling_america": [art(f"a{i}", 120, "Old Paper") for i in range(5)],
@@ -33,7 +33,7 @@ def pools():
 def test_edition_fits_reading_budget():
     config = load_config()
     sel = select(pools(), config, set())
-    assert sel.lead and len(sel.secondaries) == 2
+    assert sel.lead and len(sel.secondaries) == 1
     assert sel.words <= config.max_words
     assert sel.sections["world"] and sel.sections["science"] and sel.sections["archives"]
     assert all(word_count(a) <= 1300 for a in sel.sections["world"])
@@ -69,3 +69,26 @@ def test_lead_falls_back_when_a_source_is_missing():
 
 def test_nothing_to_print():
     assert select({}, load_config(), set()).lead is None
+
+
+def test_widens_with_ideas_section_and_two_world_items():
+    config = load_config()
+    p = {
+        "conversation": [
+            art("lead", 1000, text="study"),                       # science lead
+            art("sci", 900, text="research"),                      # science section
+            art("pol", 700, title="The election rules explained", text="policy"),  # broad -> ideas
+            art("cul", 650, title="Why novels still matter", text="culture"),       # broad spare
+        ],
+        "globalvoices": [art("g1", 600, "Global Voices", text="people"),
+                         art("g2", 650, "Global Voices", text="protest")],
+        "nasa": [art("n1", 300, "NASA"), art("n2", 400, "NASA", text="storm")],
+        "chronicling_america": [art(f"a{i}", 120, "Old Paper") for i in range(4)],
+    }
+    sel = select(p, config, set())
+    assert len(sel.sections["ideas"]) == 1
+    assert sel.sections["ideas"][0]["id"] in {"pol", "cul"}
+    assert len(sel.sections["world"]) == 2
+    conv_ids = {"lead", "sci", "pol", "cul"}
+    assert sum(1 for a in sel.articles() if a["id"] in conv_ids) <= 3
+    assert len(sel.secondaries) == 1

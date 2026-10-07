@@ -30,6 +30,7 @@ ARTICLE_SOURCES = {
 }
 SECTIONS = [
     {"id": "world", "name": "World"},
+    {"id": "ideas", "name": "Ideas"},
     {"id": "science", "name": "Science"},
     {"id": "weather", "name": "Weather"},
     {"id": "archives", "name": "From the Archives", "subtitle": "One Hundred Years Ago Today"},

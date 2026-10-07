@@ -9,11 +9,15 @@ from .config import Config
 
 LEAD_WORDS = (600, 1400)
 SECONDARY_WORDS = (120, 500)
-WORLD_MAX = 1300
+WORLD_MAX = 1000
+WORLD_ITEMS = 2
+IDEAS_MAX = 1400
 SCIENCE_MAX = 1200
 NASA_FEATURE_MAX = 700
 WEATHER_MAX = 900
 ARCHIVE_ITEMS = 4
+# The Conversation's republishing terms ask us to run at most three of their articles per edition.
+CONVERSATION_MAX = 3
 
 
 @dataclass
@@ -71,7 +75,7 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
     eso = fresh(pools.get("eso", []), used_urls, config.avoid, seen)
     archives = fresh(pools.get("chronicling_america", []), used_urls, (), seen)
     taken: set[str] = set()
-    sel = Selection(sections={"world": [], "science": [], "weather": [], "archives": []})
+    sel = Selection(sections={"world": [], "ideas": [], "science": [], "weather": [], "archives": []})
 
     def room() -> int:
         return config.max_words - sel.words
@@ -87,6 +91,7 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
     def put(section, a):
         if a:
             sel.sections[section].append(dict(a, section=section))
+        return a
 
     calm_first = ([a for a in conv if mentions(a, config.science_keywords + config.weather_keywords)]
                   + [a for a in conv if not mentions(a, config.science_keywords + config.weather_keywords)])
@@ -95,12 +100,13 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
             or take(sorted(nasa, key=word_count, reverse=True), LEAD_WORDS[1]))
     sel.lead = dict(lead, section="front") if lead else None
 
+    # One NASA teaser on the front, not two, so page one isn't three science stories under a
+    # science-leaning lead. The broader topics go in the Ideas and World sections below.
     with_images = [a for a in nasa if a.get("images")]
     plain_nasa = [a for a in nasa if not a.get("images")] + with_images
-    for _ in range(2):
-        s = take(plain_nasa, SECONDARY_WORDS[1], lo=SECONDARY_WORDS[0])
-        if s:
-            sel.secondaries.append(dict(s, section="science"))
+    s = take(plain_nasa, SECONDARY_WORDS[1], lo=SECONDARY_WORDS[0])
+    if s:
+        sel.secondaries.append(dict(s, section="science"))
 
     def science(a):
         return mentions(a, config.science_keywords)
@@ -108,14 +114,31 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
     def weather(a):
         return mentions(a, config.weather_keywords)
 
+    # Anything from The Conversation that isn't science or weather: politics, economy, health,
+    # culture, society. This is the breadth the paper otherwise misses.
+    def broad(a):
+        return not mentions(a, config.science_keywords + config.weather_keywords)
+
+    def conv_used() -> int:
+        return sum(1 for a in conv if a["id"] in taken)
+
     reserve_archives = 350
     budget_left = config.max_words - reserve_archives
 
     def take_reserved(candidates, limit, test=lambda a: True):
         return take(candidates, min(limit, budget_left - sel.words), test)
 
+    def take_conv(limit, test):
+        return take_reserved(conv, limit, test) if conv_used() < CONVERSATION_MAX else None
+
+    # World and Ideas are the breadth the paper was missing, so they take the budget before a second
+    # science piece or extra archive clips. Ideas comes before the second world item so a long lead
+    # and serial can't starve it.
     put("world", take_reserved(gv, WORLD_MAX))
-    put("science", take_reserved(conv, SCIENCE_MAX, science))
+    put("ideas", take_conv(IDEAS_MAX, broad))
+    if len(sel.sections["world"]) < WORLD_ITEMS:
+        put("world", take_reserved(gv, WORLD_MAX))
+    put("science", take_conv(SCIENCE_MAX, science))
     for a in archives:
         if len(sel.sections["archives"]) >= 2:
             break
@@ -125,6 +148,7 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
         if len(sel.sections["archives"]) >= ARCHIVE_ITEMS:
             break
         put("archives", take([a], 400))
-    put("weather", take(nasa + conv, WEATHER_MAX, weather))
+    wx = take(nasa, WEATHER_MAX, weather) or take_conv(WEATHER_MAX, weather)
+    put("weather", wx)
 
     return sel
