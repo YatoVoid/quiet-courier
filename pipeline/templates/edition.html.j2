@@ -12,9 +12,10 @@
 {% macro byline(a) %}
   {% if a.source_name == "The Conversation" %}<p class="credit">The Conversation</p>{% endif %}
   {% if a.author and a.author != a.source_name %}
-  <p class="byline">By {{ a.author }}</p>
+  <p class="byline">By {{ a.author }}{% if a.source_name == "CalMatters" %}, CalMatters{% endif %}</p>
   {% if a.author_affiliation %}<p class="affil">{{ a.author_affiliation }}</p>{% endif %}
   {% endif %}
+  {% if a.tagline %}<p class="affil">{{ a.tagline }}</p>{% endif %}
 {% endmacro %}
 
 {% macro blocks(list, drop=true) %}

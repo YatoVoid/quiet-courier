@@ -211,18 +211,29 @@ export const deliveries = pgTable(
 
 // What was sent to The Conversation under the republishing agreement: one copy per
 // edition date that ran their articles, and one usage report per month.
-export const partnerCopies = pgTable("partner_copies", {
-  editionDate: date("edition_date").primaryKey(),
-  articles: integer("articles").notNull(),
-  sentAt: timestamp("sent_at", { withTimezone: true }).notNull().defaultNow(),
-});
+// partner names the source we owe copies and reports to: "conversation" or "calmatters".
+export const partnerCopies = pgTable(
+  "partner_copies",
+  {
+    partner: text("partner").notNull().default("conversation"),
+    editionDate: date("edition_date").notNull(),
+    articles: integer("articles").notNull(),
+    sentAt: timestamp("sent_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.partner, t.editionDate] })],
+);
 
-export const partnerReports = pgTable("partner_reports", {
-  month: text("month").primaryKey(),
-  articles: integer("articles").notNull(),
-  subscribers: integer("subscribers").notNull(),
-  sentAt: timestamp("sent_at", { withTimezone: true }).notNull().defaultNow(),
-});
+export const partnerReports = pgTable(
+  "partner_reports",
+  {
+    partner: text("partner").notNull().default("conversation"),
+    month: text("month").notNull(),
+    articles: integer("articles").notNull(),
+    subscribers: integer("subscribers").notNull(),
+    sentAt: timestamp("sent_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.partner, t.month] })],
+);
 
 // Each Stripe webhook event id is recorded once, so a redelivered event is never applied twice.
 export const stripeEvents = pgTable("stripe_events", {

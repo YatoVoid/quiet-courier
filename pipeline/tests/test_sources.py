@@ -4,7 +4,7 @@ import pytest
 
 from courier.config import City, load_config
 from courier.models import Location
-from courier.sources import Context, chronicling, conversation, globalvoices, metno, nasa, nws, poems
+from courier.sources import Context, calmatters, chronicling, conversation, globalvoices, metno, nasa, nws, poems
 
 from fakes import FakeHttp
 
@@ -198,3 +198,29 @@ def test_metno_uses_fahrenheit_in_the_us():
     config = load_config()
     w = metno.fetch(Context(FakeHttp(), config, dt.date(2026, 10, 2), config.cities["denver"]))
     assert all(p["unit"] == "F" for p in w["periods"])
+
+
+def test_calmatters_keeps_news_and_skips_commentary_newsletters_spanish_and_city_races(ctx):
+    arts = calmatters.fetch(ctx)
+    titles = [a["title"] for a in arts]
+    assert len(arts) == 2
+    assert any("Prop. 4" in t for t in titles) and any("test scores" in t for t in titles)
+    prop = next(a for a in arts if "Prop. 4" in a["title"])
+    assert prop["author"] == "Yue Stella Yu"
+    assert prop["tagline"] == "This story was originally published by CalMatters."
+    assert prop["deck"].startswith("Prop. 4 would lift a ban")
+    assert prop["body"][0]["text"].startswith("In 1988")
+    assert "In summary" not in _text(prop)
+    assert prop["changes"] == "Images omitted. Text unedited."
+    assert not prop["license"]["derivatives"] and prop["license"]["commercial"]
+
+
+def test_calmatters_runs_at_most_three_times_a_week_and_never_on_back_to_back_days():
+    day = dt.date(2026, 10, 15)
+    ago = lambda n: day - dt.timedelta(days=n)
+    assert calmatters.allowed([], day)
+    assert not calmatters.allowed([ago(1)], day)
+    assert calmatters.allowed([ago(2)], day)
+    assert calmatters.allowed([ago(2), ago(4)], day)
+    assert not calmatters.allowed([ago(2), ago(4), ago(6)], day)
+    assert calmatters.allowed([ago(3), ago(5), ago(7)], day)

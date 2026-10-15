@@ -50,6 +50,13 @@
       "when": 1791250672989,
       "tag": "0006_check_in",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792076339285,
+      "tag": "0007_partner_column",
+      "breakpoints": true
     }
   ]
 }

@@ -239,7 +239,28 @@ def test_sends_the_conversation_one_copy_per_date_after_the_first_delivery(conn,
     [copy] = job_factory.mailer.to("republish@example.org")
     assert copy.attachments[0].name == "general_large.pdf"
     assert "from The Conversation" in copy.text and "theconversation.com" in copy.text
-    assert copy.idempotency_key == "partner-copy/2026-10-01"
+    assert copy.idempotency_key == "partner-copy/conversation/2026-10-01"
+
+
+def test_each_partner_gets_its_own_copy_and_report(conn, job_factory):
+    add_reader(conn)
+    both = dict(partner_copy_to=["conv@example.org"], calmatters_copy_to=["cm@example.org"],
+                partner_report_to=["conv-usage@example.org"], calmatters_report_to=["cm-usage@example.org"])
+    job_factory(**both).run(MORNING_CHICAGO)
+    job_factory(**both).run(MORNING_CHICAGO + dt.timedelta(hours=1))
+    [conv] = job_factory.mailer.to("conv@example.org")
+    [cm] = job_factory.mailer.to("cm@example.org")
+    assert "from CalMatters" in cm.text and "calmatters.org" in cm.text and "theconversation.com" not in cm.text
+    assert cm.idempotency_key == "partner-copy/calmatters/2026-10-01"
+    rows = conn.execute("SELECT partner FROM partner_copies ORDER BY partner").fetchall()
+    assert [r["partner"] for r in rows] == ["calmatters", "conversation"]
+
+    first_of_november = dt.datetime(2026, 11, 1, 3, 0, tzinfo=UTC)
+    job_factory(**both).run(first_of_november)
+    [report] = job_factory.mailer.to("cm-usage@example.org")
+    assert report.subject == "The Quiet Courier: CalMatters usage report for October 2026"
+    assert "Stories republished: 1" in report.text
+    assert len(job_factory.mailer.to("conv-usage@example.org")) == 1
 
 
 def test_monthly_usage_report_goes_out_once(conn, job_factory):
@@ -511,3 +532,17 @@ def test_no_backup_link_for_a_paper_that_got_through_on_a_retry(conn, job_factor
     assert delivery(conn, uid)["status"] == "sent"
     job_factory().run(MORNING_CHICAGO + dt.timedelta(hours=5))
     assert job_factory.mailer.to(account(uid)) == []
+
+
+def test_calmatters_copies_and_reports_stop_after_the_ones_they_asked_for(conn, job_factory):
+    add_reader(conn)
+    conn.execute("INSERT INTO partner_copies (partner, edition_date, articles) VALUES "
+                 "('calmatters', '2026-09-20', 1), ('calmatters', '2026-09-22', 1)")
+    conn.execute("INSERT INTO partner_reports (partner, month, articles, subscribers) VALUES ('calmatters', '2026-09', 2, 1)")
+    both = dict(partner_copy_to=["conv@example.org"], calmatters_copy_to=["cm@example.org"],
+                calmatters_report_to=["cm-usage@example.org"])
+    job_factory(**both).run(MORNING_CHICAGO)
+    job_factory(**both).run(dt.datetime(2026, 11, 1, 3, 0, tzinfo=UTC))
+    assert job_factory.mailer.to("cm@example.org") == []
+    assert job_factory.mailer.to("cm-usage@example.org") == []
+    assert len(job_factory.mailer.to("conv@example.org")) == 1, "The Conversation has no limit"

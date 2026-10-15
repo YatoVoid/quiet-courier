@@ -20,6 +20,13 @@ Checked 2026-10-01 against each source's published terms. Re-check before launch
     - a copy of each edition that uses their content, sent to us-republish@theconversation.com
     - usage reporting so they can log each republication, plus a general circulation number
 
+### CalMatters (California policy and politics)
+- Written permission: Dan Hu, Director of Partnerships (dhu@calmatters.org), replied 2026-10-15 to our request of 2026-10-05: "Go ahead, feel free to use our content!" Their public terms say "Do not sell our stories"; this permission is what lets a paid paper run them, so it covers only what we offered.
+- What we keep to: text and headline unedited, no photos, no fee, stop whenever they ask. We offered one or two stories a week; Dan replied the same day that more is fine. We run at most three a week, never on back-to-back mornings (`sources/calmatters.py` PER_WEEK, MIN_GAP_DAYS), because each one takes the Ideas slot.
+- Copies: Dan asked for the first one or two editions and the first monthly report, and will say whether he wants more. The job sends the first two copies and the first report to republish@calmatters.org (CALMATTERS_COPY_TO and CALMATTERS_REPORT_TO on the server), then stops (copy_limit and report_limit on the CalMatters partner in `delivery.py`). If he asks to keep receiving them, remove the limits.
+- From their republishing page (https://calmatters.org/about/republish/): byline "By Author Name, CalMatters"; "This story was originally published by CalMatters." at the top of the story (print leaves out the newsletter sentence); no ads sold against their stories.
+- Feed: https://calmatters.org/feed/ (full text). The pipeline takes news stories only: commentary (different byline and tagline), WhatMatters newsletter posts, Spanish stories and city races are skipped. Their "In summary" box becomes the deck.
+
 ### Global Voices
 - License: CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/). Commercial use and edits allowed.
 - Terms page: https://globalvoices.org/about/global-voices-attribution-policy/

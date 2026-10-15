@@ -11,6 +11,7 @@ LEAD_WORDS = (600, 1400)
 SECONDARY_WORDS = (120, 500)
 WORLD_MAX = 1000
 WORLD_ITEMS = 2
+STATES_MAX = 1400
 IDEAS_MAX = 1400
 SCIENCE_MAX = 1200
 NASA_FEATURE_MAX = 700
@@ -71,12 +72,13 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
     seen: list[str] = []
     conv = fresh(pools.get("conversation", []), used_urls, config.avoid, seen)
     gv = fresh(pools.get("globalvoices", []), used_urls, config.avoid, seen)
+    states = fresh(pools.get("calmatters", []), used_urls, config.avoid, seen)
     nasa = fresh(pools.get("nasa", []), used_urls, config.avoid, seen)
     eso = fresh(pools.get("eso", []), used_urls, config.avoid, seen)
     archives = fresh(pools.get("chronicling_america", []), used_urls, (), seen)
     hist = fresh(pools.get("onthisday", []), used_urls, (), seen)
     taken: set[str] = set()
-    sel = Selection(sections={"world": [], "ideas": [], "science": [], "economy": [], "history": [], "weather": [], "archives": []})
+    sel = Selection(sections={"world": [], "states": [], "ideas": [], "science": [], "economy": [], "history": [], "weather": [], "archives": []})
 
     def room() -> int:
         return config.max_words - sel.words
@@ -132,10 +134,13 @@ def select(pools: dict[str, list[dict]], config: Config, used_urls: set[str]) ->
     def take_conv(limit, test):
         return take_reserved(conv, limit, test) if conv_used() < CONVERSATION_MAX else None
 
-    # World and Ideas are the breadth the paper was missing, so they take the budget before a second
+    # World, The States and Ideas are the breadth the paper was missing, so they take the budget before a second
     # science piece or extra archive clips. Ideas comes before the second world item so a long lead
     # and serial can't starve it.
     put("world", take_reserved(gv, WORLD_MAX))
+    # CalMatters runs at most three times a week (calmatters.allowed). After a long lead and the serial there
+    # is room for it or for Ideas, not both, so on its days the reported story takes the slot.
+    put("states", take_reserved(states, STATES_MAX))
     put("ideas", take_conv(IDEAS_MAX, broad))
     if len(sel.sections["world"]) < WORLD_ITEMS:
         put("world", take_reserved(gv, WORLD_MAX))

@@ -34,6 +34,14 @@ class Store:
             "WHERE e.edition_date >= ? AND e.edition_date < ?", (since, before.isoformat()))) as cur:
             return {r[0] for r in cur}
 
+    def source_dates(self, source_name: str, before: dt.date, days: int) -> list[dt.date]:
+        since = (before - dt.timedelta(days=days)).isoformat()
+        with closing(self.db.execute(
+            "SELECT DISTINCT e.edition_date FROM edition_items i JOIN editions e ON e.id = i.edition_id "
+            "WHERE i.source_name = ? AND e.edition_date >= ? AND e.edition_date < ?",
+            (source_name, since, before.isoformat()))) as cur:
+            return [dt.date.fromisoformat(r[0]) for r in cur]
+
     def recent_poems(self, before: dt.date, days: int) -> set[str]:
         since = (before - dt.timedelta(days=days)).isoformat()
         with closing(self.db.execute(
@@ -75,13 +83,13 @@ class Store:
             self.db.execute("UPDATE serial_books SET started_on = ? WHERE id = ? AND started_on IS NULL",
                             (date.isoformat(), book_id))
 
-    def conversation_usage(self, first: dt.date, last: dt.date) -> list[dict]:
+    def source_usage(self, source_name: str, first: dt.date, last: dt.date) -> list[dict]:
         with closing(self.db.execute(
             "SELECT i.title, i.source_url, group_concat(DISTINCT e.edition_date) FROM edition_items i "
             "JOIN editions e ON e.id = i.edition_id "
-            "WHERE i.source_name = 'The Conversation' AND e.edition_date BETWEEN ? AND ? "
+            "WHERE i.source_name = ? AND e.edition_date BETWEEN ? AND ? "
             "GROUP BY i.source_url ORDER BY min(e.edition_date), i.title",
-            (first.isoformat(), last.isoformat()))) as cur:
+            (source_name, first.isoformat(), last.isoformat()))) as cur:
             return [{"title": t, "source_url": u, "dates": sorted(d.split(","))} for t, u, d in cur]
 
     def save(self, edition: dict, city_id: str, word_count: int, reading_min: int, runs: list[SourceRun]) -> str:

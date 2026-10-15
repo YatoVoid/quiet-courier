@@ -92,3 +92,11 @@ def test_widens_with_ideas_section_and_two_world_items():
     conv_ids = {"lead", "sci", "pol", "cul"}
     assert sum(1 for a in sel.articles() if a["id"] in conv_ids) <= 3
     assert len(sel.secondaries) == 1
+
+
+def test_states_section_takes_a_calmatters_story_that_fits():
+    p = pools()
+    p["calmatters"] = [art("cm-long", 2000, "CalMatters"), art("cm-ok", 900, "CalMatters", text="policy")]
+    sel = select(p, load_config(), set())
+    assert [a["id"] for a in sel.sections["states"]] == ["cm-ok"]
+    assert sel.words <= load_config().max_words

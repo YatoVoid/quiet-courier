@@ -1,0 +1,1006 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>CalMatters</title>
+	<atom:link href="https://calmatters.org/feed/" rel="self" type="application/rss+xml" />
+	<link>https://calmatters.org/</link>
+	<description>California, explained</description>
+	<lastBuildDate>Thu, 15 Oct 2026 13:00:00 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	
+
+<image>
+	<url>https://calmatters.org/wp-content/uploads/2025/12/cropped-calmatters-favicon-32x32.png</url>
+	<title>CalMatters</title>
+	<link>https://calmatters.org/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+<site xmlns="com-wordpress:feed-additions:1">163013142</site>	<item>
+		<title>California&#8217;s ballot propositions fuel its longstanding tax-and-spending war</title>
+		<link>https://calmatters.org/commentary/2026/10/california-ballot-propositions-tax-spending-war/</link>
+		
+		<dc:creator><![CDATA[Dan Walters]]></dc:creator>
+		<pubDate>Thu, 15 Oct 2026 12:00:00 +0000</pubDate>
+				<category><![CDATA[Commentary]]></category>
+		<category><![CDATA[Dan Walters]]></category>
+		<category><![CDATA[election 2026]]></category>
+		<category><![CDATA[Proposition 13]]></category>
+		<category><![CDATA[Proposition 40]]></category>
+		<category><![CDATA[Taxes]]></category>
+		<guid isPermaLink="false">https://calmatters.org/?p=510272</guid>
+
+					<description><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="A person watches as an election worker with a pink button up blouse inserts a white envelope into the slot of a gray ballot box." decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>Until Proposition 13, California voters let elected officials decide taxes and spending options. Now, 48 years later, money matters dominate the ballot box. ]]></description>
+										<content:encoded><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="A person watches as an election worker with a pink button up blouse inserts a white envelope into the slot of a gray ballot box." decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/06/060226_Primary-Election-Fresno_LV_CM_01.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>
+<p class="wp-block-paragraph">California voters will pass judgment on <a href="https://calmatters.org/california-voter-guide-2026/propositions">14 statewide ballot measures</a> this year and all but two of them relate, in some manner, to financing public services.</p>
+
+
+
+<p class="wp-block-paragraph">Collectively they represent the latest version of what fiscal policy buffs call “ballot box budgeting” — persuading voters to prioritize or limit how funds are raised and spent rather than leaving those issues to elected officials.</p>
+
+
+
+<p class="wp-block-paragraph">This election’s most contentious measure, <a href="https://calmatters.org/politics/2026/10/california-billionaire-tax-explainer/">Proposition 40</a>, typifies the underlying philosophical conflict that has raged ever since voters passed <a href="https://ballotpedia.org/California_Proposition_13,_Tax_Limitations_Initiative_(June_1978)">Proposition 13</a>, the state’s iconic limit on property taxes, nearly a half-century ago.</p>
+
+
+
+<p class="wp-block-paragraph">Prop. 13 embodied the belief that high taxes undercut Californians’ ability to enhance the welfare of their own families. Prop. 40, which would impose a 5% tax on the wealth of California’s billionaires, reflects the counter-contention that expansive public services better serve the well-being of all Californians.</p>
+
+
+
+<p class="wp-block-paragraph">Before Prop. 13 made the June 1978 ballot, the initiative process almost never dealt with tax and spending issues, a <a href="https://elections.cdn.sos.ca.gov/ballot-measures/pdf/initiatives-by-title-and-summary-year.pdf">yearly summary</a> from the secretary of state’s office indicates. Implicitly, voters were content to leave such money matters to elected state and local officials.</p>
+
+
+
+<p class="wp-block-paragraph">Prop. 13 reduced property taxes that had been the fundamental revenue source for local governments and school systems. It also made raising taxes of all kinds more difficult.</p>
+
+
+
+<p class="wp-block-paragraph">Prop. 13’s jolting impact also encouraged the use of ballot measures process not only to affect public finance issues but policies of all kinds. Succeeding elections saw an explosion of proposals dealing with such issues as punishment for crimes, immigration, affirmative action and same-sex marriage.</p>
+
+
+
+
+
+<p class="wp-block-paragraph">The two measures on this year’s ballot that don’t deal with taxes and spending typify that trend. <a href="https://calmatters.org/politics/2026/10/california-election-voter-id-proposition-39/">Proposition 39</a> would require voters to show identifying documents and <a href="https://calmatters.org/environment/2026/10/prop-45-california-ceqa-explained/">Proposition 45 </a>would reduce use of the California Environmental Quality Act to block projects.</p>
+
+
+
+<p class="wp-block-paragraph">However, taxes and spending continued to dominate post-Prop. 13 elections, beginning in 1979 with a special election called by then-Gov. Jerry Brown to pass <a href="https://ballotpedia.org/California_Proposition_4,_Government_Spending_%27Gann_Limit%27_Initiative_(1979)">Proposition 4</a>, a cap on state spending known as the “Gann Limit” for Paul Gann, a co-author of Prop. 13 with fellow tax gadfly Howard Jarvis.</p>
+
+
+
+<p class="wp-block-paragraph">Brown had strenuously opposed Prop. 13 but after its passage declared himself to be a “born-again tax cutter” and joined with Gann to persuade voters to approve the spending limit. It continues to be a factor in fashioning an annual state budget.</p>
+
+
+
+<p class="wp-block-paragraph">A much bigger budget factor is <a href="https://ballotpedia.org/California_Proposition_98,_Mandatory_Education_Spending_Initiative_(1988)">Proposition 98</a>, a 1988 measure sponsored by the California Teachers Association to cushion Prop. 13’s impact on school finances. Prop. 98 contains a complex formula to guarantee a certain level of state education aid that works out to about 40% of general fund revenues.</p>
+
+
+
+<p class="wp-block-paragraph">The teachers’ union is opposing this year’s Prop. 40, the wealth tax on billionaires, which designates all but a small percentage of its revenue for healthcare, excluding Prop. 98. The conflict illustrates how ballot box budgeting pits interest groups against each other, even those on the same side in their underlying battle with anti-tax forces.</p>
+
+
+
+<p class="wp-block-paragraph">Speaking of which, anti-tax groups such as the <a href="https://www.hjta.org/">Howard Jarvis Taxpayers Association</a> have continued to press their cause, staving off efforts to change Prop. 13 and promoting tax limits.</p>
+
+
+
+<p class="wp-block-paragraph">This year, they are pushing <a href="https://calmatters.org/politics/2026/10/california-prop-43-election-2026/">Proposition 43</a>, which would increase the vote requirement to approve some local taxes. And they&#8217;re opposing the California Teachers Association’s <a href="https://calmatters.org/california-voter-guide-2026/proposition-3-high-income-tax/">Proposition 3</a>, which would make permanent a temporary tax on high-income Californians that was initially passed in 2012 at Brown&#8217;s behest during his second stint as governor.</p>
+
+
+
+<p class="wp-block-paragraph">During the 17<sup>th</sup> century, a conflict known as the <a href="https://www.britannica.com/event/Thirty-Years-War">30 Years War</a> raged in Europe. Today California’s war over taxes and spending is already 48 years old and, as this year’s array of ballot measures indicates, it shows no sign of ending.</p>
+
+
+]]></content:encoded>
+					
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">510272</post-id><dc:modified>Wed, 14 Oct 2026 15:46:16 -0700</dc:modified>	</item>
+<item>
+		<title>Should California taxpayers chip in to fund political campaigns? Prop. 4 lets you decide</title>
+		<link>https://calmatters.org/politics/2026/10/california-proposition-4-explainer/</link>
+		
+		<dc:creator><![CDATA[Yue Stella Yu]]></dc:creator>
+		<pubDate>Thu, 15 Oct 2026 12:00:00 +0000</pubDate>
+				<category><![CDATA[Elections]]></category>
+		<category><![CDATA[Politics]]></category>
+		<category><![CDATA[ballot measure]]></category>
+		<category><![CDATA[California Elections]]></category>
+		<category><![CDATA[Campaign Finance]]></category>
+		<category><![CDATA[election 2026]]></category>
+		<guid isPermaLink="false">https://calmatters.org/?p=510331</guid>
+
+					<description><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="A group of young supporters gathers around California gubernatorial candidate Tom Steyer for a selfie outdoors beneath a tree. Two supporters hold campaign signs reading “Tom Steyer for Governor,” while a woman in the foreground raises her phone to take the photo." decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>Prop. 4 would lift a ban that prohibits state and most local candidates from using public funding for their political campaigns. Proponents argue the mechanism helps more candidates run for office, but opponents are skeptical.]]></description>
+										<content:encoded><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="A group of young supporters gathers around California gubernatorial candidate Tom Steyer for a selfie outdoors beneath a tree. Two supporters hold campaign signs reading “Tom Steyer for Governor,” while a woman in the foreground raises her phone to take the photo." decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060126-Tom-Steyer-Campaign-GETTY-CM-01.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>		
+		<div class="wp-block-group has-light-gray-background-color has-background calmatters-summary">
+			<div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow">
+				
+				<p class="has-small-font-size calmatters-summary-heading wp-block-paragraph"><strong>In summary</strong></p>
+				
+
+				
+				<p class="calmatters-summary-content wp-block-paragraph">Prop. 4 would lift a ban that prohibits state and most local candidates from using public funding for their political campaigns. Proponents argue the mechanism helps more candidates run for office, but opponents are skeptical.</p>
+				
+							</div>
+		</div>
+		
+		
+<p class="wp-block-paragraph">In 1988, a Democrat, a Republican and an independent in the state Legislature co-authored a ballot measure to ban most political campaigns from using public money.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Their rationale? There was already too much money in politics.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">“It certainly makes no sense to open the biggest money source of all, the taxpayers’ purses and wallets,” <a href="https://repository.uclawsf.edu/cgi/viewcontent.cgi?article=1988&amp;context=ca_ballot_props">proponents argued</a>. Nearly 60% of voters agreed.</p>
+
+
+
+<p class="wp-block-paragraph">Almost four decades later, some good-government groups argue that the state needs to do the <em>exact opposite</em> to counter the influence of money in politics.</p>
+
+
+
+<p class="wp-block-paragraph">They, along with the state Democratic Party, are backing <a href="https://calmatters.org/california-voter-guide-2026/proposition-4-public-fundraising/">Proposition 4</a> on the November ballot, which would lift the 1988 ban and authorize the state and most local governments to set up public campaign financing systems for state and local races.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Seven charter cities in California, including San Francisco, Berkeley and Oakland, were spared from the 1988 ban and already have public campaign financing.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">To qualify for the funding, candidates must meet criteria such as proving they have a certain number of small donors or agreeing to cap how much they raise and spend on their campaign. Depending on the city, eligible candidates receive the funding as a grant, a matching fund indexed to their total donations, or a voucher voters can give to campaigns.</p>
+
+
+
+<p class="wp-block-paragraph">Proponents of Prop. 4 may face an uphill battle: Voters have twice rejected similar ballot measures to lift the ban, and public polling so far suggests voters are skeptical.</p>
+
+
+
+<h2 id="what-supporters-opponents-say" class="wp-block-heading"><strong>What supporters, opponents say</strong></h2>
+
+
+
+<p class="wp-block-paragraph">Elections have gotten more expensive over the past three decades, both federally and statewide.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">In 2000, federal candidates, parties and special interests spent $5.6 billion on congressional and presidential races. By 2020, that number had <a href="https://www.opensecrets.org/elections-overview/cost-of-election?display=T">nearly quadrupled to $18 billion</a>, according to OpenSecrets, a Washington, D.C.-based nonprofit that tracks campaign spending nationwide.</p>
+
+
+
+<p class="wp-block-paragraph">In California, special interests <a href="https://calmatters.org/politics/2025/10/prop50-money-ads-mailers-billboards/">spent $26 million</a> running competing ads on redistricting last year, making it the most expensive ballot measure race in state history. This year, California had the <a href="https://www.nytimes.com/2026/06/03/us/elections/california-governor-campaign-finance.html">most expensive governor’s race</a> in U.S. history, with billionaire Tom Steyer <a href="https://calmatters.org/politics/2026/06/california-rich-candidates-funding-elections/">pouring $213 million</a> of his own money into his unsuccessful gubernatorial bid.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Supporters of Prop. 4 say public campaign financing is necessary as a check against that kind of unfettered private campaign spending, because candidates often must accept campaign spending limits to qualify for public funding. They say public financing will lead to more diverse candidates by attracting those who otherwise couldn’t afford to run for office.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">“We need to change the way we finance election campaigns so candidates can run and win without having to raise big money, and they can spend their time listening to voters rather than their donors,” said Trent Lange, president of California Clean Money Campaign and co-chair of the Yes on Prop. 4 campaign.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Gov. <a href="https://calmatters.org/tag/gavin-newsom/">Gavin Newsom</a> and the Democratic-led state Legislature, which <a href="https://calmatters.digitaldemocracy.org/bills/ca_202520260sb42">voted last year</a> to place Prop. 4 on the November ballot, also support the measure. Sen. <a href="https://calmatters.digitaldemocracy.org/legislators/thomas-umberg-165043">Tom Umberg</a>, a Santa Ana Democrat and a co-author of Prop. 4, said it would help alleviate a “growing cynicism in politics” and allow candidates to spend more time developing policies instead of fundraising.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">“To the extent that we can engage particularly small donors, that will … empower and also engage the body politic, particularly young people,” he said.</p>
+
+
+
+<p class="wp-block-paragraph">But opponents say politicians <a href="https://caltax.org/prop4/">should not use taxpayer dollars</a> to run campaigns. They argue the measure would force voters to subsidize candidates they otherwise wouldn’t support, and that fraudulent candidates could exploit the system.</p>
+
+
+
+<p class="wp-block-paragraph">Voters have previously rejected ballot initiatives that would have allowed public money to be used for political campaigns. Nearly two-thirds of voters shot down a 2000 measure that would have allowed candidates to <a href="https://lao.ca.gov/ballot/2000/25_03_2000.html">tap public funds for advertising</a>. In 2010, 58% of voters <a href="https://ballotpedia.org/California_Proposition_15,_Biennial_Lobbyist_Fee_and_Public_Campaign_Funding_Measure_(June_2010)">opposed a 2010 measure</a> to lift the 1988 ban.</p>
+
+
+
+<p class="wp-block-paragraph">“The voters have been quite clear they don’t want taxpayer money being used for politics,” Assemblymember <a href="https://calmatters.digitaldemocracy.org/legislators/carl-demaio-161014">Carl DeMaio</a>, a San Diego Republican, <a href="https://calmatters.digitaldemocracy.org/hearings/278290#t=221&amp;f=fe479f37ee7a3df6888379e9be069fd8">said last year</a> on the Assembly floor. “Unfortunately, politicians simply can’t take no for an answer.”</p>
+
+
+
+
+
+<p class="wp-block-paragraph">Critics also doubt the effectiveness of Prop. 4, arguing it is not specific enough to have teeth.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Prop. 4 offers only broad instructions to local governments and the state. It would ban candidates from using public funds meant for education, public safety and transportation. It would require candidates to prove they have enough public support and to agree to certain spending limits to receive funding, but doesn’t spell out how much. It would also ban candidates from using the money to pay for legal defenses, fines or personal loans to their campaigns.</p>
+
+
+
+<p class="wp-block-paragraph">The measure specifically exempts the Fair Political Practices Commission, the state’s campaign finance watchdog, from ensuring local programs are not exploited or abused, leaving it largely to local governments. But not every local government has its own watchdog agency, let alone an effective one.</p>
+
+
+
+<p class="wp-block-paragraph">The San Francisco Chronicle’s editorial board, in opposing Prop. 4, argued that its rules “are only meaningful if they’re enforced by independent, nonpartisan bodies. And Prop. 4 offers no guarantee they will be.”</p>
+
+
+
+<h2 id="effectiveness-debate" class="wp-block-heading"><strong>Effectiveness debate</strong></h2>
+
+
+
+<p class="wp-block-paragraph">Fifteen states and Washington, D.C., offer some sort of statewide public financing for political campaigns, according to an analysis by the <a href="https://www.ncsl.org/elections-and-campaigns/public-financing-of-campaigns-overview">National Conference of State Legislatures</a>.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Studies are mixed on the effectiveness of those programs.</p>
+
+
+
+<p class="wp-block-paragraph">Some, including one in <a href="https://journals.sagepub.com/doi/10.1177/1532673X03256784">2003</a> by two University of Maryland scholars, suggest that candidates who accept public financing spend less time fundraising, freeing them up for other campaign activities.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Some researchers found that public financing expanded the pool of candidates running for office. A <a href="https://www.sciencedirect.com/science/article/abs/pii/S0047272722000780">2022 study of Seattle’s program</a>, which gives each registered voter four $25 vouchers to contribute to the campaign of their choice, concluded that the program boosted the number of candidates by 86%. <a href="https://web.stanford.edu/~neilm/The%20Impact%20of%20Public%20Financing%20on%20Electoral%20Competition.pdf">Another study</a> of Arizona and Maine’s programs found that they “significantly increased competition.”&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Others disagreed. The United States Government Accountability Office, the nonpartisan research agency advising Congress, <a href="https://www.gao.gov/assets/gao-10-390.pdf">studied Arizona and Maine’s programs</a> in 2010 and concluded there was no evidence that public financing led to more candidates.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">There’s little evidence that public financing has curbed the influence of private donors, according to the Seattle study and the GAO report.</p>
+
+
+
+<p class="wp-block-paragraph">In California, few studies have examined the effectiveness of local programs. A 2023 San Francisco Ethics Commission study found candidates have increasingly tapped into the public funds and that third-party spending was “at near all-time lows.” But the commission encouraged a more comprehensive analysis. <a href="https://www.oaklandca.gov/files/assets/city/v/3/boards-amp-commissions/documents/pec/publications/reports-by-third-parties/2013-05-01-evaluating-oaklands-limited-public-financing-act.pdf">A 2013 study</a> in Oakland found no evidence its program diluted the influence of wealthy donors, although it did seem to boost competition.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Researchers point to <a href="https://sgp.jhu.edu/primers/public-funding-of-us-elections/#conclusion">the difficulty</a> of studying public financing programs, because most apply in only a handful of states and it is hard to measure what would have happened if the programs had not been in place.</p>
+
+
+
+<p class="wp-block-paragraph">The lack of compelling evidence makes Prop. 4 proponents’ claims shaky, the <a href="https://www.sandiegouniontribune.com/2026/09/04/endorsement-dont-buy-prop-4s-baloney-about-publicly-financed-campaigns/">San Diego Union-Tribune’s editorial board</a> argued.</p>
+
+
+
+<p class="wp-block-paragraph">“So Proposition 4’s only certain effect would be to create a new category of government spending that taxpayers could be required to pay for — one with no track record of delivering promised benefits,” it said.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">The ballot measure should not be overly prescriptive, said Dora Rose, deputy director for the League of Women Voters of California, a co-sponsor of Prop. 4.</p>
+
+
+
+<p class="wp-block-paragraph">“Prop. 4 sets basic safeguards and then lets communities learn from the evidence and decide what works for them,” she said.</p>
+
+
+
+<p class="wp-block-paragraph">For now, voters appear skeptical. A <a href="https://www.ppic.org/publication/ppic-statewide-survey-californians-and-their-government-september-2026/">September poll</a> from the Public Policy Institute of California found 53% of likely voters would oppose Prop. 4, while just 42% would vote yes. <a href="https://escholarship.org/content/qt3w14s99c/qt3w14s99c.pdf">Another poll</a> by the UC-Berkeley Institute of Governmental Studies shows a tighter matchup, with 35% of likely voters supporting the measure and another 35% against it.</p>
+
+
+]]></content:encoded>
+					
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">510331</post-id><dc:modified>Wed, 14 Oct 2026 20:44:26 -0700</dc:modified>	</item>
+<item>
+		<title>Friends who’ve fallen out feud during gritty, final LA mayoral debate</title>
+		<link>https://calmatters.org/commentary/2026/10/la-mayoral-debate-friends-feud/</link>
+		
+		<dc:creator><![CDATA[Jim Newton]]></dc:creator>
+		<pubDate>Thu, 15 Oct 2026 12:00:00 +0000</pubDate>
+				<category><![CDATA[Commentary]]></category>
+		<category><![CDATA[Elections]]></category>
+		<category><![CDATA[California Elections]]></category>
+		<category><![CDATA[election 2026]]></category>
+		<category><![CDATA[Los Angeles]]></category>
+		<guid isPermaLink="false">https://calmatters.org/?p=510400</guid>
+
+					<description><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="A group of five people dressed in business attire sits around a round table conducting a debate inside a news studio, with studio lights hanging above them from the ceiling" decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>Mayor Karen Bass, who’s fallen behind in recent polls, went on the offensive against City Councilmember Nithya Raman, a supporter-turned-challenger.
+]]></description>
+										<content:encoded><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="A group of five people dressed in business attire sits around a round table conducting a debate inside a news studio, with studio lights hanging above them from the ceiling" decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/101426-Mayoral-Debate-ET-Getty-CM-01.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>
+<p class="wp-block-paragraph">Voters have been good to Los Angeles Mayor Karen Bass. For the past two decades, she has won elections to the California Assembly, to Congress and to the mayoralty she now holds. She has never lost an election.</p>
+
+
+
+<p class="wp-block-paragraph">But her grip on her current job is tenuous. </p>
+
+
+
+<p class="wp-block-paragraph">That was evident Tuesday night during a close, sometimes gritty debate with her rival, City Councilmember Nithya Raman. Bass was measured and unflappable but also biting. Polls show her trailing in her bid for re-election, but she made it clear Tuesday she has no intention of leaving quietly.</p>
+
+
+
+<p class="wp-block-paragraph">Separated from each other by a panel of questioners, the two candidates were warned at the outset to refrain from personal attacks. Both ignored that admonishment.</p>
+
+
+
+<p class="wp-block-paragraph">In the final televised debate of a close campaign, Bass was particularly assertive, several times accusing Raman of lying and misrepresenting the mayor’s record, as well as suggesting Raman would plunge the Los Angeles Police Department into “disarray” on the eve of the Olympic games and maintaining that the mayor’s office was forced to handle constituent services in Raman’s district when residents became frustrated with the council member and her staff.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Raman shook her head in annoyance as the mayor’s accusations piled up.</p>
+
+
+
+<p class="wp-block-paragraph">Portraying Raman as naïve and slippery, Bass concluded: “Now is not the time to turn the city over to Nithya Raman.”</p>
+
+
+
+<p class="wp-block-paragraph">Those are tough words, especially for an official the mayor once favored. Raman and Bass have supported each other in prior campaigns, and Raman backed Bass in this one before jumping in herself.&nbsp;</p>
+
+
+
+
+
+<p class="wp-block-paragraph">That has left Bass feeling betrayed, and some of that bitterness Raman reflected back during the debate. Raman charged the mayor with paying “lip service” to reducing red tape that bottles up housing construction and with overseeing a listless, lost administration. The Bass mayoral record, Raman insisted, was “four years of decline, of mismanagement, of excuses.”</p>
+
+
+
+<p class="wp-block-paragraph">There are no enemies in politics quite like friends who have fallen out, and that’s what this race has become.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Substantively, their debate covered familiar ground: Raman accused the mayor of being “MIA” during and after the fire that destroyed thousands of homes in the Pacific Palisades and more broadly MIA as a manager of city services. Under Bass, the councilwoman argued, city departments have become dysfunctional, paralyzed when faced with complaints and unable to make changes that might bring down the cost of new housing.</p>
+
+
+
+<p class="wp-block-paragraph">In fact, although the two agree on the crying need for new housing construction, they managed to fight over that, too, with Bass touting the construction of 10,000 new affordable housing units during her tenure and Raman pointing out that overall apartment construction in the city is falling. Both are right.</p>
+
+
+
+<p class="wp-block-paragraph">As the two make the final turn toward Election Day, their similarities are as striking as their differences.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Both champion affordability. Raman focuses on housing, by far the biggest expense for most L.A. residents, and Bass agrees, while also suggesting that the city should expand childcare services to provide some relief there.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Both also support tax credits and services to the film industry as part of their effort to keep jobs in Los Angeles. But they differ over who cares more about that issue or who has done more about it so far.</p>
+
+
+
+<p class="wp-block-paragraph">And both compete for the title of being the leader who most dislikes President Donald Trump.&nbsp;</p>
+
+
+
+<figure class="wp-block-image size-large"><img data-recalc-dims="1" loading="lazy" decoding="async" width="780" height="520" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?resize=780%2C520&#038;ssl=1" alt="A group of heavily armed federal agents in full tactical gear emerge from the back of an armored vehicle labeled “LENCO ARMORED VEHICLES” on a sunlit urban street. Most wear camouflage fatigues, body armor, helmets, and goggles, with visible patches reading “POLICE” and insignias from U.S. Border Patrol and Homeland Security. Some agents carry rifles and one has zip cuffs and canisters clipped to their vest. A media photographer in a press vest films nearby. Palm trees and a clear blue sky suggest a Southern California location." class="wp-image-470360" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?resize=1024%2C683&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?resize=1536%2C1025&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?resize=18%2C12&amp;ssl=1 18w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/07/070725-MacArthur-Park-Feds-JW-CM-27-1024x683.jpg?w=370&amp;ssl=1 370w" sizes="auto, (max-width: 780px) 100vw, 780px" /><figcaption class="wp-element-caption">Federal agents descend on MacArthur Park in Los Angeles on July 7, 2025. Photo by J.W. Hendricks for CalMatters</figcaption></figure>
+
+
+
+<p class="wp-block-paragraph">Bass highlights her visible role in standing against the ICE raids last summer. Raman argues the city needs to be even more forceful in refusing cooperation with federal authorities bent on turning the city into a showcase for the militarized rousting of undocumented migrants or anyone who looks like them.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Trump and ICE are among the most hated figures and institutions in Los Angeles, so it’s hardly a surprise the top contenders for mayor would find common ground there.</p>
+
+
+
+<p class="wp-block-paragraph">In the debate, however, were glimmers of ways these candidates are different, substantively and temperamentally.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Bass places greater confidence in police and in the current leadership of the LAPD. Raman starts from a place of greater skepticism about the department and Police Chief Jim McDonnell, who was appointed in 2024 and has a five-year term.</p>
+
+
+
+<p class="wp-block-paragraph">But Raman seems torn by the issue. During the debate, she said she would seek to remove McDonnell, but she shuffled over the questions of how and when she would do that.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">McDonnell, Raman said, had “lost the trust” of the city’s immigrant community by defending ICE against protesters and, she maintained, by sharing data with the federal government.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Yet, when pressed on what action she would take, Raman — as she has before — equivocated, saying the chief’s removal required the agreement of the Police Commission and the involvement of City Council.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">That’s sort of true, but mostly not. The mayor appoints the Police Commission, so the mayor has no real impediment to firing a chief. And yes, an ousted chief could appeal to the council for reinstatement, but that’s never happened. It’s also hard to imagine a chief being fired, then winning reinstatement and going back to work for the mayor who fired him.</p>
+
+
+
+
+
+<p class="wp-block-paragraph">When NBC’s Conan Nolan pushed harder, asking whether Raman would get rid of McDonnell before the 2028 Olympics, she retreated further. “It will depend on these other factors.”</p>
+
+
+
+<p class="wp-block-paragraph">Bass was more sure-footed while talking about public safety, but she has her own struggles — starting with any proposal she now brings to the table. Improved childcare in city parks? Better data and transparency on police shootings? Expanded use of cameras to monitor traffic violations?&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">All have merit, but why is a mayor who’s been in office for nearly four years suddenly pulling out new ideas for the future?&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">It’s an exposed flank for an incumbent who both wants credit for progress and at the same time resists being accused of letting the city down. And it feeds Raman’s argument that Bass looks for excuses and only produces policies in response to the challenge she’s facing to win re-election.</p>
+
+
+
+<p class="wp-block-paragraph">Ballots are in the hands of voters, and polling in the race is frustratingly ambiguous.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">All the credible surveys suggest many voters are tired of Bass.But the mayor does better among older and most established residents, who happen to be the most likely to vote. She also has the support of most unions, and they are famous for turning out their members.</p>
+
+
+
+<p class="wp-block-paragraph">Bass’s challenge is unlike any she’s faced before. She needs to stage a comeback, to persuade voters that Raman is too extreme, too untested, “not ready for prime time,” as the mayor offered on Tuesday.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">But that’s a hard sell against the reality of Raman, who comes off as educated and careful, more nerdy than dangerous. Her eyes light up when she talks about data.</p>
+
+
+
+<p class="wp-block-paragraph">This week’s debate did not seal the deal for either candidate, but it offered a glimpse of what lies ahead: Tough disagreements between former friends who have become wary rivals, a choice of personalities and ideas, with the future of the city very much at stake.</p>
+
+
+]]></content:encoded>
+					
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">510400</post-id><dc:modified>Wed, 14 Oct 2026 16:23:03 -0700</dc:modified>	</item>
+<item>
+		<title>School test scores up, but just a little, as progress slows in K-12 classes</title>
+		<link>https://calmatters.org/education/k-12-education/2026/10/student-test-scores-california/</link>
+		
+		<dc:creator><![CDATA[Carolyn Jones]]></dc:creator>
+		<pubDate>Thu, 15 Oct 2026 12:00:00 +0000</pubDate>
+				<category><![CDATA[Education]]></category>
+		<category><![CDATA[K-12 Education]]></category>
+		<category><![CDATA[education]]></category>
+		<category><![CDATA[K-12 education]]></category>
+		<category><![CDATA[students]]></category>
+		<guid isPermaLink="false">https://calmatters.org/?p=510428</guid>
+
+					<description><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="Students, wearing red and light brown uniforms, raise they hand while they sit in front of desks in a classroom." decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=18%2C12&amp;ssl=1 18w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>K-12 student test scores rose slightly last year, while enrollment numbers dropped.]]></description>
+										<content:encoded><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="Students, wearing red and light brown uniforms, raise they hand while they sit in front of desks in a classroom." decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=18%2C12&amp;ssl=1 18w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2025/05/051122_St-Hope-Charter-School_MG_24.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>		
+		<div class="wp-block-group has-light-gray-background-color has-background calmatters-summary">
+			<div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow">
+				
+				<p class="has-small-font-size calmatters-summary-heading wp-block-paragraph"><strong>In summary</strong></p>
+				
+
+				
+				<p class="calmatters-summary-content wp-block-paragraph">K-12 student test scores rose slightly last year, while enrollment numbers dropped.</p>
+				
+							</div>
+		</div>
+		
+		
+<p class="wp-block-paragraph">California’s K-12 student test scores improved slightly in almost all categories last year, but progress slowed following a post-pandemic surge, according to state data released today.</p>
+
+
+
+<p class="wp-block-paragraph">“It’s slow but steady improvement,” said Linda Darling-Hammond, president of the State Board of Education. “It suggests we’re continuing to come out of the pandemic, and there’s still a lot of work to do.”</p>
+
+
+
+<p class="wp-block-paragraph">The percentage of students proficient in math jumped just over 1 percentage point – to 38.5% – and the number of students proficient in English language arts rose half a percentage point, 49.3%. Science scores increased 3.3% percentage points, to 36%.&nbsp;</p>
+
+
+
+
+
+<p class="wp-block-paragraph">For the first time, the state released its <a href="https://dq.cde.ca.gov/dataquest/">enrollment</a>, <a href="https://caaspp-elpac.ets.org/caaspp/">test score</a> and <a href="https://www.caschooldashboard.org/login">California School Dashboard</a> data together, making it easier for school districts to communicate with parents and the public and for policymakers to analyze gains and declines across broad categories.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Despite the gains, though, scores were lower for some student groups, including white and Asian students, compared to 2019, before the Covid-19 pandemic forced most schools to close for in-person learning.&nbsp;</p>
+
+
+
+<h2 id="h-enrollment-decline-continues" class="wp-block-heading">Enrollment decline continues</h2>
+
+
+
+<p class="wp-block-paragraph">Statewide enrollment, which has been falling for a decade, plunged to 5.7 million – a loss of 74,000 students from last year. Because the state funds schools based on the number of students who show up every day, the declining numbers will mean less revenue for many districts.</p>
+
+
+
+<p class="wp-block-paragraph">Amid the enrollment numbers, a few changes stood out. The number of students with disabilities jumped 25% over the past decade, to 850,822. And the number of English learners dropped 30% over that same time period due to a decline in immigration among other factors.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Chronic absenteeism, <a href="https://calmatters.org/education/k-12-education/2023/09/soaring-chronic-absenteeism-in-california-schools-is-at-pivotal-moment/">which hit 30%</a> just after the pandemic, dropped to 18% last year, a decline of more than 1 percentage point from the previous year. Prior to the pandemic, only about 12% of students were chronically absent, or gone from school at least 10% of the school year.</p>
+
+
+
+<p class="wp-block-paragraph">Test scores and just about every other academic indicator among California’s K-12 students collapsed during the Covid-19 pandemic, but rebounded significantly the first few years back to in-person learning. That progress appears to have settled, at least for now.</p>
+
+
+
+<p class="wp-block-paragraph">Darling-Hammond predicted English language arts scores will rise in the next few years, as a handful of sweeping state reforms go into effect: <a href="https://calmatters.org/education/k-12-education/2025/08/california-tk/">transitional kindergarten</a>, dyslexia screening, <a href="https://calmatters.org/education/k-12-education/2026/07/literacy-california/">literacy coaches</a> for elementary teachers and a <a href="https://calmatters.org/education/k-12-education/2026/07/literacy-california/">phonics-based reading curriculum</a>, among others.</p>
+
+
+
+<h2 id="h-more-grads-better-prepared" class="wp-block-heading">More grads, better prepared</h2>
+
+
+
+<p class="wp-block-paragraph"><a href="https://calmatters.org/education/2026/09/highlands-charter-school-california/">Highlands charter school</a>, the embattled Sacramento school for adults seeking high school diplomas, loomed large over the data. Last year, Highlands and its sister school, California Innovative Career Academy, had such high enrollments – 17,513 combined – and such low graduation rates – less than 2% – that they skewed graduation data for the entire state.</p>
+
+
+
+<p class="wp-block-paragraph">California Department of Education staff presented numbers with and without Highlands. Including Highlands, the state graduation rate was 87.9%, a slight increase from the previous year. Excluding Highlands, the rate was almost 2 percentage points higher – 89.7%, the highest rate in decades in California.</p>
+
+
+
+<p class="wp-block-paragraph">Highlands, under new leadership, winnowed its enrollment this year and is seeking to improve its outcomes after the State Auditor blasted it last year for alleged mismanagement.</p>
+
+
+
+<p class="wp-block-paragraph">The state’s high school graduates also showed improvements in college and career preparation. According to the dashboard, the percentage of students who completed a career pathway or the A-G classes required for admission to the state’s public universities climbed 2.2 percentage points, to 55.2%.</p>
+
+
+]]></content:encoded>
+					
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">510428</post-id><dc:modified>Wed, 14 Oct 2026 17:05:28 -0700</dc:modified>	</item>
+<item>
+		<title>Decenas de presas de California necesitan reparaciones ante la inminente llegada del invierno de El Niño</title>
+		<link>https://calmatters.org/calmatters-en-espanol/2026/10/represas-en-california-necesitan-reparacion-el-nino/</link>
+		
+		<dc:creator><![CDATA[Rachel Becker]]></dc:creator>
+		<pubDate>Wed, 14 Oct 2026 22:46:40 +0000</pubDate>
+				<category><![CDATA[CalMatters en Español]]></category>
+		<guid isPermaLink="false">https://calmatters.org/?p=510388</guid>
+
+					<description><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="Close-up of the concrete supports of Lake Hodges Dam, showing cracks, discolored surfaces and several areas covered with reflective patches near the waterline." decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>Con la llegada de El Niño, California encontró 57 represas en malas condiciones o en condiciones insatisfactorias, y los reguladores aún no han sancionado a ningún propietario.]]></description>
+										<content:encoded><![CDATA[<figure><img width="1024" height="682" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?fit=1024%2C682&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="Close-up of the concrete supports of Lake Hodges Dam, showing cracks, discolored surfaces and several areas covered with reflective patches near the waterline." decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-11.jpg?fit=1024%2C682&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>
+<p class="wp-block-paragraph">This article is also available in English. <a href="?p=510206">Read it here</a>.</p>
+
+
+
+<p class="wp-block-paragraph">Ante la amenaza de fuertes lluvias durante el invierno debido al fenómeno de El Niño, el Auditor Estatal advierte que las represas envejecidas de California &#8220;siguen representando un riesgo para la seguridad pública&#8221;, especialmente en las áreas de la Bahía de San Francisco, San Diego y Los Ángeles.</p>
+
+
+
+<p class="wp-block-paragraph">En 2017, los legisladores otorgaron al estado la <a href="https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=201720180SB92&amp;search_keywords=dam+safety">facultad de sancionar</a> a los propietarios de represas que infrinjan las normas de seguridad, después de que el <a href="https://water.ca.gov/Programs/State-Water-Project/SWP-Facilities/Oroville/Oroville-Spillways/Background">fallo del aliviadero de Oroville</a> obligara a la evacuación de <a href="https://www.news.caloes.ca.gov/cal-oes-revisits-the-oroville-dam-spillway-incident-and-its-impacts-five-years-later/">casi 200,000 personas</a> . La auditoría reveló que los gestores del agua aún no han utilizado esa facultad.</p>
+
+
+
+<p class="wp-block-paragraph"> Aunque los responsables estatales de la gestión del agua hubieran ejercido sus facultades coercitivas, es probable que los propietarios de las presas no hubieran podido costear las reparaciones.</p>
+
+
+
+<p class="wp-block-paragraph"> Una auditoría publicada el lunes reveló que, a fecha de mayo, 57 represas se encontraban en mal estado o en condiciones insatisfactorias, una cifra superior a la de recuentos anteriores. Es probable que este número siga aumentando, a medida que los funcionarios estatales de recursos hídricos reevalúen las represas más antiguas.</p>
+
+
+
+<p class="wp-block-paragraph"> Las 40 represas más riesgosas —clasificadas como de alto o extremadamente alto riesgo— están ubicadas en todo el estado, pero se agrupan cerca de ciudades costeras densamente pobladas.</p>
+
+
+
+<p class="wp-block-paragraph">Según el informe del auditor, si estas represas fallaran, &#8220;podrían poner en peligro a hasta 1.5 millones de personas y causar daños económicos por más de 265 mil millones de dólares&#8221;.</p>
+
+
+
+<p class="wp-block-paragraph"> Hace casi una década, los legisladores reforzaron la autoridad del Departamento de Recursos Hídricos de California para imponer sanciones como restricciones en los embalses, embargos de propiedades y multas cuando los propietarios de presas infrinjan las leyes estatales de seguridad y otros requisitos.</p>
+
+
+
+<p class="wp-block-paragraph"> Hasta abril, los ingenieros estatales habían remitido a los propietarios de 44 represas para que se tomaran medidas coercitivas. Sin embargo, según escribió el auditor, el departamento de recursos hídricos &#8220;nunca ha tomado medidas coercitivas punitivas contra los propietarios de represas que no subsanan sus infracciones&#8221;. </p>
+
+
+
+<h2 id="aging-dams-limited-funds" class="wp-block-heading"> <strong>Presas envejecidas, fondos limitados</strong></h2>
+
+
+
+<p class="wp-block-paragraph"> El problema es que las represas están envejeciendo. Muchas se construyeron cuando las normas de seguridad eran menos estrictas. Las leyes estatales nunca obligaron a los propietarios de represas a reservar fondos para su mantenimiento, por lo que cuando el hormigón se desmorona, se acumulan sedimentos y los aliviaderos amenazan con erosionarse bajo las aguas de las inundaciones, la mayoría de los propietarios carecen del dinero necesario para las reparaciones.</p>
+
+
+
+<p class="wp-block-paragraph">El departamento de recursos hídricos del estado supervisa la seguridad de más de 1,220 represas, la mayoría en buen estado. La responsabilidad del mantenimiento de las represas recae en los gobiernos locales, las empresas de servicios públicos, las agencias de agua y los propietarios privados de terrenos y empresas que las poseen. Algunas de las represas clasificadas como en mal estado pertenecen a agencias estatales.</p>
+
+
+
+<p class="wp-block-paragraph"> Los desastres son extremadamente raros. Pero cuando ocurren, como en Oroville o el colapso en 1928 de la presa de St. Francis, prácticamente nueva, al noroeste de Los Ángeles, pueden ser catastróficos. </p>
+
+
+
+<figure class="wp-block-image size-large"><img data-recalc-dims="1" loading="lazy" decoding="async" width="780" height="519" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12.jpg?resize=780%2C519&#038;ssl=1" alt="Tres trabajadores con cascos de seguridad permanecen de pie junto a una estrecha pasarela con barandillas metálicas sobre una presa de hormigón. Una serie de estructuras curvas de aliviadero se extienden a lo largo de la pasarela, por encima de grandes arcos de hormigón." class="wp-image-510119" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/060724-Lake-Hodges-Dam-JG-CM-12-1024x682.jpg?w=370&amp;ssl=1 370w" sizes="auto, (max-width: 780px) 100vw, 780px" /><figcaption class="wp-element-caption"> La presa del lago Hodges de San Diego en reparación durante el otoño de 2022. Se prevé que la presa sea reemplazada en la próxima década. Construida con un diseño de arcos múltiples, la presa se terminó en 1918 y fue adquirida por la ciudad de San Diego en 1925. Fotografía de John Gastaldo para CalMatters.</figcaption></figure>
+
+
+
+<p class="wp-block-paragraph"> El auditor elogió el programa de inspección del departamento de recursos hídricos, pero criticó duramente su inacción ante los propietarios de represas que no cumplen con los requisitos estatales de planificación, seguridad u otros, &#8220;permitiendo así que persistan graves deficiencias&#8221;.</p>
+
+
+
+<p class="wp-block-paragraph"> Uno de los casos involucró una presa con un agujero de 14 metros de ancho en su aliviadero que ha permanecido sin reparar durante más de 30 años, lo que, según la auditoría, podría causar inundaciones que afectarían a casi 300 personas y daños por más de 88 millones de dólares.</p>
+
+
+
+<p class="wp-block-paragraph"> La auditoría no menciona el nombre de la presa. Los administradores estatales del agua dijeron que dar más detalles podría plantear problemas de seguridad, aunque el departamento hace público el potencial de riesgo y el estado de cada presa en un <a href="https://water.ca.gov/-/media/DWR-Website/Web-Pages/Programs/All-Programs/Division-of-Safety-of-Dams/Files/Publications/Annual-Data-Release/2025/DAMS-WITHIN-JURISDICTION-OF-THE-STATE-OF-CALIFORNIA-DAMS-LISTED-ALPHABETICALLY-BY-COUNTY-SEPT-2025.pdf">informe anual</a>.</p>
+
+
+
+<p class="wp-block-paragraph"> Los responsables estatales de la gestión del agua finalizaron las normas de aplicación en 2022. Sin embargo, comunicaron al auditor que no han podido dotar de personal suficiente a un departamento de control y que no confían en poder costear la defensa de sus acciones en una audiencia.</p>
+
+
+
+<p class="wp-block-paragraph"> Aun con personal y recursos económicos, concluye el auditor, si el propietario de una represa sigue sin cumplir con la normativa, el estado “no puede actuar antes de que la represa represente un peligro de nivel de emergencia. Esto deja un vacío en la legislación estatal que pone en riesgo la seguridad pública”. </p>
+
+
+
+<h2 id="drop-in-the-bucket" class="wp-block-heading"> <strong>Una gota en el océano</strong></h2>
+
+
+
+<p class="wp-block-paragraph"> Hace cuatro años, el gobernador Gavin Newsom promovió la reparación de represas en su estrategia de suministro de agua durante la sequía, como una forma de reforzar las reservas hídricas. Dos años después, en 2024, Newsom y los legisladores recortaron drásticamente la financiación de un <a href="https://calmatters.org/environment/water/2024/06/california-dams-repairs-budget-cuts-newsom/">programa de subvenciones para la reparación de represas</a>.</p>
+
+
+
+<p class="wp-block-paragraph">Desde entonces, una propuesta electoral de 2024 proporcionó una inyección de 464 millones de dólares para el programa. Una subvención de la Agencia Federal para el Manejo de Emergencias también otorgó a California 629,198 dólares este septiembre, según Jason Ince, portavoz del Departamento de Recursos Hídricos.</p>
+
+
+
+<p class="wp-block-paragraph">Sin embargo, la auditoría citó estimaciones que indican que reparar las represas del estado, que dejan mucho que desear, podría costar alrededor de 28 mil millones de dólares, lo que convierte los fondos disponibles en una cantidad insignificante.</p>
+
+
+
+<p class="wp-block-paragraph"> El informe instó a los legisladores estatales a establecer plazos y exigir a los propietarios de presas de alto y muy alto riesgo —es decir, aquellas que podrían causar la muerte de personas si fallan— que presenten planes de mantenimiento y reparación a las agencias estatales.</p>
+
+
+
+<p class="wp-block-paragraph"> También pidió a los legisladores que ampliaran la autoridad de los administradores estatales del agua para hacer cumplir la ley, y que la agencia utilizara toda la fuerza de sus poderes.</p>
+
+
+
+<p class="wp-block-paragraph"> “Para garantizar que se aborde la seguridad pública antes de que el estado de una presa provoque una emergencia”, señala la auditoría, “la Legislatura debería modificar la ley estatal para permitir que el Departamento de Recursos Hídricos ordene la expropiación y el desmantelamiento de una presa cuando otros medios de aplicación de la ley por parte del Departamento de Recursos Hídricos no tengan éxito”.</p>
+
+
+
+<p class="wp-block-paragraph"> Laura Hollender, subdirectora de gestión de inundaciones y seguridad del Departamento de Recursos Hídricos, afirmó que el departamento trabajó en estrecha colaboración con el Auditor Estatal, pero discrepa con algunas de las conclusiones y recomendaciones del informe.</p>
+
+
+
+<p class="wp-block-paragraph"> Sin embargo, afirmó en un comunicado que están revisando cuidadosamente las recomendaciones y preparándose para lo que traiga El Niño. «Proteger la seguridad pública es la máxima prioridad del DWR, y reconocemos el papel fundamental que desempeñan la seguridad de las presas y el mantenimiento de los diques para reducir el riesgo de inundaciones en las comunidades de California».</p>
+
+
+
+<p class="wp-block-paragraph"> Con la llegada de la temporada de lluvias, el auditor también destacó que la planificación de la seguridad de las represas en todo el estado está incompleta.</p>
+
+
+
+<p class="wp-block-paragraph"> La Oficina de Servicios de Emergencia del Gobernador aún no ha aprobado los planes de emergencia para 245 represas, los cuales describen las medidas que sus propietarios tomarían para proteger a las personas y los bienes en caso de una falla en la represa. Los funcionarios informaron a la oficina del auditor que los propietarios de las represas no han completado las revisiones requeridas y que la ley estatal no establece plazos. <em>&nbsp;</em></p>
+]]></content:encoded>
+					
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">510388</post-id><dc:modified>Wed, 14 Oct 2026 15:46:41 -0700</dc:modified>	</item>
+<item>
+		<title>California’s riskiest dams are closer to big cities than you think</title>
+		<link>https://calmatters.org/newsletter/dam-safety-audit/</link>
+		
+		<dc:creator><![CDATA[Lynn La]]></dc:creator>
+		<pubDate>Wed, 14 Oct 2026 13:00:00 +0000</pubDate>
+				<category><![CDATA[Newsletters]]></category>
+		<category><![CDATA[WhatMatters]]></category>
+		<category><![CDATA[water]]></category>
+		<guid isPermaLink="false">https://calmatters.org/?post_type=newspack_nl_cpt&#038;p=510228</guid>
+
+					<description><![CDATA[<figure><img width="1024" height="683" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?fit=1024%2C683&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="Lake Hodges reservoir located between San Diego and Escondido, on June 7, 2024. Photo by John Gastaldo for CalMatters" decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1024%2C683&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1536%2C1025&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=18%2C12&amp;ssl=1 18w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1568%2C1046&amp;ssl=1 1568w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?fit=1024%2C683&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>As tropical storms and El Niño usher in heavy rains to California, a new report finds that 57 dams across the state are in poor or unsatisfactory condition — posing a hazard to nearby communities, reports CalMatters’ Rachel Becker.&#160; The state auditor’s report, released Monday, said that aging dams “continue to pose a risk to [&#8230;]]]></description>
+										<content:encoded><![CDATA[<figure><img width="1024" height="683" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?fit=1024%2C683&amp;ssl=1" class="attachment-rss-image-size size-rss-image-size wp-post-image" alt="Lake Hodges reservoir located between San Diego and Escondido, on June 7, 2024. Photo by John Gastaldo for CalMatters" decoding="async" loading="lazy" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1024%2C683&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1536%2C1025&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=18%2C12&amp;ssl=1 18w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1568%2C1046&amp;ssl=1 1568w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?fit=1024%2C683&amp;ssl=1&amp;w=370 370w" sizes="(max-width: 34.9rem) calc(100vw - 2rem), (max-width: 53rem) calc(8 * (100vw / 12)), (min-width: 53rem) calc(6 * (100vw / 12)), 100vw" /></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="height:16px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<div class="wp-block-columns is-layout-flex wp-container-core-columns-is-layout-8f761849 wp-block-columns-is-layout-flex">
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
+<figure class="wp-block-image size-large"><img data-recalc-dims="1" loading="lazy" decoding="async" width="780" height="520" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=780%2C520&#038;ssl=1" alt="Lake Hodges reservoir located between San Diego and Escondido, on June 7, 2024. Photo by John Gastaldo for CalMatters" class="wp-image-428165" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1024%2C683&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1536%2C1025&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=18%2C12&amp;ssl=1 18w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=1568%2C1046&amp;ssl=1 1568w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2024/06/060724-Lake-Hodges-Dam-JG-CM-02-1024x683.jpg?w=370&amp;ssl=1 370w" sizes="auto, (max-width: 780px) 100vw, 780px" /><figcaption class="wp-element-caption">Lake Hodges reservoir located between San Diego and Escondido, on June 7, 2024. Photo by John Gastaldo for CalMatters</figcaption></figure>
+</div>
+</div>
+
+
+
+<div class="wp-block-columns is-layout-flex wp-container-core-columns-is-layout-8f761849 wp-block-columns-is-layout-flex">
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
+<p class="wp-block-paragraph">As tropical storms and El Niño usher in heavy rains to California, a new report finds that 57 dams across the state <a href="https://calmatters.org/environment/2026/10/california-dam-safety-audit-enforcement/">are in poor or unsatisfactory condition</a> — posing a hazard to nearby communities, reports CalMatters’ Rachel Becker.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">The state auditor’s report, released Monday, said that aging dams “continue to pose a risk to public safety.” The 40 riskiest dams — rated high or extremely high hazard — are located near densely populated coastal regions, such as the Bay Area, and the San Diego and Los Angeles areas.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">If these dams fail, they could endanger as many as 1.5 million people and inflict more than $265 billion in economic damage, according to the audit.</p>
+
+
+
+<p class="wp-block-paragraph">The audit also revealed that the California Department of Water Resources “has never taken punitive enforcement actions against dam owners that fail to remedy their violations,” despite having the authority to do so. The department can impose penalties such as reservoir restrictions, property liens and fines against dam owners who violate state safety laws. As of April, state engineers have referred owners of 44 dams for enforcement.</p>
+
+
+
+<p class="wp-block-paragraph">Local governments, utilities, water agencies and private landowners and companies that own dams are responsible for maintaining the structures. But most dam owners do not have the money for repairs, and the state cannot step in “before the dam poses emergency-level danger,” said the auditor, leaving “a gap in state law that puts public safety at risk.” </p>
+
+
+
+<p class="wp-block-paragraph">In 2024 a ballot proposition injected $464 million to the state’s dam repair grant program, and the Federal Emergency Management Agency awarded California nearly $630,000 in September toward dam repairs.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">But that’s not nearly enough to fix all of California’s dilapidated dams, which the audit estimates could cost around $28 billion.</p>
+
+
+
+<p class="wp-block-paragraph"><a href="https://calmatters.org/environment/2026/10/california-dam-safety-audit-enforcement/">Read more</a>.</p>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+
+
+<p class="wp-block-paragraph"><strong>Join CalMatters, AAJA Sac, ABC 10 and The Sacramento Observer</strong> for a free VotingMatters event on Oct. 21 in Sacramento. The event enables attendees to learn and discuss the upcoming election and focuses on the ballot propositions and insurance commissioner race. <a href="https://www.eventbrite.com/e/votingmatters-learn-whats-on-your-2026-california-ballot-tickets-2003112624783">Register here</a> to attend in person.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+
+
+<h3 class="wp-block-heading has-text-align-center" id="h-other-stories-you-should-know" style="font-size:20px;text-transform:uppercase">Other Stories You Should Know</h3>
+
+
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+<div style="height:32px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<h2 id="wm-story-1" class="wp-block-heading" style="font-size:24px">Famous CA beer brands going under</h2>
+
+
+
+
+
+<div class="wp-block-columns is-layout-flex wp-container-core-columns-is-layout-8f761849 wp-block-columns-is-layout-flex">
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
+<figure class="wp-block-image size-large"><img data-recalc-dims="1" loading="lazy" decoding="async" width="780" height="519" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22.jpg?resize=780%2C519&#038;ssl=1" alt="A bartender looks at a guest as they converse at the bar area of a brewery." class="wp-image-509934" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22.jpg?resize=1536%2C1024&amp;ssl=1 1536w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22.jpg?resize=1200%2C800&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22.jpg?resize=780%2C520&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22.jpg?resize=400%2C267&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22.jpg?w=2000&amp;ssl=1 2000w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/10/093026_Prohibition-Brewing_AH_CM_22-1024x682.jpg?w=370&amp;ssl=1 370w" sizes="auto, (max-width: 780px) 100vw, 780px" /><figcaption class="wp-element-caption">Kyle Adams, the general manager of Prohibition Brewing Company (left), talks with a customer at Prohibition Brewing Company in Vista on Sept. 30, 2026. Photo by Adriana Heldiz, CalMatters</figcaption></figure>
+</div>
+</div>
+
+
+
+<div class="wp-block-columns is-layout-flex wp-container-core-columns-is-layout-8f761849 wp-block-columns-is-layout-flex">
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
+<p class="wp-block-paragraph">The planned closures of Stone Brewing in Escondido, Prohibition Brewing Company in Vista and other breweries are underscoring how San Diego County’s iconic <a href="https://calmatters.org/economy/2026/10/craft-brewery-closures/">craft beer industry is declining</a>, writes CalMatters’ Deborah Brennan.</p>
+
+
+
+<p class="wp-block-paragraph">In April Japanese beer-maker Sapporo announced it was selling Stone Brewing, which it acquired in 2022. It’s also closing the brand’s flagship site, Stone Brewing World Bistro &amp; Gardens, and is expected to lay off up to 272 employees.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Experts point to less alcohol consumption among younger Americans and market saturation as reasons for the slowdown. Rising costs due to steep U.S. tariffs — such as the increased price of imported aluminum and steel for cans and equipment — are also hurting the industry.</p>
+
+
+
+<ul class="wp-block-list">
+<li><strong>Kelsey McQuaid-Craig</strong>, executive director of the California Craft Brewers Association: “There’s just so much volatility that people can’t plan ahead.”</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph"><a href="https://calmatters.org/economy/2026/10/craft-brewery-closures/">Read more</a>.</p>
+</div>
+</div>
+
+
+
+<div style="height:24px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<h2 id="wm-story-2" class="wp-block-heading" style="font-size:24px">We’re here, we’re there, we’re everywhere</h2>
+
+
+
+
+
+<div class="wp-block-columns is-layout-flex wp-container-core-columns-is-layout-8f761849 wp-block-columns-is-layout-flex">
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
+<figure class="wp-block-image size-large"><img data-recalc-dims="1" loading="lazy" decoding="async" width="780" height="326" src="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/09/wheres-dan-whatmatters-graphic-v2.png?resize=780%2C326&#038;ssl=1" alt="Illustration of Dan Hu next to the text &quot;Where's Dan?&quot;" class="wp-image-507167" srcset="https://i0.wp.com/calmatters.org/wp-content/uploads/2026/09/wheres-dan-whatmatters-graphic-v2.png?resize=1024%2C428&amp;ssl=1 1024w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/09/wheres-dan-whatmatters-graphic-v2.png?resize=300%2C125&amp;ssl=1 300w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/09/wheres-dan-whatmatters-graphic-v2.png?resize=768%2C321&amp;ssl=1 768w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/09/wheres-dan-whatmatters-graphic-v2.png?resize=780%2C326&amp;ssl=1 780w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/09/wheres-dan-whatmatters-graphic-v2.png?resize=400%2C167&amp;ssl=1 400w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/09/wheres-dan-whatmatters-graphic-v2.png?w=1200&amp;ssl=1 1200w, https://i0.wp.com/calmatters.org/wp-content/uploads/2026/09/wheres-dan-whatmatters-graphic-v2-1024x428.png?w=370&amp;ssl=1 370w" sizes="auto, (max-width: 780px) 100vw, 780px" /><figcaption class="wp-element-caption">Illustration by Gabriel Hongsdusit</figcaption></figure>
+</div>
+</div>
+
+
+
+<div class="wp-block-columns is-layout-flex wp-container-core-columns-is-layout-8f761849 wp-block-columns-is-layout-flex">
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
+<p class="wp-block-paragraph">Dan Hu has reinforcements this week as CalMatters brings our VotingMatters events to you all over California, including the far north where the locals fly those State of Jefferson flags.</p>
+
+
+
+<p class="wp-block-paragraph">We promise a good conversation about all those propositions on your ballot. We have food at most of these events, too.&nbsp;</p>
+
+
+
+<p class="wp-block-paragraph">Today you can find us in Kelseyville; then in Lafayette, Modesto and Eureka on Thursday; in Weaverville on Friday and in Redding on Saturday. </p>
+
+
+
+<p class="wp-block-paragraph">Get the full details on the <a href="https://calmatters.org/inside-the-newsroom/2026/09/votingmatters-california-elections/">times and locations here</a>. The link has a calendar with upcoming events in L.A., Stockton, Fresno and more.</p>
+</div>
+</div>
+
+
+
+<div style="height:16px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+
+
+
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+
+
+<div class="wp-block-columns has-light-gray-background-color has-background is-layout-flex wp-container-core-columns-is-layout-8f761849 wp-block-columns-is-layout-flex">
+<div class="wp-block-column email-box is-layout-flow wp-block-column-is-layout-flow">
+
+
+<h4 class="wp-block-heading has-text-align-center has-light-gray-background-color has-background" id="h-california-voices" style="font-size:20px">California Voices</h4>
+
+
+
+<p class="wp-block-paragraph"><strong>CalMatters columnist Dan Walters:</strong> If the state has a legitimate role to play in specific medical research, all potential funding options should be explored — not just a bond proposal like Prop. 38, which would benefit mostly one organization <a href="https://calmatters.org/commentary/2026/10/prop-38-california-medical-research-bond/">backed by a billionaire patron</a>.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>CalMatters contributor Robert Greene:</strong> California’s insurance commissioner race is the one statewide campaign in which Democrats are working through their political identity issues — pitting left-leaning Democrats <a href="https://calmatters.org/commentary/2026/10/democrats-identity-crisis-insurance-commissioner/">against “lefter-leaning” Democrats</a>.</p>
+
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+
+
+<h3 class="wp-block-heading has-text-align-center" id="wm-other" style="font-size:20px">Other things worth your time:</h3>
+
+
+
+
+
+<p class="has-text-align-center cm-some-stories wp-block-paragraph">Some stories may require a subscription to read.</p>
+
+
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+
+
+<div class="wp-block-columns cm-reduce-padding is-layout-flex wp-container-core-columns-is-layout-8f761849 wp-block-columns-is-layout-flex">
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
+<p class="wp-block-paragraph"><strong>The evolution of Kimberly Guilfoyle:</strong> From CA political ties to ex-US ambassador // <a href="https://www.sacbee.com/news/politics-government/capitol-alert/article317596483.html?giftCode=a5f293b98d3d2afea7ca266316e3ac03d7ab3e3b09337a8ccdbeda14ab0bc17e">The Sacramento Bee</a> (gift link)</p>
+
+
+
+<p class="wp-block-paragraph"><strong>The inside story behind</strong> the mysterious rift between Pelosi and Wiener // <a href="https://sfstandard.com/2026/10/13/story-mysterious-rift-pelosi-wiener/">The San Francisco Standard</a> (paywall)</p>
+
+
+
+<p class="wp-block-paragraph"><strong>ICE enforcement surge</strong> upends CA’s most contested congressional race // <a href="https://www.sfgate.com/centralcalifornia/article/ice-raid-midterm-election-22473510.php">SFGate</a> (free)</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Latinos want more</strong> than a historic first from Xavier Becerra // <a href="https://www.kqed.org/news/12103827/latinos-want-more-than-a-historic-first-from-xavier-becerra">KQED</a> (free)</p>
+
+
+
+<p class="wp-block-paragraph"><strong>UC Berkeley to oppose $70K ICE fee</strong> on student work visas // <a href="https://edsource.org/updates/uc-berkeley-plans-to-oppose-ice-fee-on-student-work-visas">EdSource</a> (free)</p>
+
+
+
+<p class="wp-block-paragraph"><strong>A once-in-a-generation opportunity</strong> for CA’s ocean // <a href="https://grist.org/sponsored/a-once-in-a-generation-opportunity-for-californias-ocean/">Grist</a> (free)</p>
+
+
+
+<p class="wp-block-paragraph"><strong>A ‘charismatic landform’ is being lost</strong> in CA // <a href="https://www.sfchronicle.com/climate/article/california-glacier-study-sierra-22469261.php?utm_source=marketing&amp;utm_medium=copy-url-link&amp;utm_campaign=article-share&amp;hash=aHR0cHM6Ly93d3cuc2ZjaHJvbmljbGUuY29tL2NsaW1hdGUvYXJ0aWNsZS9jYWxpZm9ybmlhLWdsYWNpZXItc3R1ZHktc2llcnJhLTIyNDY5MjYxLnBocA%3D%3D&amp;time=MTc5MTkyNDU3NTI2OQ%3D%3D&amp;rid=ODU1ZWEyMDktZjczMS00NWUyLThjNmQtZDQwM2RiYmUxMjFl&amp;sharecount=NQ%3D%3D">San Francisco Chronicle</a> (gift link)</p>
+
+
+
+<p class="wp-block-paragraph"><strong>These CA boat dwellers fear the worse:</strong> Life on land // <a href="https://www.nytimes.com/2026/10/13/us/california-anchor-outs-boats.html?unlocked_article_code=1.IVE.liLm.iKyJsp37tVrR&amp;smid=url-share">The New York Times</a> (gift link)</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Scientists deploy a 24-armed secret weapon</strong> to save CA’s kelp forests // <a href="https://www.theguardian.com/environment/2026/oct/13/sunflower-sea-star-california-kelp-forests">The Guardian</a> (free)</p>
+</div>
+</div>
+
+
+
+<div style="height:24px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+
+
+
+]]></content:encoded>
+					
+		
+		
+		<post-id xmlns="com-wordpress:feed-additions:1">510228</post-id><dc:modified>Tue, 13 Oct 2026 19:26:52 -0700</dc:modified>	</item>
+	</channel>
+</rss>

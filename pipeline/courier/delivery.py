@@ -45,6 +45,16 @@ def _addresses(raw: str | None) -> list[str]:
 
 
 @dataclass(frozen=True)
+class Partner:
+    key: str
+    name: str
+    copy_to: list[str]
+    report_to: list[str]
+    copy_limit: int | None = None
+    report_limit: int | None = None
+
+
+@dataclass(frozen=True)
 class Settings:
     database_url: str
     out_root: Path
@@ -60,6 +70,8 @@ class Settings:
     keep_days: int = 14
     partner_copy_to: list[str] = field(default_factory=list)
     partner_report_to: list[str] = field(default_factory=list)
+    calmatters_copy_to: list[str] = field(default_factory=list)
+    calmatters_report_to: list[str] = field(default_factory=list)
     alert_to: list[str] = field(default_factory=list)
     billing: bool = False
     trial_days: int = 14
@@ -70,6 +82,13 @@ class Settings:
     link_secret: str | None = None
     # The address readers approve on Amazon, quoted in the check-in email.
     sender: str = "edition@quietcourier.com"
+
+    # PARTNER_* predates the second partner and stays The Conversation's, so the server env needn't change.
+    def partners(self) -> list[Partner]:
+        return [Partner("conversation", "The Conversation", self.partner_copy_to, self.partner_report_to),
+                # CalMatters asked for the first two copies and the first report, then will say whether to continue.
+                Partner("calmatters", "CalMatters", self.calmatters_copy_to, self.calmatters_report_to,
+                        copy_limit=2, report_limit=1)]
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -83,6 +102,8 @@ class Settings:
             monthly_limit=int(e.get("MAIL_MONTHLY_LIMIT", "3000")),
             partner_copy_to=_addresses(e.get("PARTNER_COPY_TO")),
             partner_report_to=_addresses(e.get("PARTNER_REPORT_TO")),
+            calmatters_copy_to=_addresses(e.get("CALMATTERS_COPY_TO")),
+            calmatters_report_to=_addresses(e.get("CALMATTERS_REPORT_TO")),
             alert_to=_addresses(e.get("ALERT_EMAIL")),
             billing=e.get("BILLING_ENABLED") == "1",
             trial_days=int(e.get("TRIAL_DAYS", "14")),
@@ -294,20 +315,28 @@ class Db:
         return self.conn.execute(
             "SELECT 1 FROM deliveries WHERE edition_date = %s AND status = 'sent' LIMIT 1", (date,)).fetchone() is not None
 
-    def partner_copy_sent(self, date: dt.date) -> bool:
-        return self.conn.execute("SELECT 1 FROM partner_copies WHERE edition_date = %s", (date,)).fetchone() is not None
+    def partner_copy_sent(self, partner: str, date: dt.date) -> bool:
+        return self.conn.execute("SELECT 1 FROM partner_copies WHERE partner = %s AND edition_date = %s",
+                                 (partner, date)).fetchone() is not None
 
-    def record_partner_copy(self, date: dt.date, articles: int) -> None:
-        self.conn.execute("INSERT INTO partner_copies (edition_date, articles) VALUES (%s, %s) ON CONFLICT DO NOTHING",
-                          (date, articles))
+    def record_partner_copy(self, partner: str, date: dt.date, articles: int) -> None:
+        self.conn.execute("INSERT INTO partner_copies (partner, edition_date, articles) VALUES (%s, %s, %s) "
+                          "ON CONFLICT DO NOTHING", (partner, date, articles))
 
-    def partner_report_sent(self, month: str) -> bool:
-        return self.conn.execute("SELECT 1 FROM partner_reports WHERE month = %s", (month,)).fetchone() is not None
+    def partner_copy_count(self, partner: str) -> int:
+        return self.conn.execute("SELECT count(*) AS n FROM partner_copies WHERE partner = %s", (partner,)).fetchone()["n"]
 
-    def record_partner_report(self, month: str, articles: int, subscribers: int) -> None:
+    def partner_report_count(self, partner: str) -> int:
+        return self.conn.execute("SELECT count(*) AS n FROM partner_reports WHERE partner = %s", (partner,)).fetchone()["n"]
+
+    def partner_report_sent(self, partner: str, month: str) -> bool:
+        return self.conn.execute("SELECT 1 FROM partner_reports WHERE partner = %s AND month = %s",
+                                 (partner, month)).fetchone() is not None
+
+    def record_partner_report(self, partner: str, month: str, articles: int, subscribers: int) -> None:
         self.conn.execute(
-            "INSERT INTO partner_reports (month, articles, subscribers) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING",
-            (month, articles, subscribers))
+            "INSERT INTO partner_reports (partner, month, articles, subscribers) VALUES (%s, %s, %s, %s) "
+            "ON CONFLICT DO NOTHING", (partner, month, articles, subscribers))
 
     def month_circulation(self, first: dt.date, last: dt.date, now: dt.datetime,
                           billing: bool) -> tuple[int, int]:
@@ -334,12 +363,16 @@ def ensure_edition(config: Config, settings: Settings, store: Store, city: City,
                  devices=[f for f in ("small", "large") if f in missing], epub="epub" in missing, now=now)
 
 
-def _conversation_articles(settings: Settings, date: dt.date) -> list[dict]:
+def _limit_reached(sent: int, limit: int | None) -> bool:
+    return limit is not None and sent >= limit
+
+
+def _partner_articles(settings: Settings, date: dt.date, source_name: str) -> list[dict]:
     core = settings.out_root / date.isoformat() / "core" / "core.json"
     if not core.exists():
         return []
     return [a for a in json.loads(core.read_text(encoding="utf-8"))["articles"]
-            if a.get("source_name") == "The Conversation"]
+            if a.get("source_name") == source_name]
 
 
 class Job:
@@ -598,70 +631,77 @@ class Job:
                 continue
             self.db.mark_setup_reminded(r["id"], now)
 
-    # Promised to The Conversation: a copy of each edition that runs their articles. Every
-    # edition of a date has the same stories, so one copy per date covers them all.
+    # Promised to The Conversation and CalMatters: a copy of each edition that runs their stories.
+    # Every edition of a date has the same stories, so one copy per date covers them all.
     def _partner_copies(self, now: dt.datetime) -> None:
-        if not self.settings.partner_copy_to:
-            return
+        for partner in self.settings.partners():
+            if partner.copy_to and not _limit_reached(self.db.partner_copy_count(partner.key), partner.copy_limit):
+                self._partner_copy(partner, now)
+
+    def _partner_copy(self, partner: Partner, now: dt.datetime) -> None:
         for offset in (-1, 0, 1):
+            if _limit_reached(self.db.partner_copy_count(partner.key), partner.copy_limit):
+                return
             date = now.date() + dt.timedelta(days=offset)
-            if self.db.partner_copy_sent(date) or not self.db.delivered_on(date):
+            if self.db.partner_copy_sent(partner.key, date) or not self.db.delivered_on(date):
                 continue
-            articles = _conversation_articles(self.settings, date)
+            articles = _partner_articles(self.settings, date, partner.name)
             if not articles:
                 continue
             try:
                 ensure_edition(self.config, self.settings, self.store, GENERAL, date, {"large"}, self.http)
                 lines = [f"Attached is The Quiet Courier for {date:%B} {date.day}, {date.year}. "
-                         f"It ran {len(articles)} article{'s' if len(articles) != 1 else ''} from The Conversation:", ""]
+                         f"It ran {len(articles)} {'story' if len(articles) == 1 else 'stories'} from {partner.name}:", ""]
                 for a in articles:
                     lines += [f"- {a['title']}", f"  {a.get('author') or ''}, {a['source_url']}"]
-                lines += ["", "Every edition that day carried the same articles. Text unedited, images omitted."]
+                lines += ["", "Every edition that day carried the same stories. Text unedited, images omitted."]
                 self.mailer.send(Message(
-                    to=self.settings.partner_copy_to,
-                    subject=f"The Quiet Courier, {date.isoformat()}: edition with The Conversation's articles",
+                    to=partner.copy_to,
+                    subject=f"The Quiet Courier, {date.isoformat()}: edition with {partner.name} stories",
                     text="\n".join(lines) + "\n",
                     attachments=[edition_file(self.settings.out_root, date, GENERAL.id, "large")],
                     attachment_names=[f"The Quiet Courier {date.isoformat()}.pdf"],
-                    idempotency_key=f"partner-copy/{date.isoformat()}",
+                    idempotency_key=f"partner-copy/{partner.key}/{date.isoformat()}",
                 ))
             except (BuildError, MailError, OSError) as e:
-                self.report.build_errors.append(f"copy for The Conversation, {date}: {e}")
+                self.report.build_errors.append(f"copy for {partner.name}, {date}: {e}")
                 continue
-            self.db.record_partner_copy(date, len(articles))
-            self.report.partner_copies.append(date.isoformat())
+            self.db.record_partner_copy(partner.key, date, len(articles))
+            self.report.partner_copies.append(f"{partner.key} {date.isoformat()}")
 
     def _monthly_report(self, now: dt.datetime) -> None:
-        if not self.settings.partner_report_to:
-            return
         first_this = now.date().replace(day=1)
         last = first_this - dt.timedelta(days=1)
         first = last.replace(day=1)
         month = first.strftime("%Y-%m")
-        if self.db.partner_report_sent(month):
-            return
-        delivered, active = self.db.month_circulation(first, last, now, self.settings.billing)
-        if delivered == 0:
-            return
-        rows = self.store.conversation_usage(first, last)
-        lines = [f"The Quiet Courier, usage of The Conversation's articles in {first:%B %Y}.", "",
-                 f"Readers who received at least one edition this month: {delivered}",
-                 f"Active subscribers on {now.date().isoformat()}: {active}", "",
-                 f"Articles republished: {len(rows)}", ""]
-        for r in rows:
-            lines += [f"- {r['title']}", f"  {r['source_url']}", f"  Ran on: {', '.join(r['dates'])}"]
-        try:
-            self.mailer.send(Message(
-                to=self.settings.partner_report_to,
-                subject=f"The Quiet Courier: The Conversation usage report for {first:%B %Y}",
-                text="\n".join(lines) + "\n",
-                idempotency_key=f"partner-report/{month}",
-            ))
-        except MailError as e:
-            self.report.build_errors.append(f"monthly report for {month}: {e}")
-            return
-        self.db.record_partner_report(month, len(rows), active)
-        self.report.partner_reports.append(month)
+        for partner in self.settings.partners():
+            if not partner.report_to or self.db.partner_report_sent(partner.key, month):
+                continue
+            if _limit_reached(self.db.partner_report_count(partner.key), partner.report_limit):
+                continue
+            delivered, active = self.db.month_circulation(first, last, now, self.settings.billing)
+            rows = self.store.source_usage(partner.name, first, last)
+            # A month with no stories from them has nothing to report.
+            if delivered == 0 or not rows:
+                continue
+            lines = [f"The Quiet Courier, usage of {partner.name} stories in {first:%B %Y}.", "",
+                     f"Readers who received at least one edition this month: {delivered}",
+                     f"Active subscribers on {now.date().isoformat()}: {active}", "",
+                     f"Stories republished: {len(rows)}", ""]
+            for r in rows:
+                lines += [f"- {r['title']}", f"  {r['source_url']}", f"  Ran on: {', '.join(r['dates'])}"]
+            try:
+                self.mailer.send(Message(
+                    to=partner.report_to,
+                    subject=f"The Quiet Courier: {partner.name} usage report for {first:%B %Y}",
+                    text="\n".join(lines) + "\n",
+                    idempotency_key=f"partner-report/{partner.key}/{month}",
+                ))
+            except MailError as e:
+                self.report.build_errors.append(f"monthly report for {partner.name}, {month}: {e}")
+                continue
+            self.db.record_partner_report(partner.key, month, len(rows), active)
+            self.report.partner_reports.append(f"{partner.key} {month}")
 
     def _prune(self, now: dt.datetime) -> None:
         cutoff = now.date() - dt.timedelta(days=self.settings.keep_days)

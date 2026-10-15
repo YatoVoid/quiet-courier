@@ -30,6 +30,11 @@ const CONTENTS = [
     source: "Global Voices",
   },
   {
+    title: "The States",
+    body: "A few times a week, a reported story on how a state government is changing schools, health care, housing or elections.",
+    source: "CalMatters",
+  },
+  {
     title: "Ideas",
     body: "One longer read beyond science: politics, the economy, health, history or culture, explained by someone who studies it.",
     source: "The Conversation",

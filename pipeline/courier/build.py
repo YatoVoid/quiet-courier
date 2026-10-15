@@ -16,7 +16,7 @@ from .http import Http
 from .models import load_edition
 from .pdf import build_pdf
 from .select import select
-from .sources import Context, chronicling, conversation, current_events, economy, eso, globalvoices, metno, nasa, nws, onthisday, poems
+from .sources import Context, calmatters, chronicling, conversation, current_events, economy, eso, globalvoices, metno, nasa, nws, onthisday, poems
 from .store import SourceRun, Store
 
 log = logging.getLogger("courier")
@@ -24,6 +24,7 @@ log = logging.getLogger("courier")
 ARTICLE_SOURCES = {
     "conversation": conversation.fetch,
     "globalvoices": globalvoices.fetch,
+    "calmatters": calmatters.fetch,
     "nasa": nasa.fetch,
     "eso": eso.fetch,
     "economy": economy.fetch,
@@ -32,6 +33,7 @@ ARTICLE_SOURCES = {
 }
 SECTIONS = [
     {"id": "world", "name": "World"},
+    {"id": "states", "name": "The States"},
     {"id": "ideas", "name": "Ideas"},
     {"id": "science", "name": "Science"},
     {"id": "economy", "name": "Economy"},
@@ -126,6 +128,8 @@ def prepare_core(config: Config, date: dt.date, out_root: Path, store: Store, ht
         http = http or Http(config.user_agent, cache_dir=out_root / "cache" / date.isoformat())
         ctx = Context(http, config, date, GENERAL)
         jobs = {name: fn for name, fn in ARTICLE_SOURCES.items() if config.enabled(name)}
+        if "calmatters" in jobs and not calmatters.allowed(store.source_dates(calmatters.SOURCE_NAME, date, 7), date):
+            del jobs["calmatters"]
         runs: list[SourceRun] = []
         pools: dict[str, list[dict]] = {}
         with ThreadPoolExecutor(max_workers=4) as pool:

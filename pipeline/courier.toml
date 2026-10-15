@@ -14,6 +14,7 @@ history_days = 60
 [sources]
 conversation = true
 globalvoices = true
+calmatters = true
 nasa = true
 eso = true
 economy = true

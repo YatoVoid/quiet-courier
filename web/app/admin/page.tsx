@@ -27,6 +27,7 @@ const when = (d: Date) =>
   new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: "UTC" }).format(d) +
   " UTC";
 const size = (bytes: number) => (bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.ceil(bytes / 1024)} KB`);
+const PARTNER_NAMES: Record<string, string> = { conversation: "The Conversation", calmatters: "CalMatters" };
 
 function Tally({ figures }: { figures: [string, number | string][] }) {
   return (
@@ -255,14 +256,14 @@ export default async function AdminPage() {
         <p>No editions have been built on this server in the last few days.</p>
       )}
 
-      <h2>The Conversation</h2>
-      <p>Copies of each edition that ran their articles, and the monthly usage reports, as agreed with their republishing team.</p>
+      <h2>Partner newsrooms</h2>
+      <p>Copies of each edition that ran The Conversation&rsquo;s or CalMatters&rsquo; stories, and the monthly usage reports, as agreed with each newsroom.</p>
       <h3>Edition copies</h3>
       {partner.copies.length ? (
         <ul>
           {partner.copies.map((c) => (
-            <li key={c.editionDate}>
-              {day(c.editionDate)}: {c.articles} {c.articles === 1 ? "article" : "articles"}, sent {when(c.sentAt)}
+            <li key={`${c.partner}-${c.editionDate}`}>
+              {PARTNER_NAMES[c.partner] ?? c.partner}, {day(c.editionDate)}: {c.articles} {c.articles === 1 ? "article" : "articles"}, sent {when(c.sentAt)}
             </li>
           ))}
         </ul>
@@ -273,8 +274,8 @@ export default async function AdminPage() {
       {partner.reports.length ? (
         <ul>
           {partner.reports.map((r) => (
-            <li key={r.month}>
-              {r.month}: {r.articles} articles, {r.subscribers} readers, sent {when(r.sentAt)}
+            <li key={`${r.partner}-${r.month}`}>
+              {PARTNER_NAMES[r.partner] ?? r.partner}, {r.month}: {r.articles} articles, {r.subscribers} readers, sent {when(r.sentAt)}
             </li>
           ))}
         </ul>

@@ -59,6 +59,7 @@ class Article:
     author: str | None = None
     author_affiliation: str | None = None
     changes: str | None = None
+    tagline: str | None = None
     kind: str = "article"
     images: tuple[Image, ...] = ()
     stats: tuple[Stat, ...] = ()
@@ -90,7 +91,7 @@ class Article:
             source_name=d["source_name"], source_url=d["source_url"], license=lic,
             attribution=d["attribution"], published=d.get("published"), deck=d.get("deck"),
             author=d.get("author"), author_affiliation=d.get("author_affiliation"),
-            changes=d.get("changes"), kind=d.get("kind", "article"), images=images,
+            changes=d.get("changes"), tagline=d.get("tagline"), kind=d.get("kind", "article"), images=images,
             stats=tuple(Stat(s["label"], s["value"], s.get("note", "")) for s in d.get("stats", [])),
         )
 

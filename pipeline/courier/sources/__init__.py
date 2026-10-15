@@ -2,7 +2,7 @@
 
 Every dict uses the article schema of the edition JSON (see samples/*.json):
 id, section, title, deck, author, author_affiliation, source_name, source_url,
-published, license, attribution, changes, body, and optionally images, where
+published, license, attribution, changes, body, and optionally tagline and images, where
 each image has `url` instead of `path` until the build downloads it.
 """
 
@@ -20,6 +20,9 @@ LICENSES = {
                   "url": "https://creativecommons.org/licenses/by/4.0/", "commercial": True, "derivatives": True},
     "cc-by-3.0": {"id": "cc-by-3.0", "name": "CC BY 3.0",
                   "url": "https://creativecommons.org/licenses/by/3.0/", "commercial": True, "derivatives": True},
+    # Written permission from the publisher, not a public license. The text is still never edited.
+    "calmatters-permission": {"id": "calmatters-permission", "name": "Republished with permission",
+                              "url": "https://calmatters.org/about/republish/", "commercial": True, "derivatives": False},
     "us-gov-pd": {"id": "us-gov-pd", "name": "Public domain (U.S. government work)",
                   "url": "https://www.usa.gov/government-copyright", "commercial": True, "derivatives": True},
     "pd-expired": {"id": "pd-expired", "name": "Public domain (published before 1931)",
